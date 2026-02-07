@@ -1,16 +1,36 @@
-# React + Vite
+# aidenmak.dev — Personal Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+My personal portfolio site showcasing AI/ML projects, backend engineering work, and software development experience.
 
-Currently, two official plugins are available:
+**[Live Site →](https://portfolio-henna-eight-pncfrkzt1a.vercel.app)**
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## About
 
-## React Compiler
+I'm Aiden (Chin Wei) Mak — a 24-year-old BSc Honours CS graduate from the University of Manitoba, now based in Toronto. I build purpose-driven AI systems, from scalable RESTful backends and RAG pipelines to autonomous agents for human rights education.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Featured Projects
 
-## Expanding the ESLint configuration
+- **Upstander Program (CMHR Partnership)** — AI-enhanced educational platform built in partnership with the Canadian Museum for Human Rights
+- **Human Rights Education Agent** — Autonomous LangGraph agent orchestrating 5 specialized tools across 25+ legal documents
+- **Human Rights Education RAG** — Scalable RESTful API backend with PostgreSQL and ChromaDB, 97% API response improvement
+- **Data Automation Agent** — AI-powered data processing system with Streamlit and Gemini
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Tech Stack
+
+**Site:** React, Vite, Vercel
+
+**What I work with:** Python, PostgreSQL, Flask, LangGraph, LangChain, ChromaDB, Gemini API, Java, C/C++, SQL
+
+## Run Locally
+
+```bash
+npm install
+npm run dev
+```
+
+## Contact
+
+- [LinkedIn](https://linkedin.com/in/mcwaiden)
+- [GitHub](https://github.com/aidenmak0624)
+- [Instagram](https://www.instagram.com/aiden_codinginvibe)
+- Email: mcwaiden000@gmail.com
