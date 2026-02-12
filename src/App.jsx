@@ -10,7 +10,7 @@ const Portfolio = () => {
   const [cursorVisible, setCursorVisible] = useState(true);
   const [showAllProjects, setShowAllProjects] = useState(false);
 
-  const fullTerminalText = "Software Developer — Backend · AI · Social Impact";
+  const fullTerminalText = "Software Developer — Full-Stack · AI · Shipping Products";
 
   useEffect(() => {
     setTimeout(() => setIsLoaded(true), 100);
@@ -44,6 +44,23 @@ const Portfolio = () => {
   }, []);
 
   const featuredProjects = [
+    {
+      id: 0,
+      title: "The Golden Fork — AI Restaurant Platform",
+      tag: "Full-Stack · RAG · OpenAI · Stripe · Next.js",
+      description:
+        "End-to-end restaurant ordering system with an AI-powered menu assistant. Built a RAG pipeline using OpenAI embeddings and Pinecone vector search that understands dietary needs, recommends dishes, and suggests pairings in real time. Features Stripe checkout, WebSocket-driven kitchen display, manager dashboard with sales velocity and menu engineering analytics, and a customer feedback loop. Deployed live on Render.",
+      metrics: [
+        { label: "AI Engine", value: "RAG" },
+        { label: "Live Demo", value: "Yes" },
+        { label: "Features", value: "12+" },
+      ],
+      color: "#f59e0b",
+      github: "https://golden-fork-9tn2.onrender.com",
+      live: "https://golden-fork-9tn2.onrender.com",
+      tech: ["Next.js", "TypeScript", "React", "Tailwind CSS", "OpenAI", "Pinecone", "Stripe", "WebSocket", "Recharts"],
+      isNew: true,
+    },
     {
       id: 1,
       title: "Upstander Program — CMHR Partnership",
@@ -176,11 +193,13 @@ const Portfolio = () => {
   const skills = [
     {
       category: "Languages",
-      items: ["Python (Advanced)", "Java", "C/C++", "SQL"],
+      items: ["TypeScript", "Python (Advanced)", "Java", "C/C++", "SQL"],
     },
     {
       category: "AI / ML",
       items: [
+        "OpenAI API",
+        "Pinecone",
         "LangGraph",
         "LangChain",
         "ChromaDB",
@@ -192,16 +211,18 @@ const Portfolio = () => {
       ],
     },
     {
-      category: "Backend & APIs",
+      category: "Full-Stack & APIs",
       items: [
+        "Next.js",
+        "React",
+        "Tailwind CSS",
         "Flask",
         "RESTful API Design",
         "PostgreSQL",
+        "Stripe Integration",
+        "WebSocket",
         "Database Schema Design",
         "SQL Optimization & Indexing",
-        "JDBC",
-        "Data Pipelines",
-        "Microservices",
       ],
     },
     {
@@ -211,6 +232,7 @@ const Portfolio = () => {
         "Linux/Unix",
         "CI/CD Pipelines",
         "GCP",
+        "Render",
         "Agile/Scrum",
         "TDD",
         "JUnit",
@@ -343,9 +365,29 @@ const Portfolio = () => {
               color: project.color,
               letterSpacing: 2,
               marginBottom: 12,
+              display: "flex",
+              alignItems: "center",
+              gap: 10,
             }}
           >
             {project.tag}
+            {project.isNew && (
+              <span
+                style={{
+                  background: "linear-gradient(135deg, #f59e0b, #ef4444)",
+                  color: "#fff",
+                  fontSize: 9,
+                  fontWeight: 700,
+                  padding: "2px 8px",
+                  borderRadius: 100,
+                  letterSpacing: 1.5,
+                  textTransform: "uppercase",
+                  animation: "glowPulse 2s infinite",
+                }}
+              >
+                NEW
+              </span>
+            )}
           </div>
           <h3
             style={{
@@ -359,6 +401,22 @@ const Portfolio = () => {
           </h3>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          {project.live && (
+            <a
+              href={project.live}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-link-btn"
+              title="Live Demo"
+              style={{ borderColor: "rgba(0,229,160,0.3)", color: "#00e5a0", background: "rgba(0,229,160,0.05)" }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                <polyline points="15 3 21 3 21 9" />
+                <line x1="10" y1="14" x2="21" y2="3" />
+              </svg>
+            </a>
+          )}
           <a
             href={project.github}
             target="_blank"
@@ -907,11 +965,11 @@ const Portfolio = () => {
             }}
           >
             24-year-old BSc Honours CS grad from the University of
-            Manitoba (2025), now based in Toronto. I started building AI
-            for the Canadian Museum for Human Rights — then independently
-            engineered the RAG pipeline and autonomous agent to take it
-            further. Trilingual (Cantonese, Mandarin, English) and
-            passionate about AI that ships to production, not just demo.
+            Manitoba (2025), now based in Toronto. I build full-stack AI
+            products — from a CMHR educational platform to a live restaurant
+            system with RAG-powered menu recommendations and Stripe checkout.
+            Trilingual (Cantonese, Mandarin, English) and passionate about
+            shipping systems that solve real problems, not just demo.
           </p>
 
           <div
@@ -1018,12 +1076,13 @@ const Portfolio = () => {
                   marginBottom: 20,
                 }}
               >
-                I build AI systems where the impact goes beyond a
-                polished prototype. It started with a partnership with
-                the Canadian Museum for Human Rights — then I
-                independently engineered a RAG pipeline and autonomous
-                agent to push the mission further, making international
-                human rights law accessible to students and advocates.
+                I build full-stack AI products that go beyond a polished
+                prototype. It started with a partnership with the Canadian
+                Museum for Human Rights, then I independently engineered a
+                RAG pipeline and autonomous agent to push the mission further.
+                Most recently, I shipped The Golden Fork — a complete restaurant
+                platform with AI menu recommendations, Stripe payments, and
+                real-time kitchen management.
               </p>
               <p
                 style={{
@@ -1033,11 +1092,12 @@ const Portfolio = () => {
                   marginBottom: 20,
                 }}
               >
-                My stack spans backend engineering and the modern AI
-                toolkit: PostgreSQL, Flask, RESTful APIs, LangGraph,
-                LangChain, and ChromaDB. I also write C — MLFQ
-                schedulers, FAT32 readers, and MPI parallel systems —
-                because understanding the machine matters.
+                My stack spans the full product surface: Next.js, React,
+                and TypeScript on the frontend; PostgreSQL, Flask, and
+                RESTful APIs on the backend; OpenAI, Pinecone, LangGraph,
+                and ChromaDB for AI. I also write C — MLFQ schedulers,
+                FAT32 readers, and MPI parallel systems — because
+                understanding the machine matters.
               </p>
               <p
                 style={{
@@ -1094,7 +1154,7 @@ const Portfolio = () => {
                   {"  "}
                   <span style={{ color: "#6366f1" }}>"focus"</span>:{" "}
                   <span style={{ color: "#a1a1aa" }}>
-                    ["RAG", "Agents", "AI for Good"]
+                    ["Full-Stack AI", "RAG", "Shipping Products"]
                   </span>
                   ,<br />
                   {"  "}
@@ -1151,7 +1211,7 @@ const Portfolio = () => {
                     color: "#a1a1aa",
                   }}
                 >
-                  CMHR partnership → self-initiated RAG & agent extensions
+                  CMHR partnership → RAG & agent extensions → Golden Fork shipped live
                 </span>
               </div>
             </div>
