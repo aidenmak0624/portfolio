@@ -56,7 +56,7 @@ const Portfolio = () => {
         { label: "Features", value: "12+" },
       ],
       color: "#f59e0b",
-      github: "https://golden-fork-9tn2.onrender.com",
+      github: "https://github.com/aidenmak0624/golden-fork",
       live: "https://golden-fork-9tn2.onrender.com",
       tech: ["Next.js", "TypeScript", "React", "Tailwind CSS", "OpenAI", "Pinecone", "Stripe", "WebSocket", "Recharts"],
       isNew: true,
