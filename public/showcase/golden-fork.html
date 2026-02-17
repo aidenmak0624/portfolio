@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Golden Fork — Product Showcase</title>
+<style>
+  :root {
+    --gold: #d4a017;
+    --gold-light: #f5e6b8;
+    --gold-dark: #a67c00;
+    --dark: #1a1a2e;
+    --darker: #0f0f23;
+    --text: #e0e0e0;
+    --text-muted: #9a9ab0;
+    --card-bg: #1e1e36;
+    --card-border: #2e2e4a;
+    --accent-blue: #4fc3f7;
+    --accent-green: #66bb6a;
+    --accent-red: #ef5350;
+    --accent-purple: #ab47bc;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background: var(--darker);
+    color: var(--text);
+    line-height: 1.7;
+  }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Hero ── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    text-align: center;
+    padding: 4rem 2rem;
+    background: radial-gradient(ellipse at 50% 0%, rgba(212,160,23,.15) 0%, transparent 60%),
+                linear-gradient(180deg, var(--darker) 0%, var(--dark) 100%);
+  }
+  .hero-badge {
+    display: inline-block;
+    padding: .35rem 1rem;
+    border: 1px solid var(--gold);
+    border-radius: 999px;
+    font-size: .8rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 1rem;
+  }
+  .hero h1 span { color: var(--gold); }
+  .hero p.subtitle {
+    font-size: clamp(1rem, 2vw, 1.35rem);
+    color: var(--text-muted);
+    max-width: 680px;
+    margin-bottom: 2.5rem;
+  }
+  .hero-stats {
+    display: flex; gap: 3rem; flex-wrap: wrap; justify-content: center;
+  }
+  .hero-stats .stat { text-align: center; }
+  .hero-stats .stat-value {
+    font-size: 2.2rem; font-weight: 700; color: var(--gold);
+  }
+  .hero-stats .stat-label {
+    font-size: .85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  /* ── Nav / ToC ── */
+  nav.toc {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(15,15,35,.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--card-border);
+    padding: .75rem 2rem;
+    display: flex; gap: 1.5rem; overflow-x: auto;
+    justify-content: center;
+  }
+  nav.toc a {
+    color: var(--text-muted); font-size: .85rem; white-space: nowrap;
+    padding: .3rem .5rem; border-radius: 6px; transition: all .2s;
+  }
+  nav.toc a:hover { color: var(--gold); background: rgba(212,160,23,.1); text-decoration: none; }
+
+  /* ── Sections ── */
+  section { max-width: 1120px; margin: 0 auto; padding: 5rem 2rem; }
+  .section-label {
+    font-size: .75rem; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--gold); margin-bottom: .5rem;
+  }
+  section h2 {
+    font-size: 2.2rem; font-weight: 700; color: #fff; margin-bottom: 1rem;
+  }
+  section h3 {
+    font-size: 1.35rem; font-weight: 600; color: #fff; margin-bottom: .5rem; margin-top: 2rem;
+  }
+  section p { color: var(--text-muted); margin-bottom: 1rem; max-width: 780px; }
+
+  /* ── Cards grid ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px,1fr)); gap: 1.5rem; margin-top: 2rem; }
+  .card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: transform .2s, border-color .2s;
+  }
+  .card:hover { transform: translateY(-4px); border-color: var(--gold); }
+  .card-icon { font-size: 2rem; margin-bottom: 1rem; }
+  .card h4 { font-size: 1.15rem; font-weight: 600; color: #fff; margin-bottom: .5rem; }
+  .card p { font-size: .92rem; color: var(--text-muted); }
+
+  /* ── Problem / Solution ── */
+  .ps-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; margin-top: 2rem; }
+  @media (max-width: 768px) { .ps-grid { grid-template-columns: 1fr; } }
+  .ps-col { padding: 2rem; border-radius: 16px; }
+  .ps-col.problem { background: rgba(239,83,80,.08); border: 1px solid rgba(239,83,80,.2); }
+  .ps-col.solution { background: rgba(102,187,106,.08); border: 1px solid rgba(102,187,106,.2); }
+  .ps-col h3 { margin-top: 0; }
+  .ps-col ul { list-style: none; padding: 0; }
+  .ps-col ul li { padding: .5rem 0; padding-left: 1.5rem; position: relative; color: var(--text-muted); font-size: .95rem; }
+  .ps-col.problem ul li::before { content: '✕'; position: absolute; left: 0; color: var(--accent-red); font-weight: 700; }
+  .ps-col.solution ul li::before { content: '✓'; position: absolute; left: 0; color: var(--accent-green); font-weight: 700; }
+
+  /* ── Tech Stack ── */
+  .tech-layers { margin-top: 2rem; }
+  .tech-layer {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 12px;
+    padding: 1.5rem 2rem; margin-bottom: 1rem;
+    display: grid; grid-template-columns: 180px 1fr; gap: 1.5rem; align-items: start;
+  }
+  @media (max-width: 640px) { .tech-layer { grid-template-columns: 1fr; } }
+  .tech-layer-name {
+    font-weight: 700; color: var(--gold); font-size: .9rem; text-transform: uppercase;
+    letter-spacing: 1px; padding-top: .2rem;
+  }
+  .tech-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .tech-tag {
+    display: inline-block; padding: .3rem .75rem; border-radius: 8px;
+    font-size: .82rem; font-weight: 500;
+  }
+  .tech-tag.frontend { background: rgba(79,195,247,.12); color: var(--accent-blue); border: 1px solid rgba(79,195,247,.25); }
+  .tech-tag.backend { background: rgba(102,187,106,.12); color: var(--accent-green); border: 1px solid rgba(102,187,106,.25); }
+  .tech-tag.ai { background: rgba(171,71,188,.12); color: var(--accent-purple); border: 1px solid rgba(171,71,188,.25); }
+  .tech-tag.infra { background: rgba(212,160,23,.12); color: var(--gold); border: 1px solid rgba(212,160,23,.25); }
+
+  /* ── Architecture diagram ── */
+  .arch-diagram {
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 16px;
+    padding: 2.5rem; margin-top: 2rem; overflow-x: auto;
+  }
+  .arch-diagram pre {
+    font-family: 'SF Mono', 'Fira Code', monospace; font-size: .8rem;
+    color: var(--text-muted); line-height: 1.5; white-space: pre;
+  }
+
+  /* ── Workflow Steps ── */
+  .workflow { margin-top: 2rem; counter-reset: step; }
+  .step {
+    display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem;
+    padding-bottom: 2.5rem; position: relative;
+  }
+  .step::before {
+    content: ''; position: absolute; left: 29px; top: 60px; bottom: 0;
+    width: 2px; background: var(--card-border);
+  }
+  .step:last-child::before { display: none; }
+  .step-num {
+    counter-increment: step;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(212,160,23,.15); border: 2px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; font-weight: 700; color: var(--gold);
+  }
+  .step-num::after { content: counter(step); }
+  .step-content { padding-top: .5rem; }
+  .step-content h4 { font-size: 1.1rem; color: #fff; margin-bottom: .3rem; }
+  .step-content p { font-size: .92rem; color: var(--text-muted); }
+  .step-ui {
+    margin-top: .75rem; padding: 1rem 1.25rem;
+    background: rgba(212,160,23,.06); border: 1px solid rgba(212,160,23,.15);
+    border-radius: 10px; font-size: .85rem; color: var(--text-muted);
+  }
+  .step-ui code {
+    background: rgba(255,255,255,.07); padding: .15rem .4rem; border-radius: 4px;
+    font-family: 'SF Mono', monospace; font-size: .8rem; color: var(--accent-blue);
+  }
+
+  /* ── API Table ── */
+  .api-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; font-size: .88rem; }
+  .api-table th {
+    text-align: left; padding: .75rem 1rem; border-bottom: 2px solid var(--card-border);
+    color: var(--gold); font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: 1px;
+  }
+  .api-table td {
+    padding: .6rem 1rem; border-bottom: 1px solid var(--card-border); color: var(--text-muted);
+  }
+  .api-table tr:hover td { background: rgba(212,160,23,.04); }
+  .method { font-weight: 700; font-family: monospace; }
+  .method.get { color: var(--accent-blue); }
+  .method.post { color: var(--accent-green); }
+  .method.patch { color: var(--gold); }
+  .endpoint { font-family: monospace; color: var(--text); }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--card-border);
+    color: var(--text-muted); font-size: .85rem;
+  }
+  footer a { color: var(--gold); }
+
+  /* ── Scroll ── */
+  html { scroll-behavior: smooth; }
+  ::selection { background: rgba(212,160,23,.3); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════  HERO  ═══════════════════════ -->
+<div class="hero">
+  <div class="hero-badge">Product Showcase</div>
+  <h1>The <span>Golden Fork</span></h1>
+  <p class="subtitle">An AI-powered restaurant ordering system that replaces paper menus and manual workflows with a smart, real-time digital experience — from table to kitchen to payment.</p>
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-value">13</div><div class="stat-label">API Endpoints</div></div>
+    <div class="stat"><div class="stat-value">4</div><div class="stat-label">AI Integrations</div></div>
+    <div class="stat"><div class="stat-value">Real-time</div><div class="stat-label">WebSocket Tracking</div></div>
+    <div class="stat"><div class="stat-value">100%</div><div class="stat-label">Mobile-First</div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════  NAV  ═══════════════════════ -->
+<nav class="toc">
+  <a href="#value">Value Props</a>
+  <a href="#problem">Problem &amp; Solution</a>
+  <a href="#features">Key Features</a>
+  <a href="#workflow">User Workflow</a>
+  <a href="#tech">Tech Stack</a>
+  <a href="#architecture">Architecture</a>
+  <a href="#api">API Reference</a>
+  <a href="#roadmap">Roadmap</a>
+</nav>
+
+<!-- ═══════════════════════  KEY VALUE PROPS  ═══════════════════════ -->
+<section id="value" style="padding-top:3rem;padding-bottom:2rem;">
+  <div class="section-label">Core Value Propositions</div>
+  <h2>Four Problems, One Platform</h2>
+  <div class="cards" style="margin-top:1.5rem;">
+    <div class="card" style="border-left:3px solid var(--accent-green);">
+      <div class="card-icon">📡</div>
+      <h4>1. Order Visibility — End Miscommunication</h4>
+      <p>Customers see real-time order progress (Received → Preparing → Ready → Delivered). Kitchen errors are caught before food leaves the pass. No more "I ordered the salmon, not the chicken" — the digital order is the single source of truth.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent-purple);">
+      <div class="card-icon">🌐</div>
+      <h4>2. Language Barrier Breaker</h4>
+      <p>The AI chatbot understands any language. A Western tourist in a Japanese izakaya can type in English and get recommendations. A Cantonese speaker at a French bistro can ask "有咩推薦?" and receive personalized suggestions. No server translation needed — the LLM bridges the gap.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--accent-blue);">
+      <div class="card-icon">🤖</div>
+      <h4>3. AI-Powered Suggestion Picking</h4>
+      <p>Customers don't need to study the menu. They describe what they want ("something warm and filling", "kid-friendly", "impress a date") and the AI picks the best items using semantic search over the entire menu — customizations included.</p>
+    </div>
+    <div class="card" style="border-left:3px solid var(--gold);">
+      <div class="card-icon">💬</div>
+      <h4>4. Chat-Based Business Intelligence</h4>
+      <p>Owners don't just see charts — they can read actual customer conversations. This reveals demand signals that statistics miss: "lots of customers are asking for oat milk but we don't offer it", "tourists keep asking what's halal". Natural language analysis beyond the numbers.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  PROBLEM / SOLUTION  ═══════════════════════ -->
+<section id="problem">
+  <div class="section-label">Why It Matters</div>
+  <h2>The Problem &amp; Our Solution</h2>
+  <p>Traditional restaurant ordering is plagued by friction — long wait times, miscommunication between front-of-house and kitchen, and zero data visibility for owners. The Golden Fork reimagines this entire flow.</p>
+
+  <div class="ps-grid">
+    <div class="ps-col problem">
+      <h3 style="color:var(--accent-red);">The Problem</h3>
+      <ul>
+        <li>Customers wait 5-10 minutes just to get a server's attention</li>
+        <li>Paper menus can't show allergens, pairings, or real-time availability</li>
+        <li>Miscommunicated orders lead to costly kitchen remakes (3-5% of revenue)</li>
+        <li>Customers can't track order progress — "Where's my food?" is the #1 complaint</li>
+        <li>Language barriers block international diners — a Western tourist in a Japanese or Hong Kong restaurant can't read the menu or communicate preferences</li>
+        <li>Owners have no real-time visibility into sales velocity or popular items</li>
+        <li>Owners can't analyze customer conversations — valuable intent data is lost after every table</li>
+        <li>Feedback loops are slow — issues surface on Yelp, not in the moment</li>
+        <li>Checkout requires server involvement, slowing table turnover</li>
+      </ul>
+    </div>
+    <div class="ps-col solution">
+      <h3 style="color:var(--accent-green);">Our Solution</h3>
+      <ul>
+        <li>QR code → instant digital menu, order in under 60 seconds</li>
+        <li>AI chatbot answers questions about allergens, ingredients, and pairings</li>
+        <li>Orders flow directly to Kitchen Display System — zero miscommunication</li>
+        <li>Live order tracking (Received → Preparing → Ready → Delivered) — customers always know their order status, eliminating "where's my food?" anxiety</li>
+        <li>AI chatbot breaks the language barrier — international diners interact in their own language to browse, ask questions, and order confidently, even when staff don't share the same language</li>
+        <li>Owner can review all chatbot conversations — analyze what customers are asking for in natural language, uncovering demand signals that statistics alone can't reveal</li>
+        <li>Real-time analytics dashboard with sales velocity and menu engineering</li>
+        <li>In-app feedback form captures issues before the customer leaves</li>
+        <li>Stripe-powered self-checkout — no waiting for the bill</li>
+        <li>RAG-powered AI gives personalized recommendations from the full menu</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  FEATURES  ═══════════════════════ -->
+<section id="features">
+  <div class="section-label">Capabilities</div>
+  <h2>Key Features</h2>
+  <p>Two integrated interfaces — one for customers, one for restaurant owners — connected by real-time data flows.</p>
+
+  <h3>Customer-Facing</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🤖</div>
+      <h4>AI Menu Assistant &amp; Smart Suggestions</h4>
+      <p>A conversational chatbot powered by OpenAI + RAG (Pinecone vector search) that answers dietary questions, suggests pairings, and adds items to cart via natural language. Customers don't need to know what to order — the AI picks for them based on preferences, mood, or dietary needs ("I want something light and spicy").</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📱</div>
+      <h4>QR Code Ordering</h4>
+      <p>Scan a table QR code to instantly open a beautiful, categorized digital menu. Browse, customize (size, temperature, extras), and add to cart — no app download needed.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">💳</div>
+      <h4>Stripe Self-Checkout</h4>
+      <p>One-tap checkout with Stripe hosted payment page. Supports cards, Apple Pay, and Google Pay. Webhook confirms payment and updates order status automatically.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h4>Language Barrier Breaker</h4>
+      <p>The LLM-powered chatbot understands any language a customer types in. A Western tourist at a Japanese restaurant, or a Mandarin speaker at a Western bistro, can browse, ask questions, and order entirely in their own language — no translation app needed, no miscommunication with staff.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📡</div>
+      <h4>Live Order Tracking</h4>
+      <p>WebSocket-powered real-time updates. Customers see their order move from "Received" → "Preparing" → "Ready" → "Delivered" with visual progress indicators. Eliminates the #1 diner complaint ("Where's my food?") and reduces unnecessary interruptions to staff.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⭐</div>
+      <h4>Instant Feedback</h4>
+      <p>Post-meal feedback form with star ratings, category tags (food, service, ambiance), and comments. Captured before the customer leaves the restaurant.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔔</div>
+      <h4>Service Requests</h4>
+      <p>Customers can request water refills, extra napkins, or call a server — all without flagging someone down. Requests appear on the owner dashboard in real time.</p>
+    </div>
+  </div>
+
+  <h3>Owner / Management Dashboard</h3>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🍳</div>
+      <h4>Kitchen Display System (KDS)</h4>
+      <p>Real-time order queue organized by table. Kitchen staff update order status with one click. Color-coded urgency indicators keep service fast.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📊</div>
+      <h4>Sales &amp; Menu Analytics</h4>
+      <p>Recharts-powered visualizations: sales velocity over time, menu engineering matrix (stars / puzzles / plowhorses / dogs), and revenue breakdowns.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🧠</div>
+      <h4>AI Business Insights &amp; Chat Analytics</h4>
+      <p>Goes beyond statistics — owners can review all customer chatbot conversations to understand what diners are actually asking for in natural language. The AI also analyzes order patterns, peak hours, and preferences to surface actionable insights like "Customers frequently ask for vegan options but your menu only has 2 — consider adding more."</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">👨‍🍳</div>
+      <h4>Chef's Choice Manager</h4>
+      <p>Owner can promote featured items that appear prominently in the ordering interface and get priority in AI chatbot recommendations.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  WORKFLOW  ═══════════════════════ -->
+<section id="workflow">
+  <div class="section-label">User Journey</div>
+  <h2>Step-by-Step Workflow</h2>
+  <p>From the moment a customer sits down to payment confirmation — every step is digital, fast, and connected.</p>
+
+  <div class="workflow">
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Scan QR Code &amp; Enter Table</h4>
+        <p>Customer scans the QR code on their table, which encodes a URL like <code>/order?table=7</code>. The app opens instantly in their mobile browser — no download required. If no QR code is available, a manual table number input screen appears.</p>
+        <div class="step-ui"><strong>UI:</strong> Welcome screen with restaurant logo → table number input field with "Go" button → transitions to full menu</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Browse the Digital Menu</h4>
+        <p>A categorized, scrollable menu appears with items organized by type (Appetizers, Main Course, Desserts, Beverages, etc.). Each item shows name, description, price, and dietary tags. A search bar at the top enables quick filtering.</p>
+        <div class="step-ui"><strong>UI:</strong> Category filter chips at top → grid of menu item cards with image area, name, description, price → search bar → cart badge in header showing item count</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Ask the AI Assistant (Optional) — In Any Language</h4>
+        <p>A floating chat bubble in the bottom-right opens the AI assistant. Customers can ask questions like "What's gluten-free?", "Suggest something spicy", or "What pairs well with the steak?" — in English, Japanese, Cantonese, Mandarin, Spanish, or any language. The LLM understands the intent and responds naturally. This is a game-changer for international diners: a tourist in Hong Kong can type in English and get accurate recommendations from a Chinese menu, or a Japanese visitor in New York can order in Japanese. The chatbot uses RAG with Pinecone vector search over the full menu database to give context-aware answers, and can add items directly to the cart — solving both the suggestion problem and the language barrier in one interaction.</p>
+        <div class="step-ui"><strong>UI:</strong> Floating 💬 button → expandable chat panel → message bubbles with typing indicator → multilingual input accepted → "Add to Cart" buttons on suggested items → "Proceed to Checkout" button for chatbot cart</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Customize &amp; Add to Cart</h4>
+        <p>Tapping a menu item opens a customization modal where customers can select options like size (Regular / Large), temperature (Hot / Iced), and extras (Extra shot, Oat milk, etc.). Selections are stored in cart state with full customization details.</p>
+        <div class="step-ui"><strong>UI:</strong> Modal overlay → item name and description → radio button groups for each customization category → quantity selector → "Add to Cart" button with updated price</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Review Cart &amp; Checkout</h4>
+        <p>The slide-out cart panel shows all items with quantities, customizations, and line totals. Customers can adjust quantities or remove items. Pressing "Checkout" triggers a Stripe Checkout session — the customer is redirected to Stripe's secure hosted payment page.</p>
+        <div class="step-ui"><strong>UI:</strong> Slide-out cart drawer from right → line items with +/- buttons → order subtotal → "Proceed to Checkout" button → redirect to Stripe payment page → Apple Pay / Google Pay / card entry</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Payment &amp; Order Confirmation</h4>
+        <p>After successful payment on Stripe, a webhook fires to <code>/api/webhooks/stripe</code> which creates the order in the system with status "received". The customer is redirected to a confirmation page showing their order number, items ordered, and table number.</p>
+        <div class="step-ui"><strong>UI:</strong> Confirmation page with ✓ animation → order number → itemized receipt → "Track your order" link → table number badge</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Real-Time Order Tracking</h4>
+        <p>The order tracking component connects via WebSocket to receive live status updates. As kitchen staff update the order on their KDS, the customer sees the progress in real time: Received → Preparing → Ready → Delivered.</p>
+        <div class="step-ui"><strong>UI:</strong> Progress stepper with 4 stages → active stage highlighted in gold → estimated time display → pulsing animation on current status → auto-updates without page refresh</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Kitchen Receives &amp; Prepares Order</h4>
+        <p>On the owner's Dashboard, the Kitchen Display System (KDS) shows incoming orders in a card layout organized by table number. Kitchen staff click to advance the status. Service requests (water, napkins) appear in a separate panel.</p>
+        <div class="step-ui"><strong>UI:</strong> Dashboard → KDS tab → order cards with table #, items, timestamps → status buttons (Preparing / Ready / Delivered) → color-coded urgency → service requests panel on the side</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Leave Feedback</h4>
+        <p>After the meal, customers can submit feedback via a built-in form. Ratings (1-5 stars), category selection (food quality, service, ambiance, value), and free-text comments. This data feeds directly into the analytics dashboard.</p>
+        <div class="step-ui"><strong>UI:</strong> Feedback form with star rating component → category chips (multi-select) → text area for comments → "Submit Feedback" button → thank-you confirmation</div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num"></div>
+      <div class="step-content">
+        <h4>Owner Reviews Analytics, Chat Logs &amp; AI Insights</h4>
+        <p>The analytics section goes beyond charts and statistics. Owners can review actual chatbot conversations to understand customer intent in natural language — seeing what diners ask for, what confuses them, and what's missing from the menu. Combined with real-time sales velocity charts, a menu engineering matrix (stars / puzzles / plowhorses / dogs), feedback stats, and AI-generated insights, owners get a complete picture: the numbers tell them <em>what</em> happened, while the chat logs tell them <em>why</em>.</p>
+        <div class="step-ui"><strong>UI:</strong> Dashboard → Analytics tab → Sales Velocity line chart → Menu Engineering scatter plot → Feedback summary → AI Insights panel with natural-language recommendations → Chat conversation logs showing real customer questions and preferences</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  TECH STACK  ═══════════════════════ -->
+<section id="tech">
+  <div class="section-label">Technology</div>
+  <h2>Tech Stack — General to Specific</h2>
+  <p>Built with a modern, production-ready stack optimized for real-time restaurant operations and AI-powered experiences.</p>
+
+  <div class="tech-layers">
+    <div class="tech-layer">
+      <div class="tech-layer-name">Frontend</div>
+      <div class="tech-tags">
+        <span class="tech-tag frontend">Next.js 16</span>
+        <span class="tech-tag frontend">React 18</span>
+        <span class="tech-tag frontend">TypeScript 5</span>
+        <span class="tech-tag frontend">Tailwind CSS 3</span>
+        <span class="tech-tag frontend">Radix UI (shadcn/ui)</span>
+        <span class="tech-tag frontend">Recharts</span>
+        <span class="tech-tag frontend">Lucide Icons</span>
+      </div>
+    </div>
+    <div class="tech-layer">
+      <div class="tech-layer-name">Backend / API</div>
+      <div class="tech-tags">
+        <span class="tech-tag backend">Next.js App Router (API Routes)</span>
+        <span class="tech-tag backend">Node.js 18+</span>
+        <span class="tech-tag backend">In-Memory Data Store (JS Maps)</span>
+        <span class="tech-tag backend">WebSocket Server (ws library)</span>
+        <span class="tech-tag backend">RESTful API Design</span>
+      </div>
+    </div>
+    <div class="tech-layer">
+      <div class="tech-layer-name">AI / ML</div>
+      <div class="tech-tags">
+        <span class="tech-tag ai">OpenAI GPT-4 (Chat Completion)</span>
+        <span class="tech-tag ai">OpenAI Embeddings (text-embedding-ada-002)</span>
+        <span class="tech-tag ai">Pinecone Vector Database</span>
+        <span class="tech-tag ai">RAG Pipeline (Retrieval-Augmented Generation)</span>
+        <span class="tech-tag ai">AI Business Insights (pattern analysis)</span>
+      </div>
+    </div>
+    <div class="tech-layer">
+      <div class="tech-layer-name">Payments</div>
+      <div class="tech-tags">
+        <span class="tech-tag infra">Stripe Checkout (Hosted Payment)</span>
+        <span class="tech-tag infra">Stripe Webhooks (payment confirmation)</span>
+        <span class="tech-tag infra">Apple Pay / Google Pay</span>
+      </div>
+    </div>
+    <div class="tech-layer">
+      <div class="tech-layer-name">Infrastructure</div>
+      <div class="tech-tags">
+        <span class="tech-tag infra">Docker (Multi-stage Build)</span>
+        <span class="tech-tag infra">Render (Cloud Hosting)</span>
+        <span class="tech-tag infra">GitHub (Version Control)</span>
+        <span class="tech-tag infra">Concurrently (Process Management)</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>Why These Choices?</h3>
+  <div class="cards" style="margin-top:1rem;">
+    <div class="card">
+      <h4>Next.js 16 App Router</h4>
+      <p>Server-side rendering for SEO and fast initial loads. API routes co-located with frontend — single deployment. React Server Components reduce client bundle size.</p>
+    </div>
+    <div class="card">
+      <h4>RAG over Fine-Tuning</h4>
+      <p>Menu data changes frequently. RAG with Pinecone allows real-time menu updates without retraining a model. Embeddings capture semantic meaning — "something light" matches salads and soups.</p>
+    </div>
+    <div class="card">
+      <h4>In-Memory Store</h4>
+      <p>MVP-appropriate choice for rapid iteration. Orders, sessions, and feedback stored in JavaScript Maps. Easily swappable to PostgreSQL/Redis for production scale without changing the API layer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  ARCHITECTURE  ═══════════════════════ -->
+<section id="architecture">
+  <div class="section-label">System Design</div>
+  <h2>Architecture Overview</h2>
+
+  <div class="arch-diagram" style="padding:1.5rem;">
+    <svg viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:900px;margin:0 auto;display:block;">
+      <defs>
+        <marker id="arrow" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#9a9ab0"/></marker>
+        <marker id="arrow-gold" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6" fill="#d4a017"/></marker>
+      </defs>
+      <!-- Customer Device -->
+      <rect x="20" y="10" width="860" height="120" rx="12" fill="none" stroke="#4fc3f7" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="450" y="35" text-anchor="middle" fill="#4fc3f7" font-size="11" font-weight="700" letter-spacing="2">CUSTOMER DEVICE (Mobile Browser)</text>
+      <rect x="50" y="50" width="170" height="60" rx="8" fill="rgba(79,195,247,.1)" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="135" y="75" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Order Page</text>
+      <text x="135" y="93" text-anchor="middle" fill="#9a9ab0" font-size="10">/order?table=N</text>
+      <rect x="250" y="50" width="170" height="60" rx="8" fill="rgba(79,195,247,.1)" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="335" y="75" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">AI Chatbot</text>
+      <text x="335" y="93" text-anchor="middle" fill="#9a9ab0" font-size="10">ChatWidget</text>
+      <rect x="450" y="50" width="170" height="60" rx="8" fill="rgba(79,195,247,.1)" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="535" y="75" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Cart &amp; Checkout</text>
+      <text x="535" y="93" text-anchor="middle" fill="#9a9ab0" font-size="10">Stripe Payment</text>
+      <rect x="650" y="50" width="170" height="60" rx="8" fill="rgba(79,195,247,.1)" stroke="#4fc3f7" stroke-width="1"/>
+      <text x="735" y="75" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Order Tracking</text>
+      <text x="735" y="93" text-anchor="middle" fill="#9a9ab0" font-size="10">WebSocket Live</text>
+      <!-- Arrows down -->
+      <line x1="135" y1="110" x2="135" y2="165" stroke="#9a9ab0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="145" y="145" fill="#9a9ab0" font-size="9">HTTP</text>
+      <line x1="335" y1="110" x2="335" y2="165" stroke="#9a9ab0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="345" y="145" fill="#9a9ab0" font-size="9">HTTP</text>
+      <line x1="535" y1="110" x2="535" y2="165" stroke="#9a9ab0" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <text x="545" y="145" fill="#9a9ab0" font-size="9">HTTP</text>
+      <line x1="735" y1="110" x2="735" y2="165" stroke="#d4a017" stroke-width="1.2" marker-end="url(#arrow-gold)"/>
+      <text x="745" y="145" fill="#d4a017" font-size="9">WS</text>
+      <!-- API Layer -->
+      <rect x="20" y="170" width="860" height="150" rx="12" fill="none" stroke="#66bb6a" stroke-width="1.5"/>
+      <text x="450" y="195" text-anchor="middle" fill="#66bb6a" font-size="11" font-weight="700" letter-spacing="2">NEXT.JS APP ROUTER — API LAYER</text>
+      <text x="450" y="215" text-anchor="middle" fill="#9a9ab0" font-size="10">/api/orders · /api/chat · /api/checkout · /api/feedback · /api/insights · /api/webhooks/stripe</text>
+      <rect x="60" y="232" width="180" height="55" rx="8" fill="rgba(102,187,106,.1)" stroke="#66bb6a" stroke-width="1"/>
+      <text x="150" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Order Store</text>
+      <text x="150" y="273" text-anchor="middle" fill="#9a9ab0" font-size="10">In-Memory (JS Maps)</text>
+      <rect x="280" y="232" width="180" height="55" rx="8" fill="rgba(102,187,106,.1)" stroke="#66bb6a" stroke-width="1"/>
+      <text x="370" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">RAG Service</text>
+      <text x="370" y="273" text-anchor="middle" fill="#9a9ab0" font-size="10">ragService.ts</text>
+      <rect x="500" y="232" width="180" height="55" rx="8" fill="rgba(102,187,106,.1)" stroke="#66bb6a" stroke-width="1"/>
+      <text x="590" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Stripe SDK</text>
+      <text x="590" y="273" text-anchor="middle" fill="#9a9ab0" font-size="10">Payments &amp; Webhooks</text>
+      <rect x="720" y="232" width="140" height="55" rx="8" fill="rgba(102,187,106,.1)" stroke="#66bb6a" stroke-width="1"/>
+      <text x="790" y="255" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">WS Server</text>
+      <text x="790" y="273" text-anchor="middle" fill="#9a9ab0" font-size="10">Real-time Push</text>
+      <!-- Arrows to external -->
+      <line x1="330" y1="287" x2="280" y2="355" stroke="#ab47bc" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <line x1="410" y1="287" x2="460" y2="355" stroke="#ab47bc" stroke-width="1.2" marker-end="url(#arrow)"/>
+      <!-- External Services -->
+      <rect x="160" y="360" width="200" height="60" rx="10" fill="rgba(171,71,188,.12)" stroke="#ab47bc" stroke-width="1.5"/>
+      <text x="260" y="387" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">OpenAI API</text>
+      <text x="260" y="405" text-anchor="middle" fill="#9a9ab0" font-size="10">GPT-4 + Embeddings</text>
+      <rect x="400" y="360" width="200" height="60" rx="10" fill="rgba(171,71,188,.12)" stroke="#ab47bc" stroke-width="1.5"/>
+      <text x="500" y="387" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Pinecone</text>
+      <text x="500" y="405" text-anchor="middle" fill="#9a9ab0" font-size="10">Vector DB (Menu Index)</text>
+      <rect x="640" y="360" width="200" height="60" rx="10" fill="rgba(212,160,23,.12)" stroke="#d4a017" stroke-width="1.5"/>
+      <text x="740" y="387" text-anchor="middle" fill="#fff" font-size="12" font-weight="600">Stripe</text>
+      <text x="740" y="405" text-anchor="middle" fill="#9a9ab0" font-size="10">Hosted Checkout</text>
+      <!-- Arrows from Stripe SDK to Stripe -->
+      <line x1="590" y1="287" x2="700" y2="355" stroke="#d4a017" stroke-width="1.2" marker-end="url(#arrow-gold)"/>
+      <!-- Owner Dashboard -->
+      <rect x="20" y="460" width="860" height="140" rx="12" fill="none" stroke="#d4a017" stroke-width="1.5" stroke-dasharray="6,3"/>
+      <text x="450" y="485" text-anchor="middle" fill="#d4a017" font-size="11" font-weight="700" letter-spacing="2">OWNER DASHBOARD (/dashboard)</text>
+      <rect x="50" y="500" width="170" height="55" rx="8" fill="rgba(212,160,23,.1)" stroke="#d4a017" stroke-width="1"/>
+      <text x="135" y="523" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">KDS Board</text>
+      <text x="135" y="541" text-anchor="middle" fill="#9a9ab0" font-size="10">Order Queue</text>
+      <rect x="250" y="500" width="170" height="55" rx="8" fill="rgba(212,160,23,.1)" stroke="#d4a017" stroke-width="1"/>
+      <text x="335" y="523" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Analytics</text>
+      <text x="335" y="541" text-anchor="middle" fill="#9a9ab0" font-size="10">Charts &amp; Metrics</text>
+      <rect x="450" y="500" width="170" height="55" rx="8" fill="rgba(212,160,23,.1)" stroke="#d4a017" stroke-width="1"/>
+      <text x="535" y="523" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">AI Insights</text>
+      <text x="535" y="541" text-anchor="middle" fill="#9a9ab0" font-size="10">+ Chat Logs</text>
+      <rect x="650" y="500" width="170" height="55" rx="8" fill="rgba(212,160,23,.1)" stroke="#d4a017" stroke-width="1"/>
+      <text x="735" y="523" text-anchor="middle" fill="#fff" font-size="11" font-weight="600">Service Requests</text>
+      <text x="735" y="541" text-anchor="middle" fill="#9a9ab0" font-size="10">Water, Napkins, etc.</text>
+      <!-- Bidirectional arrow API <-> Dashboard -->
+      <line x1="450" y1="320" x2="450" y2="455" stroke="#d4a017" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="460" y="440" fill="#d4a017" font-size="9">Polling / API</text>
+    </svg>
+  </div>
+</section>
+
+<!-- ═══════════════════════  API REFERENCE  ═══════════════════════ -->
+<section id="api">
+  <div class="section-label">Technical Detail</div>
+  <h2>API Endpoints</h2>
+  <p>RESTful API built with Next.js App Router route handlers. All endpoints return JSON.</p>
+
+  <table class="api-table">
+    <thead>
+      <tr><th>Method</th><th>Endpoint</th><th>Purpose</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/chat</td><td>AI chatbot — sends user message, returns AI response via RAG pipeline</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/checkout</td><td>Creates Stripe Checkout session from cart items, returns payment URL</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/webhooks/stripe</td><td>Stripe webhook — confirms payment, creates order in system</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/orders</td><td>List all orders (optionally filtered by table or status)</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/orders</td><td>Create a new order manually</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/orders/[id]</td><td>Get single order details by ID</td></tr>
+      <tr><td class="method patch">PATCH</td><td class="endpoint">/api/orders/[id]/status</td><td>Update order status (received → preparing → ready → delivered)</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/feedback</td><td>Submit customer feedback (rating, categories, comment)</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/feedback/stats</td><td>Aggregated feedback statistics for dashboard</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/service-requests</td><td>Customer service request (water, napkins, call server)</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/service-requests</td><td>List pending service requests for dashboard</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/insights</td><td>AI-generated business insights from order data</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/admin/index-menu</td><td>Index menu items into Pinecone for RAG search</td></tr>
+      <tr><td class="method post">POST</td><td class="endpoint">/api/admin/chefs-choice</td><td>Update Chef's Choice featured items</td></tr>
+      <tr><td class="method get">GET</td><td class="endpoint">/api/health</td><td>Health check endpoint for monitoring</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═══════════════════════  ROADMAP  ═══════════════════════ -->
+<section id="roadmap">
+  <div class="section-label">What's Next</div>
+  <h2>Future Roadmap</h2>
+  <div class="cards">
+    <div class="card">
+      <div class="card-icon">🗄️</div>
+      <h4>Persistent Database</h4>
+      <p>Migrate from in-memory Maps to PostgreSQL (or Supabase) for production durability. Add user accounts and order history.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🏪</div>
+      <h4>Multi-Restaurant Support</h4>
+      <p>Tenant isolation, custom branding per restaurant, centralized management console for restaurant groups.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📈</div>
+      <h4>Advanced Analytics</h4>
+      <p>Predictive demand forecasting, inventory management integration, labor scheduling recommendations based on order patterns.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🌐</div>
+      <h4>Localized UI &amp; Menu Translations</h4>
+      <p>The chatbot already understands any language — next step is translating the entire menu UI, item names, and descriptions into the customer's detected language automatically.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════  FOOTER  ═══════════════════════ -->
+<footer>
+  <p><strong>The Golden Fork</strong> — AI-Powered Restaurant Ordering System</p>
+  <p style="margin-top:.5rem;">Built with Next.js 16 · React 18 · OpenAI · Pinecone · Stripe · WebSocket</p>
+  <p style="margin-top:.5rem;">
+    <a href="https://github.com/aidenmak0624/golden-fork" target="_blank">GitHub Repository</a>
+  </p>
+</footer>
+
+</body>
+</html>
