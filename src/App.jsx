@@ -46,6 +46,28 @@ const Portfolio = () => {
   const featuredProjects = [
     {
       id: 0,
+      title: "HR Intelligence Platform — Multi-Agent System",
+      tag: "Multi-Agent · LangGraph · RAG · GCP · Enterprise",
+      description:
+        "Production-grade multi-agent HR platform with 8 specialized LangGraph agents handling policy Q&A, leave management, compliance auditing (GDPR/CCPA), and workforce analytics. Features RAG-powered knowledge retrieval, HRIS connectors (Workday, BambooHR), PII detection, bias logging, and a real-time dashboard. 51K lines of Python with 2,079 tests across 68 test files. Deployed live on Google Cloud Run.",
+      metrics: [
+        { label: "AI Agents", value: "8" },
+        { label: "Test Functions", value: "2,079" },
+        { label: "Lines of Code", value: "51K" },
+      ],
+      color: "#3b82f6",
+      github: "https://github.com/aidenmak0624/HR_agent",
+      live: "https://hr-platform-837558695367.us-central1.run.app/dashboard",
+      showcases: {
+        developer: "/showcase/hr-agent-developer.html",
+        business: "/showcase/hr-agent-business.html",
+        vibeCoding: "/showcase/hr-agent-vibe-coding.html",
+      },
+      tech: ["Python", "LangGraph", "Flask", "OpenAI", "Gemini", "ChromaDB", "SQLAlchemy", "Playwright", "GCP Cloud Run", "Docker"],
+      isNew: true,
+    },
+    {
+      id: 1,
       title: "The Golden Fork — AI Restaurant Platform",
       tag: "Full-Stack · RAG · OpenAI · Stripe · Next.js",
       description:
@@ -63,8 +85,8 @@ const Portfolio = () => {
       isNew: true,
     },
     {
-      id: 1,
-      title: "Upstander Program — CMHR Partnership",
+      id: 2,
+      title: "Upstander Program \u2014 CMHR Partnership",
       tag: "AI Education · Gemini · Flask · NLP",
       description:
         "AI-enhanced educational platform built in partnership with the Canadian Museum for Human Rights. Personalized learning journeys through conversational AI, strength assessments, scenario-based simulations, and community engagement — guiding users from recognizing injustice to taking action.",
@@ -78,7 +100,7 @@ const Portfolio = () => {
       tech: ["Python", "Gemini Flash 2.0", "Flask", "NLP", "Pandas"],
     },
     {
-      id: 2,
+      id: 3,
       title: "Human Rights Education Agent",
       tag: "Agentic AI · LangGraph · Workflow Orchestration",
       description:
@@ -93,7 +115,7 @@ const Portfolio = () => {
       tech: ["Python", "LangGraph", "LangChain", "Gemini", "ChromaDB", "PostgreSQL"],
     },
     {
-      id: 3,
+      id: 4,
       title: "Human Rights Education RAG",
       tag: "RESTful API · RAG · PostgreSQL",
       description:
@@ -108,7 +130,7 @@ const Portfolio = () => {
       tech: ["Python", "Flask", "PostgreSQL", "ChromaDB", "Gemini", "RESTful APIs"],
     },
     {
-      id: 4,
+      id: 5,
       title: "Data Automation Agent",
       tag: "AI Tool · Streamlit · SQLite",
       description:
@@ -126,7 +148,7 @@ const Portfolio = () => {
 
   const moreProjects = [
     {
-      id: 5,
+      id: 6,
       title: "TeachReach Tutoring Platform",
       tag: "Agile · Java · SOLID · CI/CD",
       description:
@@ -141,7 +163,7 @@ const Portfolio = () => {
       tech: ["Java", "SQL", "JDBC", "JUnit", "Agile/Scrum", "CI/CD"],
     },
     {
-      id: 6,
+      id: 7,
       title: "Municipal Data Analytics Platform",
       tag: "PostgreSQL · Database Engineering · Analytics",
       description:
@@ -156,7 +178,7 @@ const Portfolio = () => {
       tech: ["SQL", "PostgreSQL", "Python", "Pandas", "scikit-learn", "Database Design"],
     },
     {
-      id: 7,
+      id: 8,
       title: "Systems Programming in C",
       tag: "OS · MPI · OpenMP · Parallel",
       description:
@@ -171,7 +193,7 @@ const Portfolio = () => {
       tech: ["C", "MPI", "OpenMP", "POSIX Threads", "SLURM"],
     },
     {
-      id: 8,
+      id: 9,
       title: "Premier League DBMS",
       tag: "SQL · JDBC · Database Design",
       description:
@@ -194,18 +216,19 @@ const Portfolio = () => {
   const skills = [
     {
       category: "Languages",
-      items: ["TypeScript", "Python (Advanced)", "Java", "C/C++", "SQL"],
+      items: ["Python (Advanced)", "TypeScript", "Java", "C/C++", "SQL"],
     },
     {
       category: "AI / ML",
       items: [
-        "OpenAI API",
-        "Pinecone",
+        "Multi-Agent Systems",
         "LangGraph",
         "LangChain",
-        "ChromaDB",
-        "RAG Pipelines",
+        "OpenAI API",
         "Gemini API",
+        "RAG Pipelines",
+        "Pinecone",
+        "ChromaDB",
         "Workflow Orchestration",
         "Sentence Transformers",
         "Scikit-learn",
@@ -218,6 +241,7 @@ const Portfolio = () => {
         "React",
         "Tailwind CSS",
         "Flask",
+        "SQLAlchemy",
         "RESTful API Design",
         "PostgreSQL",
         "Stripe Integration",
@@ -227,17 +251,28 @@ const Portfolio = () => {
       ],
     },
     {
-      category: "DevOps & Practices",
+      category: "DevOps & Testing",
       items: [
+        "Docker",
+        "GCP Cloud Run",
         "Git",
         "Linux/Unix",
         "CI/CD Pipelines",
-        "GCP",
+        "Playwright",
+        "Pytest",
         "Render",
         "Agile/Scrum",
         "TDD",
-        "JUnit",
-        "SOLID Principles",
+      ],
+    },
+    {
+      category: "AI-Assisted Development",
+      items: [
+        "Claude Code (Cowork)",
+        "GitHub Copilot",
+        "Antigravity",
+        "Vibe Coding Methodology",
+        "AI-Driven Testing",
       ],
     },
   ];
@@ -416,6 +451,49 @@ const Portfolio = () => {
                 <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
               </svg>
             </a>
+          )}
+          {project.showcases && (
+            <>
+              <a
+                href={project.showcases.developer}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link-btn"
+                title="Developer Showcase"
+                style={{ borderColor: "rgba(99,102,241,0.3)", color: "#818cf8", background: "rgba(99,102,241,0.05)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="16 18 22 12 16 6" />
+                  <polyline points="8 6 2 12 8 18" />
+                </svg>
+              </a>
+              <a
+                href={project.showcases.business}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link-btn"
+                title="Business Showcase"
+                style={{ borderColor: "rgba(59,130,246,0.3)", color: "#3b82f6", background: "rgba(59,130,246,0.05)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                  <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+                </svg>
+              </a>
+              <a
+                href={project.showcases.vibeCoding}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="project-link-btn"
+                title="Vibe Coding Journey"
+                style={{ borderColor: "rgba(168,85,247,0.3)", color: "#a855f7", background: "rgba(168,85,247,0.05)" }}
+              >
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 20h9" />
+                  <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
+                </svg>
+              </a>
+            </>
           )}
           {project.live && (
             <a
@@ -980,12 +1058,13 @@ const Portfolio = () => {
               transition: "opacity 0.8s 0.6s",
             }}
           >
-            24-year-old BSc Honours CS grad from the University of
-            Manitoba (2025), now based in Toronto. I build full-stack AI
-            products — from a CMHR educational platform to a live restaurant
-            system with RAG-powered menu recommendations and Stripe checkout.
-            Trilingual (Cantonese, Mandarin, English) and passionate about
-            shipping systems that solve real problems, not just demo.
+            BSc Honours CS grad from the University of Manitoba (2025),
+            now based in Toronto. I build production-grade AI systems — from
+            an 8-agent HR platform with compliance auditing and workforce
+            analytics (51K LOC, deployed on GCP) to a RAG-powered restaurant
+            system with real-time ordering and Stripe checkout. Trilingual
+            (Cantonese, Mandarin, English) and passionate about shipping
+            multi-agent systems that solve real enterprise problems.
           </p>
 
           <div
