@@ -47,13 +47,13 @@ const Portfolio = () => {
     {
       id: 0,
       title: "HR Intelligence Platform — Multi-Agent System",
-      tag: "Multi-Agent · LangGraph · RAG · GCP · Enterprise",
+      tag: "Multi-Agent · LangGraph · MCP · RAG · GCP · Enterprise",
       description:
-        "Production-grade multi-agent HR platform with 8 specialized LangGraph agents handling policy Q&A, leave management, compliance auditing (GDPR/CCPA), and workforce analytics. Features RAG-powered knowledge retrieval, HRIS connectors (Workday, BambooHR), PII detection, bias logging, and a real-time dashboard. 51K lines of Python with 2,079 tests across 68 test files. Deployed live on Google Cloud Run.",
+        "Enterprise-grade multi-agent HR platform with 8 specialized LangGraph agents handling policy Q&A, leave management, benefits enrollment, compliance auditing (GDPR/CCPA/HIPAA), and workforce analytics. Integrates MCP (Model Context Protocol) via FastMCP with 28 tools, 8 resources, and 5 prompts — plus a BambooHR MCP connector. Features RAG-powered knowledge retrieval, live database analytics, PII detection, and production observability with Prometheus and Grafana. 101 modules, 1,909 tests. Deployed on Google Cloud Run with CI/CD.",
       metrics: [
         { label: "AI Agents", value: "8" },
-        { label: "Test Functions", value: "2,079" },
-        { label: "Lines of Code", value: "51K" },
+        { label: "MCP Tools", value: "28" },
+        { label: "Tests", value: "1,909" },
       ],
       color: "#3b82f6",
       github: "https://github.com/aidenmak0624/HR_agent",
@@ -63,7 +63,7 @@ const Portfolio = () => {
         business: "/showcase/hr-agent-business.html",
         vibeCoding: "/showcase/hr-agent-vibe-coding.html",
       },
-      tech: ["Python", "LangGraph", "Flask", "OpenAI", "Gemini", "ChromaDB", "SQLAlchemy", "Playwright", "GCP Cloud Run", "Docker"],
+      tech: ["Python", "LangGraph", "MCP (FastMCP)", "Flask", "OpenAI", "Gemini", "ChromaDB", "PostgreSQL", "Redis", "SQLAlchemy", "Playwright", "GCP Cloud Run", "Docker", "Prometheus"],
       isNew: true,
     },
     {
@@ -222,6 +222,7 @@ const Portfolio = () => {
       category: "AI / ML",
       items: [
         "Multi-Agent Systems",
+        "MCP (Model Context Protocol)",
         "LangGraph",
         "LangChain",
         "OpenAI API",
@@ -244,6 +245,7 @@ const Portfolio = () => {
         "SQLAlchemy",
         "RESTful API Design",
         "PostgreSQL",
+        "Redis",
         "Stripe Integration",
         "WebSocket",
         "Database Schema Design",
@@ -258,6 +260,8 @@ const Portfolio = () => {
         "Git",
         "Linux/Unix",
         "CI/CD Pipelines",
+        "Prometheus",
+        "Grafana",
         "Playwright",
         "Pytest",
         "Render",
@@ -1060,11 +1064,11 @@ const Portfolio = () => {
           >
             BSc Honours CS grad from the University of Manitoba (2025),
             now based in Toronto. I build production-grade AI systems — from
-            an 8-agent HR platform with compliance auditing and workforce
-            analytics (51K LOC, deployed on GCP) to a RAG-powered restaurant
-            system with real-time ordering and Stripe checkout. Trilingual
-            (Cantonese, Mandarin, English) and passionate about shipping
-            multi-agent systems that solve real enterprise problems.
+            an 8-agent HR platform with MCP integration, compliance auditing,
+            and live analytics (deployed on GCP with CI/CD) to a RAG-powered
+            restaurant system with real-time ordering and Stripe checkout.
+            Trilingual (Cantonese, Mandarin, English) and passionate about
+            shipping multi-agent systems that solve real enterprise problems.
           </p>
 
           <div
