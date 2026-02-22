@@ -108,6 +108,7 @@ tr:hover td{background:#fafaf9}
   <button onclick="show('timeline')">Build Timeline</button>
   <button onclick="show('testing')">Testing Story</button>
   <button onclick="show('metrics')">Metrics & Learnings</button>
+  <button onclick="show('boundaries')">LLM Boundaries</button>
 </div>
 
 <div class="container">
@@ -156,28 +157,44 @@ tr:hover td{background:#fafaf9}
 <div id="tools" class="section">
   <div class="card">
     <h2>The AI-Powered Development Stack</h2>
-    <p class="sub">Three AI tools working in concert, each playing a distinct role in the development workflow.</p>
+    <p class="sub">Five tools working in concert, each playing a distinct role in the development workflow.</p>
   </div>
 
   <div class="g3">
     <div class="tool-card" style="border-top:4px solid var(--pri)">
       <div class="icon">🟣</div>
       <h3>Claude Code</h3>
-      <p>Primary development engine. Used for architecture design, multi-file code generation, complex agent logic, testing strategies, and iterative refinement via terminal-based conversations.</p>
-      <div class="pct">~70%</div>
+      <p>Primary development engine. Architecture design, multi-file code generation, complex agent logic, testing strategies, and iterative refinement.</p>
+      <div class="pct">~60%</div>
       <p style="font-size:.78rem;color:var(--txm)">of total code output</p>
     </div>
     <div class="tool-card" style="border-top:4px solid var(--blu)">
       <div class="icon">🤖</div>
       <h3>GitHub Copilot</h3>
-      <p>In-editor companion for real-time autocomplete, inline suggestions, and project integration. Excels at filling in patterns, completing functions from context, and maintaining code consistency.</p>
+      <p>In-editor companion for real-time autocomplete, inline suggestions, and maintaining code consistency across modules.</p>
       <div class="pct">~20%</div>
-      <p style="font-size:.78rem;color:var(--txm)">inline completions & integration</p>
+      <p style="font-size:.78rem;color:var(--txm)">inline completions</p>
+    </div>
+    <div class="tool-card" style="border-top:4px solid #f59e0b">
+      <div class="icon">🎨</div>
+      <h3>Figma</h3>
+      <p>Visual design tool for UI mockups and component layouts. Designs are translated to code via Claude Code, ensuring pixel-accurate implementation.</p>
+      <div class="pct">UI</div>
+      <p style="font-size:.78rem;color:var(--txm)">design-to-code pipeline</p>
+    </div>
+  </div>
+  <div class="g2" style="margin-top:20px;margin-bottom:24px">
+    <div class="tool-card" style="border-top:4px solid var(--acc)">
+      <div class="icon">🚀</div>
+      <h3>Antigravity</h3>
+      <p>Manual UI testing tool for visual QA, interactive flow validation, and catching UX issues that automated tests miss. The human-in-the-loop quality gate before deployment.</p>
+      <div class="pct">QA</div>
+      <p style="font-size:.78rem;color:var(--txm)">manual UI verification</p>
     </div>
     <div class="tool-card" style="border-top:4px solid var(--cyn)">
       <div class="icon">🎭</div>
       <h3>Playwright</h3>
-      <p>AI-assisted browser testing framework. Used for end-to-end UI validation with 14 spec files covering login, dashboard, chat, role switching, mobile responsiveness, and API health.</p>
+      <p>Automated browser testing with 14 spec files covering login, dashboard, chat, role switching, mobile responsiveness, and API health.</p>
       <div class="pct">14</div>
       <p style="font-size:.78rem;color:var(--txm)">browser test suites</p>
     </div>
@@ -193,7 +210,10 @@ tr:hover td{background:#fafaf9}
       <tr><td>Fill in function bodies</td><td><strong>Copilot</strong></td><td>Fast inline completions from surrounding context</td></tr>
       <tr><td>Write API route handlers</td><td><strong>Claude Code</strong> + <strong>Copilot</strong></td><td>Claude generates structure, Copilot fills patterns</td></tr>
       <tr><td>Fix integration issues</td><td><strong>Copilot</strong></td><td>Real-time suggestions while debugging in editor</td></tr>
+      <tr><td>UI/UX design mockups</td><td><strong>Figma</strong></td><td>Visual component design before writing any code</td></tr>
+      <tr><td>Design → code translation</td><td><strong>Figma</strong> → <strong>Claude Code</strong></td><td>Figma provides the visual spec, Claude generates the code</td></tr>
       <tr><td>Generate test suites</td><td><strong>Claude Code</strong></td><td>Comprehensive edge case coverage from spec understanding</td></tr>
+      <tr><td>Manual UI testing</td><td><strong>Antigravity</strong></td><td>Visual QA, interactive flows, catches what automation misses</td></tr>
       <tr><td>Browser E2E testing</td><td><strong>Playwright</strong></td><td>14 spec files testing real user flows across browsers</td></tr>
       <tr><td>CI/CD pipeline debugging</td><td><strong>Claude Code</strong></td><td>Log analysis, config fixes, deployment troubleshooting</td></tr>
     </table>
@@ -475,11 +495,112 @@ tr:hover td{background:#fafaf9}
   </div>
 </div>
 
+<!-- ═══ LLM BOUNDARIES ═══ -->
+<div id="boundaries" class="section">
+  <div class="card">
+    <h2>Understanding LLM Boundaries</h2>
+    <p class="sub">The most important skill in vibe coding isn't prompting — it's knowing where LLMs break down and designing your workflow around those limits.</p>
+    <p style="font-size:.95rem;color:#44403c">Building a 51K-line platform with AI taught me that effective AI-assisted development requires understanding exactly where hallucination creeps in, which models excel at which tasks, and when to bring in manual human verification. Blindly trusting any single model is how projects fail.</p>
+  </div>
+
+  <div class="card" style="border-left:4px solid #ef4444">
+    <h2>Where LLMs Hallucinate — And How I Caught It</h2>
+    <p class="sub">Hallucination isn't random — it follows patterns. Knowing the patterns lets you build guardrails.</p>
+    <table>
+      <tr><th>Hallucination Pattern</th><th>Real Example from This Project</th><th>How I Caught / Prevented It</th></tr>
+      <tr><td><strong>Confident but wrong API usage</strong></td><td>Generated LangGraph code using deprecated <code>.add_node()</code> signatures that looked correct but failed at runtime</td><td>Always run generated code immediately; never trust "it looks right"</td></tr>
+      <tr><td><strong>Phantom imports</strong></td><td>Referenced non-existent Flask extensions and SQLAlchemy methods that don't exist in the installed versions</td><td>CI pipeline with strict linting catches import errors before merge</td></tr>
+      <tr><td><strong>Plausible but wrong logic</strong></td><td>GDPR compliance checks that passed tests but missed edge cases — e.g., data retention for terminated employees</td><td>Domain-specific code review; AI doesn't understand legal nuance</td></tr>
+      <tr><td><strong>Test hallucination</strong></td><td>Generated tests that asserted the wrong thing — tests passed but didn't actually validate the feature</td><td>Manual review of every test assertion; check what's being tested, not just pass/fail</td></tr>
+      <tr><td><strong>Configuration drift</strong></td><td>Docker configs that worked locally but had subtle env var differences for Cloud Run</td><td>17 CI commits in one day to fix deployment — some things need hands-on debugging</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Right Model for the Right Job</h2>
+    <p class="sub">No single LLM is best at everything. The key insight: treat models like specialized team members, each with their own strength.</p>
+  </div>
+
+  <div class="g2" style="margin-bottom:24px">
+    <div class="card" style="border-top:4px solid var(--pri)">
+      <h2 style="font-size:1.2rem">Backend & Architecture</h2>
+      <p style="font-size:.85rem;color:var(--txm);margin-bottom:12px">Claude Code (Sonnet / Opus)</p>
+      <ul style="list-style:none;padding:0;font-size:.9rem;color:#44403c">
+        <li style="padding:5px 0">🟣 Multi-file agent architecture across 111 modules</li>
+        <li style="padding:5px 0">🟣 LangGraph orchestration with complex state graphs</li>
+        <li style="padding:5px 0">🟣 Full test suite generation with edge case coverage</li>
+        <li style="padding:5px 0">🟣 CI/CD pipeline debugging and deployment configs</li>
+        <li style="padding:5px 0">🟣 Database schema design and migration scripts</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--pri-bg);border-radius:8px;font-size:.82rem;color:var(--pri);font-weight:600">Best at: System-level reasoning, multi-file changes, complex logic</div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--blu)">
+      <h2 style="font-size:1.2rem">Frontend & UI</h2>
+      <p style="font-size:.85rem;color:var(--txm);margin-bottom:12px">Figma → Claude Code → Antigravity</p>
+      <ul style="list-style:none;padding:0;font-size:.9rem;color:#44403c">
+        <li style="padding:5px 0">🎨 Figma for visual design and component mockups</li>
+        <li style="padding:5px 0">🤖 Claude Code for converting designs to HTML/CSS/JS</li>
+        <li style="padding:5px 0">🔵 GitHub Copilot for in-editor frontend tweaks</li>
+        <li style="padding:5px 0">🧪 Antigravity for manual UI testing and visual QA</li>
+        <li style="padding:5px 0">🎭 Playwright for automated browser E2E regression</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--blu-bg);border-radius:8px;font-size:.82rem;color:var(--blu);font-weight:600">Best at: Design-to-code, visual consistency, cross-browser testing</div>
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:24px">
+    <div class="card" style="border-top:4px solid var(--grn)">
+      <h2 style="font-size:1.2rem">In-Editor Flow</h2>
+      <p style="font-size:.85rem;color:var(--txm);margin-bottom:12px">GitHub Copilot</p>
+      <ul style="list-style:none;padding:0;font-size:.9rem;color:#44403c">
+        <li style="padding:5px 0">⚡ Real-time autocomplete while coding</li>
+        <li style="padding:5px 0">⚡ Pattern completion from surrounding context</li>
+        <li style="padding:5px 0">⚡ Boilerplate and repetitive code blocks</li>
+        <li style="padding:5px 0">⚡ Quick bug fixes during live debugging</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--grn-bg);border-radius:8px;font-size:.82rem;color:var(--grn);font-weight:600">Best at: Speed, inline suggestions, staying in flow state</div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--acc)">
+      <h2 style="font-size:1.2rem">Manual QA & Visual Testing</h2>
+      <p style="font-size:.85rem;color:var(--txm);margin-bottom:12px">Antigravity</p>
+      <ul style="list-style:none;padding:0;font-size:.9rem;color:#44403c">
+        <li style="padding:5px 0">🔍 Manual UI testing that catches what automation misses</li>
+        <li style="padding:5px 0">🔍 Visual regression detection across viewport sizes</li>
+        <li style="padding:5px 0">🔍 Interactive flow testing with real user behavior</li>
+        <li style="padding:5px 0">🔍 Final human-in-the-loop QA before deployment</li>
+      </ul>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--acc-bg);border-radius:8px;font-size:.82rem;color:var(--acc);font-weight:600">Best at: Catching visual bugs, UX issues, human-judgment QA</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>The Multi-Model Workflow in Practice</h2>
+    <p class="sub">A real feature built using all tools in their optimal roles.</p>
+    <div style="display:flex;justify-content:center;align-items:center;gap:0;flex-wrap:wrap;margin:20px 0">
+      <div style="padding:12px 16px;border-radius:12px;background:var(--bg2);border:2px solid var(--bdr);font-weight:700;color:var(--txm);font-size:.82rem;text-align:center">Figma<br><span style="font-weight:400;font-size:.72rem">Design mockup</span></div>
+      <div style="padding:0 8px;color:var(--txm);font-size:1.2rem">→</div>
+      <div style="padding:12px 16px;border-radius:12px;background:var(--pri-bg);border:2px solid var(--pri-l);font-weight:700;color:var(--pri);font-size:.82rem;text-align:center">Claude Code<br><span style="font-weight:400;font-size:.72rem">Backend + Frontend</span></div>
+      <div style="padding:0 8px;color:var(--txm);font-size:1.2rem">→</div>
+      <div style="padding:12px 16px;border-radius:12px;background:var(--grn-bg);border:2px solid #86efac;font-weight:700;color:var(--grn);font-size:.82rem;text-align:center">Copilot<br><span style="font-weight:400;font-size:.72rem">Polish & tweaks</span></div>
+      <div style="padding:0 8px;color:var(--txm);font-size:1.2rem">→</div>
+      <div style="padding:12px 16px;border-radius:12px;background:var(--acc-bg);border:2px solid #fdba74;font-weight:700;color:var(--acc);font-size:.82rem;text-align:center">Antigravity<br><span style="font-weight:400;font-size:.72rem">Manual UI QA</span></div>
+      <div style="padding:0 8px;color:var(--txm);font-size:1.2rem">→</div>
+      <div style="padding:12px 16px;border-radius:12px;background:var(--cyn-bg);border:2px solid #67e8f9;font-weight:700;color:var(--cyn);font-size:.82rem;text-align:center">Playwright<br><span style="font-weight:400;font-size:.72rem">Automated E2E</span></div>
+    </div>
+    <p style="font-size:.88rem;color:#57534e;text-align:center;margin-top:8px"><strong>Example — Leave Management Dashboard:</strong> Designed layout in Figma → Claude Code generated Flask route + Jinja2 template + JS → Copilot refined in-editor styling → Antigravity tested interactive flows manually → Playwright automated the regression suite.</p>
+  </div>
+
+  <div class="quote">
+    "The question isn't 'Can AI build this?' — it's 'Where does AI break on this?' Finding the hallucination boundary for each model is the real engineering skill. Once you map those limits, you know exactly which tool to reach for and when to step in yourself."
+    <cite>— Key takeaway from building with multiple AI models</cite>
+  </div>
+</div>
+
 </div><!-- /container -->
 
 <div class="footer">
   Vibe Coding Journey — Multi-Agent HR Intelligence Platform<br>
-  Built with Claude Code · GitHub Copilot · Playwright · Python · LangGraph
+  Built with Claude Code · GitHub Copilot · Figma · Antigravity · Playwright · Python · LangGraph
 </div>
 
 <script>
