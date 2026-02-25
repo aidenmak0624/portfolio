@@ -9,6 +9,7 @@ const Portfolio = () => {
   const [terminalText, setTerminalText] = useState("");
   const [cursorVisible, setCursorVisible] = useState(true);
   const [showAllProjects, setShowAllProjects] = useState(false);
+  const [showResumeMenu, setShowResumeMenu] = useState(false);
 
   const fullTerminalText = "Software Developer — Full-Stack · AI · Shipping Products";
 
@@ -942,19 +943,78 @@ const Portfolio = () => {
               {item}
             </button>
           ))}
-          <a
-            href="/resume.pdf"
-            className="cta-btn cta-secondary"
-            style={{
-              padding: "8px 20px",
-              fontSize: 11,
-              letterSpacing: 1.5,
-            }}
-            target="_blank"
-            rel="noopener"
-          >
-            Resume
-          </a>
+          <div style={{ position: "relative" }}>
+            <button
+              className="cta-btn cta-secondary"
+              style={{
+                padding: "8px 20px",
+                fontSize: 11,
+                letterSpacing: 1.5,
+                cursor: "pointer",
+                border: "none",
+                background: "inherit",
+              }}
+              onClick={() => setShowResumeMenu((v) => !v)}
+              onBlur={() => setTimeout(() => setShowResumeMenu(false), 200)}
+            >
+              Resume ▾
+            </button>
+            {showResumeMenu && (
+              <div
+                style={{
+                  position: "absolute",
+                  top: "100%",
+                  right: 0,
+                  marginTop: 6,
+                  background: "#1a1a2e",
+                  border: "1px solid rgba(255,255,255,0.12)",
+                  borderRadius: 8,
+                  overflow: "hidden",
+                  minWidth: 180,
+                  zIndex: 200,
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                }}
+              >
+                <a
+                  href="/resume-aie.pdf"
+                  target="_blank"
+                  rel="noopener"
+                  style={{
+                    display: "block",
+                    padding: "10px 16px",
+                    color: "#e2e8f0",
+                    textDecoration: "none",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    letterSpacing: 0.5,
+                    borderBottom: "1px solid rgba(255,255,255,0.06)",
+                  }}
+                  onMouseEnter={(e) => (e.target.style.background = "rgba(255,255,255,0.06)")}
+                  onMouseLeave={(e) => (e.target.style.background = "transparent")}
+                >
+                  🤖 AI Engineer
+                </a>
+                <a
+                  href="/resume.pdf"
+                  target="_blank"
+                  rel="noopener"
+                  style={{
+                    display: "block",
+                    padding: "10px 16px",
+                    color: "#e2e8f0",
+                    textDecoration: "none",
+                    fontSize: 12,
+                    fontWeight: 600,
+                    letterSpacing: 0.5,
+                  }}
+                  onMouseEnter={(e) => (e.target.style.background = "rgba(255,255,255,0.06)")}
+                  onMouseLeave={(e) => (e.target.style.background = "transparent")}
+                >
+                  💻 Software Engineer
+                </a>
+              </div>
+            )}
+          </div>
         </div>
       </nav>
 
