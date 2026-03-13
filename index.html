@@ -1,13 +1,1417 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>portfolio-site</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIDEN MAK — AI / Full-Stack Engineer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
+
+  *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+  :root{
+    --bg:#0c0c18;--bg2:#10101f;--bg3:#161628;
+    --accent:#00ffcc;--accent-dim:#00cc99;--accent2:#ff3366;--accent3:#7b61ff;--accent4:#ffaa00;
+    --text:#ededf5;--text-dim:#a0a0c0;--text-muted:#707090;
+    --mono:'JetBrains Mono',monospace;--sans:'Space Grotesk',sans-serif;--display:'Outfit',sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);--ease-out:cubic-bezier(0,.55,.45,1);
+    --radius:2px;
+  }
+
+  html{scroll-behavior:auto}
+  body{background:var(--bg);color:var(--text);font-family:var(--sans);overflow-x:hidden;cursor:none}
+  ::selection{background:var(--accent);color:var(--bg)}
+
+  /* ── CUSTOM CURSOR ── */
+  .cursor{position:fixed;pointer-events:none;z-index:100000;mix-blend-mode:difference}
+  .cursor-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),background .3s}
+  .cursor-ring{width:28px;height:28px;border:1px solid rgba(0,255,204,.35);border-radius:50%;transform:translate(-50%,-50%);transition:width .3s var(--ease),height .3s var(--ease),border-color .3s,background .3s}
+  .cursor-dot.hovering{width:10px;height:10px;background:var(--accent2)}
+  .cursor-ring.hovering{width:42px;height:42px;border-color:var(--accent2);background:rgba(255,51,102,.05)}
+  .cursor-ring.clicking{width:22px;height:22px}
+
+  /* CURSOR LABEL — Fixed sizing */
+  .cursor-label{position:fixed;pointer-events:none;z-index:100001;font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--bg);background:var(--accent);padding:.2rem .5rem;border-radius:2px;opacity:0;transition:opacity .25s;transform:translate(16px,-50%);white-space:nowrap;font-weight:600}
+  .cursor-label.visible{opacity:1}
+
+  /* ── PROGRESS BAR ── */
+  .scroll-progress{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));z-index:10001;width:0%;transition:none}
+
+  /* ── NOISE & SCAN ── */
+  .noise{position:fixed;inset:0;pointer-events:none;z-index:9998;opacity:.025;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+  .vignette{position:fixed;inset:0;pointer-events:none;z-index:9997;background:radial-gradient(ellipse at center,transparent 65%,rgba(0,0,0,.35) 100%)}
+
+  /* ── NAV ── */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:5000;display:flex;justify-content:space-between;align-items:center;padding:1.6rem 3rem;transition:all .6s var(--ease);backdrop-filter:blur(0px)}
+  .nav.scrolled{background:rgba(10,10,20,.92);backdrop-filter:blur(20px);border-bottom:1px solid rgba(0,255,204,.04);padding:1.2rem 3rem}
+  .nav-logo{font-family:var(--mono);font-weight:600;font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;color:var(--text);cursor:none;transition:color .3s}
+  .nav-logo:hover{color:var(--accent)}
+  .nav-logo .dot{display:inline-block;width:6px;height:6px;background:var(--accent);border-radius:50%;margin-left:4px;animation:pulse 2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.7)}}
+  .nav-links{display:flex;gap:2.5rem;list-style:none;align-items:center}
+  .nav-links a{color:var(--text-dim);text-decoration:none;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:color .3s;position:relative;cursor:none}
+  .nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--accent);transition:width .4s var(--ease)}
+  .nav-links a:hover{color:var(--text)}.nav-links a:hover::after{width:100%}
+  .nav-cta{padding:.55rem 1.4rem;border:1px solid rgba(0,255,204,.25);color:var(--accent);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);text-decoration:none;transition:all .3s;cursor:none}
+  .nav-cta:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+  /* Language Toggle */
+  .lang-toggle{display:flex;align-items:center;gap:0;border:1px solid rgba(0,255,204,.2);overflow:hidden;cursor:none}
+  .lang-btn{padding:.4rem .7rem;font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;color:var(--text-muted);background:transparent;border:none;cursor:none;transition:all .3s;font-weight:500}
+  .lang-btn.active{background:var(--accent);color:var(--bg);font-weight:700}
+  .lang-btn:hover:not(.active){color:var(--text)}
+  .nav-back{display:none;align-items:center;gap:.6rem;color:var(--accent);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;cursor:none;border:none;background:none;font-family:var(--mono);transition:opacity .3s}
+  .nav-back:hover{opacity:.6}.nav-back.visible{display:flex}
+
+  /* ── MUTE BUTTON ── */
+  #muteBtn{position:fixed;bottom:2rem;right:2rem;z-index:5001;width:50px;height:50px;border-radius:50%;background:rgba(0,255,204,.1);border:1px solid rgba(0,255,204,.3);color:var(--text);font-size:1.4rem;cursor:pointer;transition:all .3s;display:flex;align-items:center;justify-content:center;font-family:var(--mono)}
+  #muteBtn:hover{background:rgba(0,255,204,.2);border-color:var(--accent);transform:scale(1.1)}
+  #muteBtn:active{transform:scale(0.95)}
+
+  /* ── TRANSITION WIPE ── */
+  .wipe{position:fixed;inset:0;z-index:9500;pointer-events:none;display:flex}
+  .wipe-panel{flex:1;background:var(--bg);transform:scaleY(0);transform-origin:bottom;transition:transform .5s var(--ease)}
+  .wipe-panel:nth-child(2){transition-delay:.04s}.wipe-panel:nth-child(3){transition-delay:.08s}
+  .wipe-panel:nth-child(4){transition-delay:.12s}.wipe-panel:nth-child(5){transition-delay:.16s}
+  .wipe.enter .wipe-panel{transform:scaleY(1);transform-origin:top}
+  .wipe.exit .wipe-panel{transform:scaleY(0);transform-origin:bottom}
+  .wipe-text{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9501;pointer-events:none;font-family:var(--mono);font-size:.78rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);opacity:0;transition:opacity .3s}
+  .wipe-text.visible{opacity:1}
+
+  /* ── MAIN PAGE ── */
+  #mainPage{transition:opacity .3s}
+  #mainPage.hidden{opacity:0;pointer-events:none;position:absolute;top:0;left:0;right:0}
+
+  /* HERO */
+  .hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;position:relative;overflow:hidden}
+  .hero-bg{position:absolute;inset:0;background:radial-gradient(circle at 20% 60%,rgba(0,255,204,.04) 0%,transparent 40%),radial-gradient(circle at 80% 30%,rgba(123,97,255,.04) 0%,transparent 40%),radial-gradient(circle at 60% 80%,rgba(255,51,102,.02) 0%,transparent 40%),radial-gradient(circle at 40% 20%,rgba(255,170,0,.02) 0%,transparent 40%)}
+  .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,204,.02) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,204,.02) 1px,transparent 1px);background-size:80px 80px;mask-image:radial-gradient(circle at center,black 30%,transparent 70%)}
+  .hero-content{position:relative;z-index:5;text-align:center}
+  .hero-pre{font-family:var(--mono);font-size:.7rem;letter-spacing:.35em;text-transform:uppercase;color:var(--accent);opacity:.7;margin-bottom:2rem;overflow:hidden}
+  .hero-pre span{display:inline-block;transform:translateY(100%);animation:slideUp .8s var(--ease) forwards}
+  @keyframes slideUp{to{transform:translateY(0)}}
+  .hero-title{font-family:var(--display);font-weight:900;font-size:clamp(4rem,12vw,10rem);text-transform:uppercase;letter-spacing:-.04em;line-height:.88;margin-bottom:1.5rem}
+  .hero-title .char{display:inline-block;opacity:0;transform:translateY(60px) rotateX(-40deg);animation:charReveal .6s var(--ease) forwards}
+  @keyframes charReveal{to{opacity:1;transform:translateY(0) rotateX(0)}}
+  .hero-title .line1{display:block;-webkit-text-stroke:2px var(--text);color:transparent}
+  .hero-title .line2{display:block;background:linear-gradient(90deg,var(--text) 0%,var(--accent) 50%,var(--accent3) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+  .hero-sub{font-family:var(--mono);font-size:.82rem;letter-spacing:.14em;text-transform:uppercase;color:var(--text-dim);margin-bottom:.5rem;opacity:0;animation:fadeIn 1s var(--ease) .8s forwards}
+  @keyframes fadeIn{to{opacity:1}}
+  .hero-status{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;color:var(--accent);opacity:0;animation:fadeIn 1s var(--ease) 1s forwards;display:flex;align-items:center;gap:.8rem;justify-content:center}
+  .status-dot{width:6px;height:6px;background:var(--accent);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+  .hero-scroll{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.8rem;opacity:0;animation:fadeIn 1.2s var(--ease) 1.2s forwards}
+  .hero-scroll span{font-family:var(--mono);font-size:.6rem;letter-spacing:.25em;text-transform:uppercase;color:var(--text-muted)}
+  .scroll-line{width:1px;height:40px;background:linear-gradient(to bottom,var(--accent),transparent);animation:scrollLine 2.5s ease-in-out infinite}
+  @keyframes scrollLine{0%{opacity:.2;transform:scaleY(.5)}50%{opacity:.8;transform:scaleY(1)}100%{opacity:.2;transform:scaleY(.5)}}
+
+  /* ── INTRO / ABOUT ME — NEW SECTION ── */
+  .intro{padding:8rem 3rem;max-width:1100px;margin:0 auto}
+  .intro-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:4rem}
+  .intro-header .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.7;white-space:nowrap}
+  .intro-header .line{flex:1;height:1px;background:linear-gradient(to right,rgba(0,255,204,.12),transparent)}
+  .intro-content{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start}
+  .intro-hero{display:flex;align-items:flex-start;gap:2.5rem;margin-bottom:2.5rem}
+  .intro-photo{width:180px;min-width:180px;border-radius:12px;overflow:hidden;border:2px solid rgba(0,255,204,.15);background:linear-gradient(135deg,rgba(0,255,204,.03) 0%,rgba(123,97,255,.03) 100%);transition:all .4s var(--ease);box-shadow:0 8px 32px rgba(0,0,0,.3)}
+  .intro-photo:hover{border-color:rgba(0,255,204,.35);box-shadow:0 8px 40px rgba(0,255,204,.1)}
+  .intro-photo img{width:100%;display:block}
+  @media(max-width:768px){.intro-hero{flex-direction:column;align-items:center;text-align:center}.intro-photo{width:150px;min-width:150px}}
+  .photo-text{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);text-align:center}
+  .intro-left h2{font-family:var(--display);font-weight:900;font-size:clamp(2.2rem,4.5vw,3.6rem);text-transform:uppercase;line-height:1.05;margin-bottom:1.5rem;letter-spacing:-.03em;-webkit-text-stroke:1.5px var(--text);color:transparent}
+  .intro-left h2 .outline{-webkit-text-stroke:0;color:transparent;background:linear-gradient(135deg,var(--accent) 0%,var(--accent3) 50%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;filter:drop-shadow(0 0 20px rgba(0,255,204,.15))}
+  .intro-text{font-size:1.05rem;line-height:1.9;color:var(--text-dim);margin-bottom:1.8rem}
+  .intro-text strong{color:var(--text);font-weight:600}
+  .intro-highlights{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+  .intro-hl{padding:1.2rem 1.4rem;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);transition:all .4s var(--ease)}
+  .intro-hl:hover{border-color:rgba(0,255,204,.12);background:rgba(0,255,204,.02);transform:translateY(-2px)}
+  .intro-hl .hl-val{font-family:var(--display);font-weight:800;font-size:1.6rem;color:var(--accent);margin-bottom:.2rem}
+  .intro-hl:nth-child(1) .hl-val{color:var(--accent)}
+  .intro-hl:nth-child(2) .hl-val{color:var(--accent2)}
+  .intro-hl:nth-child(3) .hl-val{color:var(--accent3)}
+  .intro-hl:nth-child(4) .hl-val{color:var(--accent4)}
+  .intro-hl:nth-child(1):hover{border-color:rgba(0,255,204,.12);background:rgba(0,255,204,.02)}
+  .intro-hl:nth-child(2):hover{border-color:rgba(255,51,102,.12);background:rgba(255,51,102,.02)}
+  .intro-hl:nth-child(3):hover{border-color:rgba(123,97,255,.12);background:rgba(123,97,255,.02)}
+  .intro-hl:nth-child(4):hover{border-color:rgba(255,170,0,.12);background:rgba(255,170,0,.02)}
+  .intro-hl .hl-lbl{font-family:var(--mono);font-size:.65rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)}
+  .intro-right .intro-bio{font-size:1rem;line-height:1.9;color:var(--text-dim);margin-bottom:2rem}
+  .intro-right .intro-bio strong{color:var(--text);font-weight:600}
+  .intro-info{display:flex;flex-direction:column;gap:.6rem;margin-bottom:2rem}
+  .intro-info-row{display:flex;gap:1rem;align-items:baseline}
+  .intro-info-row .info-k{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);min-width:100px}
+  .intro-info-row .info-v{font-size:.92rem;color:var(--text)}
+  .intro-info-row .info-v.green{color:var(--accent)}
+  .intro-links{display:flex;gap:.7rem;flex-wrap:wrap}
+  .btn-primary{padding:.75rem 2rem;background:var(--accent);color:var(--bg);text-decoration:none;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:700;font-family:var(--sans);border:none;cursor:none;transition:all .3s var(--ease)}
+  .btn-primary:hover{background:#fff;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,255,204,.15)}
+  .btn-ghost{padding:.75rem 1.6rem;border:1px solid rgba(255,255,255,.12);color:var(--text-dim);text-decoration:none;font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;font-family:var(--sans);cursor:none;transition:all .3s}
+  .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ── WORKS SECTION ── */
+  .works{padding:4rem 0 12rem;position:relative}
+  .works-header{text-align:center;margin-bottom:5rem}
+  .works-label{font-family:var(--mono);font-size:.68rem;letter-spacing:.3em;text-transform:uppercase;color:var(--accent);opacity:.6;margin-bottom:.8rem}
+  .works-count{font-family:var(--display);font-weight:200;font-size:clamp(1.8rem,3vw,2.5rem);color:var(--text-dim);letter-spacing:.05em}
+  .works-count strong{font-weight:800;color:var(--text)}
+  .works-list{display:flex;flex-direction:column;gap:0;max-width:1400px;margin:0 auto;padding:0 3rem}
+
+  .work-item{position:relative;cursor:none;padding:2.2rem 0;border-bottom:1px solid rgba(255,255,255,.08);transition:all .5s var(--ease);display:flex;align-items:center;gap:2rem;overflow:hidden}
+  .work-item::before{content:'';position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--accent);transition:width .6s var(--ease)}
+  .work-item:hover::before{width:100%}
+  .work-item:hover{padding-left:1.5rem}
+  .work-item:hover .work-title{transform:translateX(8px)}
+  .work-item:hover .work-arrow{opacity:1;transform:translateX(0)}
+  .work-item:hover .work-tags{opacity:1}
+  /* Multi-color work items */
+  .work-item:nth-child(4n+1):hover .work-title,.work-item:nth-child(4n+1):hover .work-year,.work-item:nth-child(4n+1):hover .work-number,.work-item:nth-child(4n+1):hover .work-arrow{color:var(--accent)}
+  .work-item:nth-child(4n+1)::before{background:var(--accent)}
+  .work-item:nth-child(4n+2):hover .work-title,.work-item:nth-child(4n+2):hover .work-year,.work-item:nth-child(4n+2):hover .work-number,.work-item:nth-child(4n+2):hover .work-arrow{color:var(--accent2)}
+  .work-item:nth-child(4n+2)::before{background:var(--accent2)}
+  .work-item:nth-child(4n+3):hover .work-title,.work-item:nth-child(4n+3):hover .work-year,.work-item:nth-child(4n+3):hover .work-number,.work-item:nth-child(4n+3):hover .work-arrow{color:var(--accent3)}
+  .work-item:nth-child(4n+3)::before{background:var(--accent3)}
+  .work-item:nth-child(4n):hover .work-title,.work-item:nth-child(4n):hover .work-year,.work-item:nth-child(4n):hover .work-number,.work-item:nth-child(4n):hover .work-arrow{color:var(--accent4)}
+  .work-item:nth-child(4n)::before{background:var(--accent4)}
+  .work-item:hover .work-year{opacity:1}
+  .work-item:hover .work-number{opacity:.8}
+  .work-number{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em;color:var(--text-muted);opacity:.5;min-width:2.5rem;transition:all .4s var(--ease)}
+  .work-title-wrap{flex:1}
+  .work-title{font-family:var(--display);font-weight:800;font-size:clamp(2rem,5.5vw,4.2rem);text-transform:uppercase;line-height:1;letter-spacing:-.02em;transition:all .5s var(--ease);display:inline}
+  .work-role{display:block;font-family:var(--mono);font-size:.75rem;letter-spacing:.08em;color:var(--text-muted);margin-top:.4rem;text-transform:uppercase;opacity:.7}
+  .work-tags{display:flex;gap:.4rem;flex-wrap:wrap;opacity:0;transition:opacity .4s .1s;max-width:300px}
+  .work-tag{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:.28rem .6rem;border:1px solid rgba(0,255,204,.12);color:var(--accent-dim);white-space:nowrap;transition:all .3s}
+  .work-item:nth-child(4n+1) .work-tag{border-color:rgba(0,255,204,.12);color:var(--accent-dim)}
+  .work-item:nth-child(4n+2) .work-tag{border-color:rgba(255,51,102,.12);color:rgba(255,51,102,.6)}
+  .work-item:nth-child(4n+3) .work-tag{border-color:rgba(123,97,255,.12);color:rgba(123,97,255,.6)}
+  .work-item:nth-child(4n) .work-tag{border-color:rgba(255,170,0,.12);color:rgba(255,170,0,.6)}
+  .work-year{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;color:var(--text-muted);opacity:.3;transition:all .4s;min-width:4rem;text-align:right}
+  .work-arrow{font-family:var(--mono);font-size:.85rem;color:var(--accent);opacity:0;transform:translateX(-10px);transition:all .4s var(--ease)}
+
+  /* HOVER PREVIEW */
+  .work-preview{position:fixed;pointer-events:none;z-index:4000;width:320px;height:200px;overflow:hidden;opacity:0;transition:opacity .3s;transform:translate(-50%,-110%);border:1px solid rgba(0,255,204,.1)}
+  .work-preview.visible{opacity:1}
+  .work-preview-inner{width:100%;height:100%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:.7rem;color:var(--accent);letter-spacing:.15em;text-transform:uppercase;position:relative;overflow:hidden}
+  .work-preview-inner::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,204,.05) 0%,transparent 50%,rgba(123,97,255,.05) 100%)}
+  .preview-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,255,204,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,255,204,.03) 1px,transparent 1px);background-size:20px 20px}
+
+  /* ── SKILLS ── */
+  .skills{padding:8rem 3rem;background:var(--bg2);border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06)}
+  .section-header{display:flex;align-items:center;gap:1.5rem;margin-bottom:4rem}
+  .section-header .label{font-family:var(--mono);font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);opacity:.5;white-space:nowrap}
+  .section-header .line{flex:1;height:1px;background:linear-gradient(to right,rgba(0,255,204,.12),transparent)}
+  .skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:2.5rem;max-width:1400px;margin:0 auto}
+  .skill-group{padding:1.8rem;border:1px solid rgba(255,255,255,.03);background:rgba(255,255,255,.01);transition:all .4s var(--ease)}
+  .skill-group:hover{border-color:rgba(0,255,204,.08);background:rgba(0,255,204,.015)}
+  .skill-group h3{font-family:var(--mono);font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);margin-bottom:1.2rem;opacity:.6;display:flex;align-items:center;gap:.5rem}
+  .skill-group h3::before{content:'';width:8px;height:1px;background:var(--accent);opacity:.4}
+  /* Multi-color skill groups */
+  .skill-group:nth-child(1) h3{color:var(--accent)}.skill-group:nth-child(1) h3::before{background:var(--accent)}
+  .skill-group:nth-child(1):hover{border-color:rgba(0,255,204,.08);background:rgba(0,255,204,.015)}
+  .skill-group:nth-child(2) h3{color:var(--accent2)}.skill-group:nth-child(2) h3::before{background:var(--accent2)}
+  .skill-group:nth-child(2):hover{border-color:rgba(255,51,102,.08);background:rgba(255,51,102,.015)}
+  .skill-group:nth-child(3) h3{color:var(--accent3)}.skill-group:nth-child(3) h3::before{background:var(--accent3)}
+  .skill-group:nth-child(3):hover{border-color:rgba(123,97,255,.08);background:rgba(123,97,255,.015)}
+  .skill-group:nth-child(4) h3{color:var(--accent4)}.skill-group:nth-child(4) h3::before{background:var(--accent4)}
+  .skill-group:nth-child(4):hover{border-color:rgba(255,170,0,.08);background:rgba(255,170,0,.015)}
+  .skill-group:nth-child(5) h3{color:var(--accent2)}.skill-group:nth-child(5) h3::before{background:var(--accent2)}
+  .skill-group:nth-child(5):hover{border-color:rgba(255,51,102,.08);background:rgba(255,51,102,.015)}
+  .skill-group:nth-child(6) h3{color:var(--accent3)}.skill-group:nth-child(6) h3::before{background:var(--accent3)}
+  .skill-group:nth-child(6):hover{border-color:rgba(123,97,255,.08);background:rgba(123,97,255,.015)}
+  .skill-pills{display:flex;flex-wrap:wrap;gap:.4rem}
+  .skill-pill{font-family:var(--mono);font-size:.68rem;letter-spacing:.03em;padding:.4rem .7rem;border:1px solid rgba(255,255,255,.06);color:var(--text-dim);transition:all .3s;cursor:none}
+  .skill-pill:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,255,204,.04);transform:translateY(-1px)}
+  .skill-group:nth-child(1) .skill-pill:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,255,204,.04)}
+  .skill-group:nth-child(2) .skill-pill:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(255,51,102,.04)}
+  .skill-group:nth-child(3) .skill-pill:hover{border-color:var(--accent3);color:var(--accent3);background:rgba(123,97,255,.04)}
+  .skill-group:nth-child(4) .skill-pill:hover{border-color:var(--accent4);color:var(--accent4);background:rgba(255,170,0,.04)}
+  .skill-group:nth-child(5) .skill-pill:hover{border-color:var(--accent2);color:var(--accent2);background:rgba(255,51,102,.04)}
+  .skill-group:nth-child(6) .skill-pill:hover{border-color:var(--accent3);color:var(--accent3);background:rgba(123,97,255,.04)}
+
+  /* ── CONTACT SECTION ── */
+  .contact{padding:8rem 3rem;background:rgba(255,255,255,.008);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08)}
+  .contact-header{text-align:center;margin-bottom:4rem}
+  .contact-title{font-family:var(--display);font-weight:700;font-size:clamp(1.8rem,4vw,2.8rem);text-transform:uppercase;margin-bottom:1rem;letter-spacing:-.02em}
+  .contact-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:2rem;max-width:1000px;margin:0 auto}
+  .contact-card{display:block;padding:2rem;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.04);transition:all .4s var(--ease);text-align:center;cursor:pointer;border-radius:12px;backdrop-filter:blur(8px);text-decoration:none;color:inherit}
+  .contact-card:hover{border-color:rgba(0,255,204,.25);background:rgba(0,255,204,.03);transform:translateY(-4px);box-shadow:0 8px 32px rgba(0,255,204,.06)}
+  .contact-icon{margin-bottom:1.2rem;display:flex;justify-content:center;align-items:center}
+  .contact-icon svg{width:34px;height:34px;fill:var(--accent);filter:drop-shadow(0 0 6px rgba(0,255,204,.2));transition:all .3s}
+  .contact-card:hover .contact-icon svg{fill:#fff;filter:drop-shadow(0 0 12px rgba(0,255,204,.4))}
+  .contact-link{word-break:break-all;font-size:clamp(.72rem,.85rem,.95rem)}
+  .contact-label{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.8rem}
+  .contact-link{font-size:.95rem;color:var(--accent);text-decoration:none;transition:color .3s;font-weight:500}
+  .contact-link:hover{color:#fff}
+
+  /* ── FOOTER ── */
+  .main-footer{padding:2.5rem 3rem;border-top:1px solid rgba(255,255,255,.03);display:flex;justify-content:space-between;align-items:center;font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+  .main-footer a{color:var(--text-muted);text-decoration:none;transition:color .3s;cursor:none}.main-footer a:hover{color:var(--accent)}
+  .footer-links{display:flex;gap:2rem;list-style:none}
+
+  /* ═══ PROJECT PAGE ═══ */
+  #projectPage{display:none;min-height:100vh;background:var(--bg)}
+  #projectPage.visible{display:block}
+  #matrixCanvas{position:fixed;inset:0;z-index:0;opacity:.12;pointer-events:none}
+
+  .project-hero{min-height:100vh;display:flex;flex-direction:column;justify-content:center;padding:8rem 4rem 5rem;position:relative;max-width:1200px;margin:0 auto}
+  .project-breadcrumb{font-family:var(--mono);font-size:.68rem;letter-spacing:.18em;color:var(--text-muted);margin-bottom:2.5rem;text-transform:uppercase}
+  .project-breadcrumb .bc-accent{color:var(--accent)}
+  .project-meta{display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-bottom:2rem}
+  .meta-chip{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;padding:.35rem .8rem}
+  .meta-chip.status{border:1px solid var(--accent);color:var(--accent)}
+  .meta-chip.date{color:var(--text-muted);opacity:.6}
+  .meta-chip.role{color:var(--text-muted);opacity:.6;border-left:1px solid rgba(255,255,255,.1);padding-left:1rem}
+  .project-title{font-family:var(--display);font-weight:900;font-size:clamp(3rem,7vw,5.5rem);text-transform:uppercase;line-height:.95;letter-spacing:-.02em;margin-bottom:1.8rem}
+  .project-title .glitch{position:relative;display:inline-block}
+  .project-title .glitch::before,.project-title .glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;opacity:0}
+  .project-title .glitch:hover::before{animation:g1 .6s linear infinite;color:var(--accent2);clip-path:inset(20% 0 40% 0);opacity:.7}
+  .project-title .glitch:hover::after{animation:g2 .6s linear infinite;color:var(--accent3);clip-path:inset(60% 0 10% 0);opacity:.7}
+  @keyframes g1{0%{transform:translate(0)}10%{transform:translate(-3px,2px)}20%{transform:translate(3px,-2px)}30%{transform:translate(-2px,1px)}40%{transform:translate(2px,-1px)}50%{transform:translate(-1px,3px)}60%{transform:translate(3px,-2px)}70%{transform:translate(-3px,1px)}80%{transform:translate(2px,-3px)}90%{transform:translate(-1px,2px)}100%{transform:translate(0)}}
+  @keyframes g2{0%{transform:translate(0)}10%{transform:translate(2px,-3px)}20%{transform:translate(-2px,3px)}30%{transform:translate(3px,-1px)}40%{transform:translate(-3px,2px)}50%{transform:translate(2px,1px)}60%{transform:translate(-2px,-3px)}70%{transform:translate(1px,2px)}80%{transform:translate(-3px,-1px)}90%{transform:translate(3px,1px)}100%{transform:translate(0)}}
+  .project-desc{font-size:1.05rem;line-height:1.85;color:var(--text-dim);max-width:700px;margin-bottom:2.5rem}
+  .project-links{display:flex;gap:.8rem;flex-wrap:wrap}
+  .sci-btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;padding:.75rem 1.8rem;text-decoration:none;transition:all .3s;display:inline-flex;align-items:center;gap:.5rem;cursor:none}
+  .sci-btn-fill{background:var(--accent);color:var(--bg);border:1px solid var(--accent)}.sci-btn-fill:hover{background:#fff;border-color:#fff}
+  .sci-btn-outline{background:transparent;color:var(--accent);border:1px solid rgba(0,255,204,.3)}.sci-btn-outline:hover{border-color:var(--accent);background:rgba(0,255,204,.04)}
+  .sci-btn-doc{background:transparent;color:var(--accent3);border:1px solid rgba(123,97,255,.3)}.sci-btn-doc:hover{border-color:var(--accent3);background:rgba(123,97,255,.06)}
+
+  .stats-strip{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.08);max-width:1200px;margin:0 auto}
+  .stat{padding:2.5rem 2rem;text-align:center;border-right:1px solid rgba(255,255,255,.03);position:relative;overflow:hidden}
+  .stat:last-child{border-right:none}
+  .stat::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(0,255,204,.02) 0%,transparent 100%);opacity:0;transition:opacity .3s}
+  .stat:hover::before{opacity:1}
+  .stat-val{font-family:var(--display);font-weight:800;font-size:2.2rem;color:var(--accent);margin-bottom:.3rem;position:relative}
+  .stat:nth-child(1) .stat-val{color:var(--accent)}
+  .stat:nth-child(2) .stat-val{color:var(--accent2)}
+  .stat:nth-child(3) .stat-val{color:var(--accent3)}
+  .stat:nth-child(4) .stat-val{color:var(--accent4)}
+  .stat:nth-child(1)::before{background:linear-gradient(135deg,rgba(0,255,204,.03) 0%,transparent 100%)}
+  .stat:nth-child(2)::before{background:linear-gradient(135deg,rgba(255,51,102,.03) 0%,transparent 100%)}
+  .stat:nth-child(3)::before{background:linear-gradient(135deg,rgba(123,97,255,.03) 0%,transparent 100%)}
+  .stat:nth-child(4)::before{background:linear-gradient(135deg,rgba(255,170,0,.03) 0%,transparent 100%)}
+  .stat-lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted)}
+
+  .p-section{padding:5rem 4rem;max-width:1200px;margin:0 auto;border-bottom:1px solid rgba(255,255,255,.03)}
+  .p-section-head{display:flex;align-items:center;gap:1rem;margin-bottom:2.5rem}
+  .p-section-head .lbl{font-family:var(--mono);font-size:.68rem;letter-spacing:.25em;text-transform:uppercase;color:var(--accent);opacity:.4;white-space:nowrap}
+  .p-section-head .ln{flex:1;height:1px;background:linear-gradient(to right,rgba(0,255,204,.1),transparent)}
+
+  .overview-grid{display:grid;grid-template-columns:1fr 1fr;gap:3.5rem;align-items:start}
+  .overview-grid h3{font-family:var(--display);font-weight:700;font-size:1.7rem;text-transform:uppercase;margin-bottom:1rem;letter-spacing:-.01em}
+  .overview-grid p{font-size:.95rem;line-height:1.85;color:var(--text-dim)}
+
+  /* Architecture diagram — interactive */
+  .arch{padding:2rem;border:1px solid rgba(0,255,204,.06);background:rgba(0,255,204,.01)}
+  .arch-layer{margin-bottom:1.2rem}
+  .arch-layer-label{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.5rem}
+  .arch-boxes{display:flex;flex-wrap:wrap;gap:.5rem}
+  .arch-box{padding:.55rem .9rem;border:1px solid rgba(0,255,204,.12);font-family:var(--mono);font-size:.7rem;color:var(--accent-dim);transition:all .3s;cursor:none}
+  .arch-box:hover{border-color:var(--accent);color:var(--accent);background:rgba(0,255,204,.04);transform:scale(1.05)}
+  .arch-box.highlight{border-color:var(--accent);color:var(--accent);background:rgba(0,255,204,.06);box-shadow:0 0 12px rgba(0,255,204,.08)}
+  .arch-divider{height:16px;display:flex;align-items:center;justify-content:center;color:var(--accent);opacity:.15;font-size:.7rem}
+
+  .tech-wrap{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:.6rem}
+  .tech-tag{padding:.7rem .95rem;border:1px solid rgba(255,255,255,.04);font-family:var(--mono);font-size:.72rem;letter-spacing:.02em;color:var(--text-dim);transition:all .3s;cursor:none;position:relative;overflow:hidden}
+  .tech-tag::before{content:'';position:absolute;top:0;left:0;width:2px;height:100%;background:var(--accent);opacity:0;transition:opacity .3s}
+  .tech-tag:hover{border-color:rgba(0,255,204,.2);color:var(--accent);background:rgba(0,255,204,.02)}.tech-tag:hover::before{opacity:1}
+
+  /* Accomplishments — interactive expand */
+  .accomplishments{display:flex;flex-direction:column;gap:1rem}
+  .acc-item{display:flex;gap:1rem;padding:1.3rem 1.5rem;border:1px solid rgba(255,255,255,.02);background:rgba(255,255,255,.008);transition:all .4s var(--ease);cursor:none}
+  .acc-item:hover{border-color:rgba(0,255,204,.1);transform:translateX(6px);background:rgba(0,255,204,.015)}
+  .acc-icon{font-family:var(--mono);font-size:.72rem;color:var(--accent);opacity:.4;padding-top:.2rem;min-width:16px;transition:opacity .3s}
+  .acc-item:hover .acc-icon{opacity:1}
+  .acc-text{font-size:.92rem;line-height:1.8;color:var(--text-dim)}
+  .acc-text strong{color:var(--accent);font-weight:600}
+  .acc-item:nth-child(4n+2) .acc-text strong{color:var(--accent2)}
+  .acc-item:nth-child(4n+3) .acc-text strong{color:var(--accent3)}
+  .acc-item:nth-child(4n) .acc-text strong{color:var(--accent4)}
+  .acc-item:nth-child(4n+2):hover{border-color:rgba(255,51,102,.1);background:rgba(255,51,102,.015)}
+  .acc-item:nth-child(4n+3):hover{border-color:rgba(123,97,255,.1);background:rgba(123,97,255,.015)}
+  .acc-item:nth-child(4n):hover{border-color:rgba(255,170,0,.1);background:rgba(255,170,0,.015)}
+  .acc-item:nth-child(4n+2) .acc-icon{color:var(--accent2)}
+  .acc-item:nth-child(4n+3) .acc-icon{color:var(--accent3)}
+  .acc-item:nth-child(4n) .acc-icon{color:var(--accent4)}
+
+  .terminal{background:rgba(0,0,0,.4);border:1px solid rgba(0,255,204,.06);overflow:hidden}
+  .terminal-header{display:flex;align-items:center;gap:.5rem;padding:.8rem 1.2rem;border-bottom:1px solid rgba(0,255,204,.04);background:rgba(0,255,204,.02)}
+  .terminal-dot{width:8px;height:8px;border-radius:50%}
+  .terminal-dot.r{background:#ff5f57}.terminal-dot.y{background:#febc2e}.terminal-dot.g{background:#28c840}
+  .terminal-path{font-family:var(--mono);font-size:.68rem;color:var(--text-muted);margin-left:.8rem;letter-spacing:.05em}
+  .terminal-body{padding:1.5rem 1.8rem;font-family:var(--mono);font-size:.78rem;line-height:2;overflow-x:auto}
+  .terminal-body .prompt{color:var(--accent)}.terminal-body .cmt{opacity:.25}.terminal-body .out{color:var(--accent-dim)}
+
+  .project-nav-bar{display:flex;justify-content:space-between;align-items:center;padding:3rem 4rem;max-width:1200px;margin:0 auto;border-top:1px solid rgba(255,255,255,.03)}
+  .pn-item{cursor:none;transition:color .3s;max-width:40%}.pn-item:hover{color:var(--accent)}
+  .pn-label{font-family:var(--mono);font-size:.62rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+  .pn-title{font-family:var(--display);font-weight:700;font-size:1.3rem;text-transform:uppercase}
+  .pn-counter{font-family:var(--mono);font-size:.65rem;letter-spacing:.15em;color:var(--text-muted)}
+
+  /* Scroll reveals */
+  .reveal{opacity:0;transform:translateY(30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal.vis{opacity:1;transform:translateY(0)}
+  .reveal-left{opacity:0;transform:translateX(-30px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .reveal-left.vis{opacity:1;transform:translateX(0)}
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:900px){
+    body{cursor:auto}
+    .cursor,.cursor-dot,.cursor-ring,.cursor-label{display:none!important}
+    *{cursor:auto!important}
+    .nav{padding:1rem 1.5rem}.nav.scrolled{padding:.8rem 1.5rem}
+    .nav-links{gap:1.5rem}.nav-links a{font-size:.65rem}
+    .hero-title{font-size:clamp(3rem,10vw,5rem)!important}
+    .intro{padding:5rem 1.5rem}.intro-content{grid-template-columns:1fr;gap:3rem}
+    .intro-highlights{grid-template-columns:1fr 1fr}
+    .works-list{padding:0 1.5rem}.work-item{padding:1.5rem 0}
+    .work-title{font-size:clamp(1.6rem,6vw,2.5rem)!important}
+    .work-tags,.work-year,.work-number,.work-arrow{display:none}
+    .work-preview{display:none!important}
+    .overview-grid{grid-template-columns:1fr}
+    .stats-strip{grid-template-columns:1fr 1fr}
+    .project-hero{padding:6rem 1.5rem 3rem}
+    .p-section{padding:3rem 1.5rem}
+    .project-nav-bar{padding:2rem 1.5rem;flex-direction:column;gap:2rem;text-align:center}
+    .pn-item{max-width:100%}
+    .skills{padding:4rem 1.5rem}.skills-grid{grid-template-columns:1fr}
+  }
+</style>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="vignette"></div>
+
+<!-- Custom Cursor -->
+<div class="cursor cursor-dot" id="cursorDot"></div>
+<div class="cursor cursor-ring" id="cursorRing"></div>
+<div class="cursor-label" id="cursorLabel"></div>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- Hover Preview -->
+<div class="work-preview" id="workPreview">
+  <div class="work-preview-inner"><div class="preview-grid"></div><span id="previewLabel">VIEW PROJECT</span></div>
+</div>
+
+<!-- Page Wipe Transition -->
+<div class="wipe" id="wipe">
+  <div class="wipe-panel"></div><div class="wipe-panel"></div><div class="wipe-panel"></div><div class="wipe-panel"></div><div class="wipe-panel"></div>
+</div>
+<div class="wipe-text" id="wipeText"></div>
+
+<nav class="nav" id="mainNav">
+  <div class="nav-logo" onclick="goHome()">aiden.mak<span class="dot"></span></div>
+  <button class="nav-back" id="navBack" onclick="goHome()" data-i18n="nav.back">← Index</button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#intro" data-i18n="nav.about">About</a></li>
+    <li><a href="#works" data-i18n="nav.works">Works</a></li>
+    <li><a href="#skills" data-i18n="nav.skills">Skills</a></li>
+    <li><a href="https://github.com/aidenmak0624" target="_blank">GitHub</a></li>
+    <li><a href="https://linkedin.com/in/mcwaiden" target="_blank">LinkedIn</a></li>
+    <li><a href="mailto:mcwaiden000@gmail.com" class="nav-cta" data-i18n="nav.contact">Contact</a></li>
+    <li><div class="lang-toggle"><button class="lang-btn active" onclick="SFX.toggle();setLang('en')">EN</button><button class="lang-btn" onclick="SFX.toggle();setLang('zh')">中</button></div></li>
+  </ul>
+</nav>
+
+<!-- Audio Mute Button -->
+<button id="muteBtn" onclick="SFX.toggleMute()" title="Toggle BGM">🔊</button>
+
+<!-- ═══ MAIN PAGE ═══ -->
+<div id="mainPage">
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-pre"><span data-i18n="hero.pre">AI / Full-Stack Engineer</span></div>
+      <h1 class="hero-title" id="heroTitle">
+        <span class="line1">Aiden Mak</span>
+        <span class="line2" data-i18n="hero.line2">Selected Works</span>
+      </h1>
+      <p class="hero-sub" data-i18n="hero.sub">Toronto, ON — BSc Honours CS, University of Manitoba 2025</p>
+      <div class="hero-status"><div class="status-dot"></div><span data-i18n="hero.status"> Open to Work — AI Engineer / Full-Stack / QA</span></div>
+    </div>
+    <div class="hero-scroll"><span data-i18n="hero.scroll">Scroll</span><div class="scroll-line"></div></div>
+  </section>
+
+  <!-- ═══ PROFESSIONAL INTRO ═══ -->
+  <section class="intro" id="intro">
+    <div class="intro-header reveal"><span class="label" data-i18n="intro.label">// About Me</span><div class="line"></div></div>
+    <div class="intro-content">
+      <div class="intro-left reveal-left">
+        <div class="intro-hero">
+          <div class="intro-photo">
+            <img src="1769900684236.jpeg" alt="Aiden Mak — AI / Full-Stack Engineer" onerror="this.parentElement.innerHTML='<div class=photo-text>📸 Place photo.jpg here</div>'">
+          </div>
+          <div>
+            <h2 data-i18n="intro.heading" data-i18n-html="1">Building<br><span class="outline">Intelligent</span><br>Systems</h2>
+          </div>
+        </div>
+        <p class="intro-text" data-i18n="intro.text" data-i18n-html="1">I'm <strong>Chin Wei (Aiden) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.</p>
+        <div class="intro-highlights">
+          <div class="intro-hl"><div class="hl-val">8</div><div class="hl-lbl" data-i18n="intro.stat1">AI Agents Shipped</div></div>
+          <div class="intro-hl"><div class="hl-val">1,909</div><div class="hl-lbl" data-i18n="intro.stat2">Automated Tests</div></div>
+          <div class="intro-hl"><div class="hl-val">28</div><div class="hl-lbl" data-i18n="intro.stat3">MCP Tools Built</div></div>
+          <div class="intro-hl"><div class="hl-val">97%</div><div class="hl-lbl" data-i18n="intro.stat4">Speed Improvement</div></div>
+        </div>
+      </div>
+      <div class="intro-right reveal">
+        <p class="intro-bio" data-i18n="intro.bio1" data-i18n-html="1">With a <strong>BSc Honours in Computer Science</strong> from the University of Manitoba (2025), I bring strong foundations in software engineering alongside hands-on experience building AI systems that solve real problems. My flagship project — an <strong>8-agent HR Intelligence Platform</strong> — demonstrates my ability to architect, test, and deploy complex AI systems at production scale with 1,909 automated tests and CI/CD on GCP Cloud Run.</p>
+        <p class="intro-bio" data-i18n="intro.bio2" data-i18n-html="1">I'm trilingual (<strong>Cantonese</strong>, <strong>Mandarin</strong>, <strong>English</strong>) and passionate about building purpose-driven technology. Whether it's a museum partnership with the <strong>Canadian Museum for Human Rights</strong>, an independent RAG pipeline, or a full-stack restaurant platform, I bring the same standard of engineering rigor.</p>
+        <div class="intro-info">
+          <div class="intro-info-row"><span class="info-k" data-i18n="intro.k1">Location</span><span class="info-v" data-i18n="intro.v1">Toronto, ON</span></div>
+          <div class="intro-info-row"><span class="info-k" data-i18n="intro.k2">Education</span><span class="info-v" data-i18n="intro.v2">BSc Honours CS — UManitoba 2025</span></div>
+          <div class="intro-info-row"><span class="info-k" data-i18n="intro.k3">Languages</span><span class="info-v" data-i18n="intro.v3">Cantonese · Mandarin · English</span></div>
+          <div class="intro-info-row"><span class="info-k" data-i18n="intro.k4">Status</span><span class="info-v green" data-i18n="intro.v4">Open to Work</span></div>
+        </div>
+        <div class="intro-links">
+          <a href="mailto:mcwaiden000@gmail.com" class="btn-primary" data-i18n="intro.cta">Get In Touch →</a>
+          <a href="https://github.com/aidenmak0624" class="btn-ghost" target="_blank">GitHub</a>
+          <a href="https://linkedin.com/in/mcwaiden" class="btn-ghost" target="_blank">LinkedIn</a>
+          <a href="https://github.com/aidenmak0624/portfolio" class="btn-ghost" target="_blank">Portfolio Repo</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="works" id="works">
+    <div class="works-header reveal">
+      <div class="works-label" data-i18n="works.label">Selected Projects</div>
+      <div class="works-count" data-i18n="works.count" data-i18n-html="1"><strong>08</strong> Works</div>
+    </div>
+    <div class="works-list" id="worksList"></div>
+  </section>
+
+  <section class="skills" id="skills">
+    <div class="section-header reveal"><span class="label" data-i18n="skills.label">Technical Skills</span><div class="line"></div></div>
+    <div class="skills-grid">
+      <div class="skill-group reveal"><h3 data-i18n="skills.g1">AI / ML</h3><div class="skill-pills">
+        <span class="skill-pill">Multi-Agent Systems</span><span class="skill-pill">LangGraph</span><span class="skill-pill">LangChain</span><span class="skill-pill">MCP (FastMCP)</span><span class="skill-pill">RAG Pipelines</span><span class="skill-pill">Prompt Engineering</span><span class="skill-pill">OpenAI API</span><span class="skill-pill">Gemini</span><span class="skill-pill">ChromaDB</span><span class="skill-pill">Pinecone</span><span class="skill-pill">Sentence Transformers</span>
+      </div></div>
+      <div class="skill-group reveal"><h3 data-i18n="skills.g2">Programming</h3><div class="skill-pills">
+        <span class="skill-pill">Python</span><span class="skill-pill">TypeScript</span><span class="skill-pill">JavaScript</span><span class="skill-pill">Java</span><span class="skill-pill">C/C++</span><span class="skill-pill">SQL</span>
+      </div></div>
+      <div class="skill-group reveal"><h3 data-i18n="skills.g3">Full-Stack</h3><div class="skill-pills">
+        <span class="skill-pill">Flask</span><span class="skill-pill">Next.js</span><span class="skill-pill">React</span><span class="skill-pill">Node.js</span><span class="skill-pill">PostgreSQL</span><span class="skill-pill">Redis</span><span class="skill-pill">SQLAlchemy</span><span class="skill-pill">REST APIs</span><span class="skill-pill">WebSocket</span><span class="skill-pill">Stripe</span><span class="skill-pill">Tailwind CSS</span>
+      </div></div>
+      <div class="skill-group reveal"><h3 data-i18n="skills.g4">Infrastructure</h3><div class="skill-pills">
+        <span class="skill-pill">Docker</span><span class="skill-pill">GCP Cloud Run</span><span class="skill-pill">CI/CD</span><span class="skill-pill">Git</span><span class="skill-pill">Linux</span><span class="skill-pill">Prometheus</span><span class="skill-pill">Grafana</span><span class="skill-pill">Playwright</span><span class="skill-pill">Pytest</span>
+      </div></div>
+      <div class="skill-group reveal"><h3 data-i18n="skills.g5">Practices</h3><div class="skill-pills">
+        <span class="skill-pill">Agile / Scrum</span><span class="skill-pill">TDD</span><span class="skill-pill">SOLID</span><span class="skill-pill">OOD</span><span class="skill-pill">Code Review</span>
+      </div></div>
+      <div class="skill-group reveal"><h3 data-i18n="skills.g6">Languages</h3><div class="skill-pills">
+        <span class="skill-pill">Cantonese (native)</span><span class="skill-pill">Mandarin (fluent)</span><span class="skill-pill">English (fluent)</span>
+      </div></div>
+    </div>
+  </section>
+
+  <section class="contact" id="contact">
+    <div class="contact-header reveal">
+      <h2 class="contact-title" data-i18n="contact.heading">Get In Touch</h2>
+    </div>
+    <div class="contact-grid">
+      <a href="mailto:mcwaiden000@gmail.com" class="contact-card reveal">
+        <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></span>
+        <div class="contact-label" data-i18n="contact.email">Email</div>
+        <div class="contact-link">mcwaiden000@gmail.com</div>
+      </a>
+      <a href="https://linkedin.com/in/mcwaiden" target="_blank" class="contact-card reveal">
+        <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></span>
+        <div class="contact-label" data-i18n="contact.linkedin">LinkedIn</div>
+        <div class="contact-link">linkedin.com/in/mcwaiden</div>
+      </a>
+      <a href="https://github.com/aidenmak0624" target="_blank" class="contact-card reveal">
+        <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+        <div class="contact-label" data-i18n="contact.github">GitHub</div>
+        <div class="contact-link">github.com/aidenmak0624</div>
+      </a>
+      <a href="https://www.instagram.com/aiden_codinginvibe/" target="_blank" class="contact-card reveal">
+        <span class="contact-icon"><svg viewBox="0 0 24 24"><path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 1 0 0-12.324zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405a1.441 1.441 0 0 1-2.88 0 1.441 1.441 0 0 1 2.88 0z"/></svg></span>
+        <div class="contact-label" data-i18n="contact.instagram">Instagram</div>
+        <div class="contact-link">@aiden_codinginvibe</div>
+      </a>
+    </div>
+  </section>
+
+  <footer class="main-footer">
+    <span data-i18n="footer.copy">© 2025 Chin Wei (Aiden) Mak</span>
+    <ul class="footer-links">
+      <li><a href="https://github.com/aidenmak0624" target="_blank">GitHub</a></li>
+      <li><a href="https://linkedin.com/in/mcwaiden" target="_blank">LinkedIn</a></li>
+      <li><a href="mailto:mcwaiden000@gmail.com">Email</a></li>
+    </ul>
+  </footer>
+</div>
+
+<!-- ═══ PROJECT PAGE ═══ -->
+<div id="projectPage">
+  <canvas id="matrixCanvas"></canvas>
+  <div id="projectContent"></div>
+</div>
+
+<script>
+// ═══ SOUND ENGINE (Web Audio API — BGM + SFX) ═══
+const SFX=(()=>{
+  let ctx,bgmOsc,bgmGain,isMuted=false;
+  function gc(){if(!ctx)ctx=new(window.AudioContext||window.webkitAudioContext)();return ctx}
+  function tone(freq,dur,type='sine',vol=0.04){
+    try{const c=gc(),o=c.createOscillator(),g=c.createGain();
+    o.type=type;o.frequency.setValueAtTime(freq,c.currentTime);
+    g.gain.setValueAtTime(vol,c.currentTime);g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+    o.connect(g);g.connect(c.destination);o.start();o.stop(c.currentTime+dur)}catch(e){}
+  }
+  let bgmAudio=null;
+  function startBGM(){
+    if(bgmAudio){bgmAudio.play().catch(()=>{});return;}
+    bgmAudio=new Audio();
+    bgmAudio.src='musinova-minimal-techno-ambient-483372.mp3';
+    bgmAudio.loop=true;
+    bgmAudio.volume=isMuted?0:0.25;
+    bgmAudio.preload='auto';
+    bgmAudio.addEventListener('canplaythrough',function(){bgmAudio.play().catch(()=>{});},{once:true});
+    bgmAudio.load();
+    /* fallback: try play after short delay in case canplaythrough already fired */
+    setTimeout(()=>{if(bgmAudio&&bgmAudio.paused)bgmAudio.play().catch(()=>{});},500);
+  }
+  function stopBGM(){
+    if(bgmAudio){bgmAudio.pause();bgmAudio.currentTime=0;bgmAudio=null;}
+  }
+  function toggleMute(){
+    isMuted=!isMuted;
+    if(bgmAudio){bgmAudio.volume=isMuted?0:0.25;}
+    updateMuteButton();
+  }
+  function updateMuteButton(){
+    const btn=document.getElementById('muteBtn');
+    if(btn)btn.textContent=isMuted?'🔇':'🔊';
+  }
+  return{
+    hover:()=>tone(2200,.03,'sine',0.02),
+    click:()=>{tone(1200,.04,'sine',0.02);tone(900,.06,'sine',0.015)},
+    nav:()=>{tone(700,.12,'sine',0.02);setTimeout(()=>tone(1000,.08,'sine',0.02),60)},
+    toggle:()=>tone(2400,.04,'triangle',0.02),
+    wipe:()=>{tone(200,.3,'sine',0.02);setTimeout(()=>tone(400,.15,'sine',0.018),100)},
+    startBGM,stopBGM,toggleMute,isMuted:()=>isMuted
+  }
+})();
+
+// ═══ PROJECT DATA ═══
+const P={
+  'hr-agent':{idx:'01',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
+    desc:'Enterprise-grade multi-agent AI system orchestrating 8 specialized LangGraph agents for autonomous HR workflows — from policy Q&A to compliance auditing. Shipped to production on GCP Cloud Run with 1,909 automated tests.',
+    live:'https://hr-platform-837558695367.us-central1.run.app/dashboard',git:'https://github.com/aidenmak0624/HR_agent',docs:null,
+    showcase:[
+      {label:'Developer Deep-Dive',url:'https://aidenmak.vercel.app/showcase/hr-agent-developer.html'},
+      {label:'Business Case',url:'https://aidenmak.vercel.app/showcase/hr-agent-business.html'},
+      {label:'Vibe Coding Journey',url:'https://aidenmak.vercel.app/showcase/hr-agent-vibe-coding.html'}
+    ],
+    stats:[{v:'8',l:'AI Agents'},{v:'1,909',l:'Tests'},{v:'28',l:'MCP Tools'},{v:'101',l:'Modules'}],
+    tags:['Multi-Agent','MCP','LangGraph','GCP'],
+    tech:['LangGraph 0.2','FastMCP','MCP','OpenAI GPT-4','Gemini','ChromaDB','Sentence Transformers','Python 3.10+','Flask 3.0','SQLAlchemy 2.0','Celery','PostgreSQL 15+','Redis 7+','Docker','GCP Cloud Run','Prometheus','Grafana','LangSmith','Pytest','Playwright','BambooHR MCP','Chart.js','JWT Auth'],
+    overview:{t:'Multi-Agent Intelligence',d:'Rather than a simple chatbot, this platform orchestrates 8 specialized LangGraph agents that autonomously handle complex HR workflows. Intelligent request routing through a Flask API gateway with JWT authentication, rate limiting, and automatic PII masking directs queries to the right specialist — Policy, Leave, Benefits, Compliance, Analytics, Onboarding, Payroll, or Recruitment.'},
+    arch:[
+      {label:'Frontend',items:['React Dashboard','Real-Time Metrics','Agent Chat UI','Chart.js Viz']},
+      {label:'API Gateway',items:['Flask 3.0','JWT Auth','Rate Limiter','PII Masking']},
+      {label:'Orchestration',items:['Central Router','Agent Selector','Shared State','Fault Recovery']},
+      {label:'AI Agents (8)',items:['Policy Q&A','Leave Mgmt','Benefits','Compliance','Analytics','Onboarding','Payroll','Recruiting']},
+      {label:'Knowledge',items:['ChromaDB Vectors','Sentence Transformers','RAG Pipeline','Doc Retrieval']},
+      {label:'Infrastructure',items:['FastMCP (28 tools)','PostgreSQL','Redis Cache','BambooHR MCP','Prometheus','Grafana']}
+    ],
+    bullets:[
+      'Shipped 8-agent enterprise HR platform to production on <strong>GCP Cloud Run</strong> with <strong>1,909 automated tests</strong> (Pytest + Playwright E2E), Docker containerization, and real-time observability via Prometheus and Grafana.',
+      'Architected <strong>LangGraph multi-agent orchestration</strong> with conditional routing, shared state, and fault-tolerant workflows across policy Q&A, leave management, compliance auditing (<strong>GDPR/CCPA/HIPAA</strong>), and workforce analytics.',
+      'Implemented <strong>Model Context Protocol (MCP) server via FastMCP</strong> exposing 28 tools, 8 resources, and 5 prompts, enabling standardized LLM-to-tool integration with BambooHR connector for live HRIS data.',
+      'Built <strong>hybrid RAG pipeline</strong> combining ChromaDB vector store with Sentence Transformers embeddings for context-aware policy document retrieval across 101 Python modules.',
+      'Designed end-to-end <strong>CI/CD pipeline</strong> with automated linting, type checking, and multi-stage Docker builds, maintaining production reliability across continuous deployments.'
+    ],
+    features:['8 Specialized AI Agents','Intelligent Request Routing','Real-Time Monitoring','Policy Q&A Engine','Leave Management Workflows','Compliance Auditing','Multi-LLM Support','Rate Limiting & PII Masking'],
+    functions:['Answers HR policy questions with citations','Manages leave requests with approval workflows','Handles benefits inquiries and enrollments','Audits compliance across GDPR/CCPA/HIPAA standards','Generates workforce analytics and trends','Automates onboarding tasks','Processes payroll integrations','Routes recruitment candidates'],
+    vibeCoding:{desc:'Built with GitHub Copilot and Claude Code — Copilot handled boilerplate, Claude managed complex multi-agent orchestration and test architecture design. Vibe coding accelerated development of 1,909 tests significantly.'},
+    term:['# Project structure','$ tree src/ -L 1','> src/','> agents/       # 8 specialized LangGraph agents','> api/          # REST API routes & middleware','> core/         # RAG pipeline, LLM gateway','> connectors/   # HRIS integrations','> mcp/          # FastMCP server (28 tools)','> services/     # Business logic','','# Deploy','$ docker-compose up -d && gcloud run deploy','> Deployed: hr-platform-837558695367.us-central1.run.app','','# Tests','$ pytest --cov=agents --cov-report=html','> 1,909 passed, 0 failed (coverage: 94%)','> FastMCP: 28 tools ✓ | Resources: 8 ✓ | Prompts: 5 ✓']
+  },
+  'golden-fork':{idx:'02',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
+    desc:'AI-powered restaurant platform with RAG-driven recommendation engine using OpenAI embeddings and Pinecone vector search. Featured at Redefine Event. Features Stripe checkout, WebSocket real-time kitchen display, and manager analytics dashboard.',
+    live:'https://golden-fork-9tn2.onrender.com',git:null,docs:null,
+    showcase:[
+      {label:'Product Showcase',url:'https://aidenmak.vercel.app/showcase/golden-fork.html#value'}
+    ],
+    stats:[{v:'RAG',l:'Pipeline'},{v:'<1s',l:'Retrieval'},{v:'RT',l:'WebSocket'},{v:'$',l:'Stripe Pay'}],
+    tags:['RAG','Pinecone','Next.js','Stripe'],
+    tech:['OpenAI API','Pinecone','RAG','Next.js','TypeScript','PostgreSQL','Stripe','WebSocket','Render','Node.js','Tailwind CSS'],
+    overview:{t:'Intelligent Restaurant Discovery',d:'Golden Fork combines a RAG-driven recommendation engine with a full e-commerce order pipeline. OpenAI embeddings power semantic menu search through Pinecone vector store, delivering dietary-aware suggestions with sub-second retrieval. The platform includes Stripe webhook-driven checkout, WebSocket real-time kitchen display for live order tracking, and a manager analytics dashboard with sales velocity metrics.'},
+    arch:[
+      {label:'Frontend',items:['Next.js App','TypeScript','Tailwind CSS','Real-Time UI']},
+      {label:'AI Layer',items:['OpenAI Embeddings','Pinecone Vectors','RAG Pipeline','Semantic Search']},
+      {label:'Order Pipeline',items:['Stripe Webhooks','WebSocket Kitchen Display','Order Tracking']},
+      {label:'Data & Analytics',items:['PostgreSQL','Manager Dashboard','Sales Velocity','Menu Engineering']}
+    ],
+    bullets:[
+      'Engineered <strong>RAG-driven recommendation engine</strong> using OpenAI embeddings and Pinecone vector search, delivering dietary-aware menu suggestions with <strong>sub-second retrieval latency</strong>.',
+      'Built end-to-end order pipeline with <strong>Stripe webhook-driven checkout</strong> and <strong>WebSocket real-time kitchen display</strong> for live order tracking across multiple concurrent sessions.',
+      'Created <strong>manager analytics dashboard</strong> with sales velocity metrics and menu engineering insights; deployed full platform live on Render with PostgreSQL persistence.',
+      'Selected for showcase at <strong>Redefine Event</strong> — demonstrating AI-powered restaurant technology to industry professionals.'
+    ],
+    features:['RAG-Powered Menu Search','Dietary-Aware Recommendations','Stripe Checkout Integration','Real-Time Order Tracking','WebSocket Kitchen Display','Manager Analytics Dashboard','Sales Velocity Metrics','Menu Engineering Insights'],
+    functions:['Searches restaurant menus using semantic embeddings','Recommends restaurants based on dietary preferences','Processes payments securely via Stripe','Displays live order status in kitchen','Shows manager dashboard with sales trends','Tracks order history per user','Calculates menu popularity metrics','Identifies top-performing dishes'],
+    vibeCoding:{desc:'Claude Code handled RAG pipeline design and Pinecone integration, while Copilot assisted with Next.js boilerplate. Vibe coding streamlined rapid iteration on the recommendation engine.'},
+    term:['# RAG Pipeline','$ node embed-restaurants.js --source=postgresql','> Embedded restaurant menus → Pinecone','> Vector dims: 1536 (text-embedding-ada-002)','','# Query example','> "cozy Italian place with gluten-free options"','> Retrieved: 5 matches (similarity > 0.87)','> Response generated in 340ms','','# WebSocket kitchen display','> Active sessions: 12 concurrent orders','> Stripe webhook: payment_intent.succeeded ✓','> Kitchen display: real-time order stream ACTIVE']
+  },
+  'decision-ease':{idx:'03',title:'Decision Ease',year:'2026',role:'Founder / Developer',status:'IN DEVELOPMENT',
+    desc:'AI-powered productivity platform that turns overwhelming to-do lists into actionable micro-steps. Features smart prioritization based on energy levels, compassionate coaching, and privacy-first architecture. Currently in early access with waitlist.',
+    live:'https://decision-ease-landing.vercel.app',git:null,docs:null,
+    stats:[{v:'AI',l:'Powered'},{v:'8+',l:'Waitlist'},{v:'4.8',l:'Avg Rating'},{v:'Privacy',l:'First'}],
+    tags:['AI','Productivity','SaaS','Landing Page'],
+    tech:['Next.js','React','TypeScript','Tailwind CSS','PostgreSQL','Vercel','PIPEDA'],
+    overview:{t:'Stop Doomscrolling. Start Doing.',d:'DecisionEase is an AI teammate that breaks overwhelming projects into tiny, actionable micro-steps tailored to your energy levels. It combines smart prioritization with compassionate coaching — no shame, no guilt, just gentle nudges to get back on track. Built with privacy-first architecture where your data stays yours.'},
+    arch:[
+      {label:'Frontend',items:['Next.js Landing','Waitlist System','Feedback Forms','Live Stats']},
+      {label:'AI Engine',items:['Smart Prioritization','Energy-Level Adaptation','Micro-Step Decomposition','Compassionate Coach']},
+      {label:'Backend',items:['API Routes','PostgreSQL','User Analytics','PIPEDA Compliant']},
+      {label:'Infrastructure',items:['Vercel Edge','SSL/TLS','Encrypted Storage','Privacy-First']}
+    ],
+    bullets:[
+      'Designed and shipped a <strong>complete landing page</strong> with waitlist signup, feedback collection, and live stats dashboard.',
+      'Architected <strong>AI-powered micro-step decomposition</strong> that breaks overwhelming projects into actionable tasks based on user energy levels.',
+      'Built with <strong>privacy-first architecture</strong> compliant with PIPEDA, featuring encrypted storage and explicit consent flows.',
+      'Currently in <strong>early access</strong> with growing waitlist — validating product-market fit through user feedback loops.'
+    ],
+    features:['AI Micro-Step Decomposition','Energy-Level Adaptation','Smart Prioritization','Compassionate Coaching','Privacy-First Architecture','PIPEDA Compliance','Encrypted Storage','Waitlist Management'],
+    functions:['Breaks down overwhelming projects into tiny steps','Suggests tasks based on current energy levels','Prioritizes tasks by impact and effort','Provides gentle nudges and encouragement','Stores data locally with end-to-end encryption','Complies with Canadian privacy regulations','Collects user feedback safely','Manages waitlist with live stats'],
+    term:['# DecisionEase — AI Productivity Platform','$ npm run dev','> Server running on localhost:3000','$ curl /api/stats','> {"totalSignups":8,"avgRating":"4.8","totalFeedback":5}','# Privacy-first • PIPEDA compliant','$ vercel --prod','> Deployed to decision-ease-landing.vercel.app']
+  },
+  'upstander':{idx:'04',title:'Upstander Program',year:'Sept 2024 – Oct 2025',role:'AI Developer · CMHR Partnership',status:'COMPLETE',
+    desc:'University of Manitoba partnership with the Canadian Museum for Human Rights. AI-powered educational platform using Gemini Flash 2.0 with adaptive prompting and NLP-driven content personalization across 6 interactive learning modules.',
+    live:null,git:'https://github.com/aidenmak0624/Upstander_Program',docs:null,
+    stats:[{v:'6',l:'Learning Modules'},{v:'CMHR',l:'Museum Partner'},{v:'AI',l:'Gemini Flash 2.0'},{v:'NLP',l:'Personalization'}],
+    tags:['CMHR','Gemini','NLP','Education'],
+    tech:['Gemini Flash 2.0','Python','Pandas','Streamlit','NLP','Flask','Adaptive Prompting'],
+    overview:{t:'Human Rights Education Through AI',d:'Built in partnership with the Canadian Museum for Human Rights via the University of Manitoba, Upstander guides users through three transformative phases: recognizing social injustices, discovering personal strengths, and applying those strengths to create meaningful change. The AI chatbot uses adaptive prompting where instructions shift based on user selections and conversation stage, with NLP-driven content personalization.'},
+    arch:[
+      {label:'Interface',items:['Streamlit UI','6 Learning Modules','Interactive Exercises','Self-Assessment']},
+      {label:'AI Engine',items:['Gemini Flash 2.0','Adaptive Prompting','NLP Processing','Response Analysis']},
+      {label:'Personalization',items:['User Profiling','Strength Assessment','Content Recommendations','Community Stories']},
+      {label:'Backend',items:['Python / Flask','Pandas Processing','Session Management','CMHR Content API']}
+    ],
+    bullets:[
+      'Partnered with <strong>Canadian Museum for Human Rights</strong> via University of Manitoba to build LLM-powered educational platform using <strong>Gemini Flash 2.0</strong>, with adaptive prompting and NLP-driven content personalization across <strong>6 interactive learning modules</strong>.',
+      'Designed <strong>conversational AI system</strong> that guides users through recognizing social injustices, discovering personal strengths, and applying them to create meaningful change.',
+      'Built <strong>self-assessment tools</strong> and personalization engine that customizes content recommendations based on individual user profiles and identified strengths.',
+      'Platform is <strong>98.3% Python</strong> with Streamlit frontend, Pandas data processing, and community story-sharing features.'
+    ],
+    features:['6 Interactive Learning Modules','Adaptive Prompting System','NLP-Based Personalization','Self-Assessment Tools','Community Story Sharing','Progress Tracking','Strength Identification','Action Planning Framework'],
+    functions:['Teaches users to recognize social injustices','Guides discovery of personal strengths','Facilitates action planning for change','Shares real community stories','Assesses individual strengths objectively','Personalizes content to user profile','Tracks learning progress','Provides strength-based recommendations'],
+    term:['# Upstander Platform','$ streamlit run app.py --server.port=8501','> Module 1: Recognizing Injustice ... LOADED','> Module 2: Discovering Strengths ... LOADED','> Module 3: Taking Action ... LOADED','> Module 4: Community Stories ... LOADED','> Module 5: Self-Assessment ... LOADED','> Module 6: Action Planning ... LOADED','> Gemini Flash 2.0 API: CONNECTED','> Adaptive Prompting Engine: READY','> NLP Pipeline: INITIALIZED']
+  },
+  'hr-edu-agent':{idx:'05',title:'HR Education Agent',year:'2025',role:'Independent Project',status:'COMPLETE',
+    desc:'Self-initiated LangGraph multi-agent workflow orchestrating 5 specialized tools for legal document analysis with conditional routing across 25+ human rights documents.',
+    live:null,git:null,docs:null,
+    stats:[{v:'5',l:'Specialized Tools'},{v:'25+',l:'Legal Documents'},{v:'LG',l:'LangGraph'},{v:'↻',l:'Orchestrated'}],
+    tags:['LangGraph','Multi-Agent','Legal AI'],
+    tech:['LangGraph','LangChain','Python','OpenAI','Conditional Routing','State Machines'],
+    overview:{t:'Autonomous Workflow Orchestration',d:'A self-initiated project demonstrating multi-agent architecture separate from the CMHR partnership. Five specialized tools handle document retrieval, legal interpretation, compliance checking, policy summarization, and training recommendations — all orchestrated through LangGraph state machines with conditional routing for complex multi-step legal analysis workflows.'},
+    arch:[
+      {label:'Query Interface',items:['Natural Language Input','Structured Response','Citation Engine']},
+      {label:'LangGraph Orchestration',items:['State Machine','Conditional Router','Tool Selector','Memory']},
+      {label:'Specialized Tools',items:['Doc Retriever','Legal Interpreter','Compliance Checker','Summarizer','Recommender']},
+      {label:'Knowledge Base',items:['25+ HR Legal Docs','Employment Law','Policy Frameworks','Compliance Reqs']}
+    ],
+    bullets:[
+      'Independently designed <strong>LangGraph multi-agent workflow</strong> orchestrating 5 specialized tools for legal document analysis with <strong>conditional routing</strong> across 25+ human rights documents.',
+      'Built <strong>state machine orchestration</strong> with tool selection, memory persistence, and structured output with source citations.',
+      'Demonstrates <strong>multi-agent architecture skills</strong> independently from university partnership work — separate repo, separate design, self-initiated.'
+    ],
+    features:['5 Specialized Tools','Document Retrieval Engine','Legal Interpretation','Compliance Checking','Citation Generation','Conditional Routing','State Machine Orchestration','Source Tracking'],
+    functions:['Retrieves relevant legal documents by query','Interprets legal text in plain language','Checks compliance with regulations','Generates responses with source citations','Routes queries to right tools','Maintains conversation state','Tracks which tools were invoked','Provides structured legal analysis'],
+    term:['# HR Edu Agent','$ python agent.py --mode=interactive','> LangGraph initialized: 5 tools registered','> Legal docs loaded: 25 documents indexed','','> Query: "What are overtime regulations in Ontario?"','> Tool: doc_retriever → 3 relevant sections','> Tool: legal_interpreter → ESA Part VIII analysis','> Tool: compliance_checker → provincial compliance ✓','> Response generated with 4 citations','','> Workflow: retrieval → interpretation → compliance → summary','> State transitions: 7 | Tools invoked: 4']
+  },
+  'hr-edu-rag':{idx:'06',title:'HR Education RAG',year:'2025',role:'Independent Project',status:'COMPLETE',
+    desc:'Standalone RAG pipeline with ChromaDB achieving 97% API speed improvement (6.8s → 0.2s). Processes 112 document chunks across 9 topic categories with source-backed citations and 0.013s retrieval speed.',
+    live:null,git:'https://github.com/aidenmak0624/Human_Right_Edu_RAG',docs:null,
+    stats:[{v:'97%',l:'Speed Improvement'},{v:'112',l:'Doc Chunks'},{v:'0.2s',l:'Response Time'},{v:'9',l:'Topic Categories'}],
+    tags:['RAG','ChromaDB','Embeddings'],
+    tech:['ChromaDB','RAG','Flask','Gemini 2.5 Flash','Sentence Transformers','all-MiniLM-L6-v2','Python','JavaScript','CSS','CORS'],
+    overview:{t:'Optimized Retrieval Pipeline',d:'An independent RAG pipeline that makes international human rights law accessible through conversational AI. 112 document chunks across 9 topic categories (from foundational rights to children\'s rights and freedom of expression) are embedded using sentence-transformers/all-MiniLM-L6-v2 and stored in ChromaDB. Optimized chunking and caching reduced response times by 97% — from 6.8s to 0.2s, with raw retrieval at 0.013s.'},
+    arch:[
+      {label:'Frontend',items:['JavaScript UI','9 Topic Categories','Source Citations','Relevance Scores']},
+      {label:'API',items:['Flask REST','CORS Support','Response Cache']},
+      {label:'RAG Pipeline',items:['Query Embedding','ChromaDB Retrieval','Re-Ranking','Context Assembly']},
+      {label:'Knowledge Base',items:['112 Chunks','all-MiniLM-L6-v2','UDHR','CRC','CEDAW','25+ Docs']}
+    ],
+    bullets:[
+      'Achieved <strong>97% API response speedup</strong> (6.8s to 0.2s) by engineering standalone RAG pipeline with ChromaDB processing <strong>112 document chunks</strong> through embedding optimization and caching.',
+      'Every response includes <strong>citations to original documents</strong> with relevance scores across <strong>9 topic categories</strong> spanning foundational rights through specialized areas.',
+      'Raw retrieval speed of <strong>0.013 seconds</strong> with 98% optimization — main bottleneck is Gemini API latency (3–7s).',
+      'Knowledge base covers <strong>25+ authoritative documents</strong> including UDHR, Convention on the Rights of the Child, and CEDAW.',
+      'Built with <strong>60.1% Python, 21.7% JavaScript, 14.5% CSS</strong> — Flask backend with responsive frontend.'
+    ],
+    features:['ChromaDB Vector Store','Embedding Optimization','Multi-Category Organization','Citation Engine','Relevance Scoring','Response Caching','Query Expansion','Source Attribution'],
+    functions:['Embeds documents using sentence transformers','Stores and retrieves vectors from ChromaDB','Organizes documents in 9 topic categories','Returns citations to original sources','Shows relevance scores for each result','Caches responses for speed','Expands queries for better matches','Attributes content to official documents'],
+    term:['# Ingest pipeline','$ python ingest.py --source=hr_docs/','> Chunking: 112 segments across 9 collections','> Embedding: sentence-transformers/all-MiniLM-L6-v2','> ChromaDB: 112 vectors stored (persistent)','','# Performance benchmark','> Before RAG: avg 6.8s per query','> After RAG:  avg 0.2s per query (retrieval: 0.013s)','> Improvement: 97% faster ✓','','# Sample query','> "What rights do children have under international law?"','> Collection: childrens_rights | Chunks: 4 retrieved','> Sources: CRC Art.1-4, UDHR Art.25 (relevance: 0.94)','> Gemini response: 5.15s (API-bound)']
+  },
+  '311-analysis':{idx:'07',title:'311 Service Analysis',year:'2024',role:'Data Scientist',status:'COMPLETE',
+    desc:'Data-driven analysis of Winnipeg\'s 1.6M+ municipal 311 service requests (2008–2024) using FP-Growth mining, STL decomposition, and anomaly detection to uncover operational patterns and improve city services.',
+    live:null,git:'https://github.com/aidenmak0624/311_Service_Request_Analysis',docs:null,
+    stats:[{v:'1.6M+',l:'Requests'},{v:'16yr',l:'Data Span'},{v:'39-43%',l:'Anomaly Rates'},{v:'FP',l:'Growth Mining'}],
+    tags:['Data Science','FP-Growth','Anomaly Detection'],
+    tech:['Python','Pandas','scikit-learn','statsmodels','mlxtend','matplotlib','plotly','FP-Growth','STL Decomposition','Anomaly Detection'],
+    overview:{t:'Municipal Intelligence',d:'Analyzed Winnipeg\'s 311 service request data spanning 2008–2024 to identify recurring issues, seasonal demand cycles, and service bottlenecks. Used FP-Growth algorithm to find co-occurring request patterns, STL decomposition to separate trend/seasonal/residual signals, and Median Absolute Deviation anomaly detection to flag unusually long case durations — enabling smarter resource allocation and preventive maintenance.'},
+    arch:[
+      {label:'Data Sources',items:['1.6M+ Service Requests','2008–2024','Multiple Departments']},
+      {label:'Analysis Pipeline',items:['FP-Growth Mining','STL Decomposition','MAD Anomaly Detection']},
+      {label:'Insights',items:['Hotspot Mapping','Seasonal Patterns','Co-occurrence Rules','Bottleneck ID']},
+      {label:'Output',items:['Executive Report','Heatmaps','Visualizations','Recommendations']}
+    ],
+    bullets:[
+      '<strong>Water and Waste department</strong> handles over 1.6M requests citywide — the largest service category.',
+      'Identified <strong>hotspot wards</strong>: Mynarski, Daniel McIntyre, Point Douglas, and William Whyte.',
+      'Environmental/infrastructure services show <strong>39–43% anomaly rates</strong>, indicating systemic delays in case resolution.',
+      'FP-Growth mining revealed <strong>co-occurring request patterns</strong> suggesting bundling related services could reduce operational costs.',
+      'STL decomposition enables <strong>predictive crew positioning</strong> by separating seasonal demand from long-term trends.'
+    ],
+    features:['FP-Growth Mining','STL Decomposition','Anomaly Detection','Hotspot Mapping','Co-occurrence Analysis','Seasonal Decomposition','Bottleneck Identification','Executive Reporting'],
+    functions:['Mines frequent patterns in service requests','Separates trends from seasonal signals','Detects anomalously slow case resolutions','Maps hotspot wards with high request volumes','Identifies co-occurring service types','Analyzes seasonal demand patterns','Finds operational bottlenecks','Generates executive summary reports'],
+    term:['# Data pipeline','$ python analysis.py --dataset=311_requests.csv','> Records loaded: 1,612,847 (2008-2024)','> Departments: Water & Waste, Public Works, 311...','','# FP-Growth association mining','> Minimum support: 0.05 | Min confidence: 0.6','> Rules discovered: 23 significant patterns','> Top co-occurrence: road repair ↔ pothole (lift: 4.2)','','# Anomaly detection (MAD)','> Environmental services: 43% anomaly rate','> Infrastructure: 39% anomaly rate','> Avg anomalous case duration: 4.7x normal']
+  },
+  'teachreach':{idx:'08',title:'TeachReach',year:'2024',role:'Software Developer',status:'COMPLETE',
+    desc:'Android tutoring platform connecting post-secondary students with qualified tutors. Features matching, scheduling, in-app messaging, payments, and review systems — built with Java and 3-tier testing.',
+    live:null,git:'https://github.com/aidenmak0624/TeachReach',docs:'https://teachreachdev.wixsite.com/home',
+    stats:[{v:'100%',l:'Java'},{v:'3',l:'Test Tiers'},{v:'Android',l:'Platform'},{v:'Full',l:'CRUD App'}],
+    tags:['Android','Java','Testing'],
+    tech:['Java','Android SDK','Gradle','JUnit','Espresso','Android Studio','SQLite','XML Layouts'],
+    overview:{t:'Student-Tutor Marketplace',d:'A full-featured Android application that addresses post-secondary education challenges by connecting students with qualified tutors. The platform handles the complete tutoring lifecycle — discovery, booking, session management, payment processing, and reviews. Built with software engineering best practices including 3-tier testing (unit, integration, acceptance).'},
+    arch:[
+      {label:'Presentation',items:['Android Activities','XML Layouts','Material Design']},
+      {label:'Business Logic',items:['Matching Engine','Scheduling','Payment Processing','Messaging']},
+      {label:'Data Layer',items:['SQLite Database','User Profiles','Session Records','Reviews']},
+      {label:'Testing',items:['Unit (JUnit)','Integration','Acceptance (Espresso)']}
+    ],
+    bullets:[
+      'Built <strong>student-tutor matching system</strong> with detailed profiles, subject filtering, and availability scheduling.',
+      'Implemented <strong>appointment scheduling</strong>, session management, payment processing, and in-app messaging.',
+      'Established <strong>3-tier testing architecture</strong>: unit tests (AllUnitTests), integration tests (AllIntegrationTests), and UI acceptance tests (AllAcceptanceTest).',
+      'Followed <strong>software engineering best practices</strong> with architecture documentation, coding style guidelines, and contribution workflows.'
+    ],
+    features:['Student-Tutor Matching','Appointment Scheduling','In-App Messaging','Payment Processing','Review System','User Profiles','Subject Filtering','Availability Calendar'],
+    functions:['Matches students with qualified tutors','Schedules lessons and manages appointments','Enables direct messaging between users','Processes payments securely','Allows ratings and written reviews','Displays detailed tutor profiles','Filters tutors by subject expertise','Shows tutor availability calendar'],
+    term:['# Build and test','$ ./gradlew assembleDebug','> BUILD SUCCESSFUL in 12s','','$ ./gradlew test','> AllUnitTests: 24 passed ✓','> AllIntegrationTests: 18 passed ✓','','$ ./gradlew connectedAndroidTest','> AllAcceptanceTest: 12 passed ✓','> UI flows verified on Android 13 emulator']
+  },
+  'portfolio':{idx:'09',title:'Portfolio',year:'2025–Present',role:'Designer & Developer',status:'LIVE',
+    desc:'A hand-crafted single-file HTML portfolio featuring custom cursor, matrix rain, procedural audio BGM, bilingual i18n (EN/中), CSS wipe transitions, and an interactive project showcase — all in ~1,300 lines of pure HTML/CSS/JS with zero dependencies.',
+    live:null,git:'https://github.com/aidenmak0624/portfolio',docs:null,
+    stats:[{v:'1.3K',l:'Lines of Code'},{v:'0',l:'Dependencies'},{v:'9',l:'Projects'},{v:'2',l:'Languages'}],
+    tags:['Vanilla JS','Web Audio API','CSS Animations','i18n'],
+    tech:['HTML5','CSS3','Vanilla JavaScript','Web Audio API','Canvas API','IntersectionObserver','CSS Custom Properties','i18n System'],
+    overview:{t:'A Portfolio That Is the Project',d:'This isn\'t a template — it\'s a single-file, zero-dependency interactive experience. Custom cursor with per-project color theming, matrix rain canvas background, procedural Web Audio API synthesizer for BGM and SFX, character-by-character hero text animation, CSS wipe page transitions, bilingual support (English / 中文) with full project translations, scroll-triggered reveals via IntersectionObserver, and a contact section — all built from scratch without React, without frameworks, without npm.'},
+    arch:[
+      {label:'Presentation',items:['Custom Cursor System','CSS Wipe Transitions','Matrix Canvas Rain','Scroll Reveal Animations']},
+      {label:'Audio Engine',items:['Web Audio API','Procedural BGM Synth','SFX Tone Generator','Mute Toggle Control']},
+      {label:'i18n System',items:['EN/中 Toggle','data-i18n Attributes','P_ZH Translation Object','pL() Helper Function']},
+      {label:'Data Layer',items:['9 Project Objects','Dynamic Rendering','Per-Project Theming','Stats & Architecture']}
+    ],
+    bullets:[
+      'Engineered a <strong>zero-dependency single-file</strong> portfolio (~1,300 lines) with custom cursor, matrix rain, and procedural audio — no React, no npm, no build step.',
+      'Built a complete <strong>bilingual i18n system</strong> (English/中文) with data-i18n attributes, parallel P_ZH translation objects, and live language switching across all content.',
+      'Created a <strong>procedural BGM synthesizer</strong> using Web Audio API with oscillators, LFO modulation, and dynamic mute control — no audio files needed.',
+      'Implemented <strong>interactive project showcase</strong> with per-project color theming, CSS wipe transitions, architecture diagrams, and a terminal emulator display.',
+      'Designed with <strong>AI-assisted vibe coding</strong> using Claude Cowork — iterating on design, features, and translations through conversational development.'
+    ],
+    features:['Custom Cursor System','Matrix Rain Background','Procedural Audio BGM','Bilingual EN/中文','CSS Wipe Transitions','Per-Project Color Themes','Interactive Architecture Diagrams','Terminal Emulator Display'],
+    functions:['Renders 9 interactive project pages from JS data objects','Plays procedural synthesizer BGM with mute toggle','Switches all content between English and Chinese in real-time','Animates hero text character-by-character on load','Displays matrix rain canvas on project pages','Applies unique color accent per project on hover','Shows scroll-triggered reveal animations via IntersectionObserver','Provides contact section with email, LinkedIn, GitHub, Instagram'],
+    vibeCoding:{desc:'This entire portfolio was built through iterative AI-assisted development using Claude Cowork. Starting from a blank HTML file, each feature — the custom cursor, matrix rain, audio engine, i18n system, and project rendering — was designed and refined through conversational vibe coding sessions. The bilingual translations, per-project theming, and procedural BGM were all added incrementally based on real-time feedback loops. It\'s a living example of what\'s possible when human creativity meets AI-powered development.'},
+    term:['# Portfolio v6-polished.html','$ wc -l v6-polished.html','> 1311 v6-polished.html','','# Zero dependencies','$ cat package.json','> cat: package.json: No such file — none needed.','','# Languages','$ echo "EN / 中文 bilingual"','> EN / 中文 bilingual ✓','','# Audio','$ echo "Web Audio API — procedural BGM + SFX"','> Oscillator → LFO → GainNode → Destination ✓']
+  }
+};
+
+// ═══ CHINESE PROJECT TRANSLATIONS ═══
+const P_ZH={
+  'hr-agent':{title:'HR 智能平台',role:'AI 工程師',status:'已部署',
+    desc:'企業級多智能體 AI 系統，協調 8 個專業 LangGraph 智能體執行自主 HR 工作流程——從政策問答到合規審計。已部署至 GCP Cloud Run 生產環境，配備 1,909 個自動化測試。',
+    showcase:[
+      {label:'開發者深度剖析',url:'https://aidenmak.vercel.app/showcase/hr-agent-developer.html'},
+      {label:'商業案例',url:'https://aidenmak.vercel.app/showcase/hr-agent-business.html'},
+      {label:'Vibe Coding 之旅',url:'https://aidenmak.vercel.app/showcase/hr-agent-vibe-coding.html'}
+    ],
+    stats:[{v:'8',l:'AI 智能體'},{v:'1,909',l:'測試數量'},{v:'28',l:'MCP 工具'},{v:'101',l:'模組數'}],
+    overview:{t:'多智能體架構',d:'此平台並非簡單的聊天機器人，而是協調 8 個專業 LangGraph 智能體自主處理複雜的 HR 工作流程。透過 Flask API 閘道的智能請求路由，配備 JWT 驗證、速率限制和自動 PII 遮蔽，將查詢導向正確的專家——政策、請假、福利、合規、分析、入職、薪資或招聘。'},
+    arch:[
+      {label:'前端',items:['React Dashboard','Real-Time Metrics','Agent Chat UI','Chart.js Viz']},
+      {label:'API 閘道',items:['Flask 3.0','JWT Auth','Rate Limiter','PII Masking']},
+      {label:'編排層',items:['Central Router','Agent Selector','Shared State','Fault Recovery']},
+      {label:'AI 智能體 (8)',items:['Policy Q&A','Leave Mgmt','Benefits','Compliance','Analytics','Onboarding','Payroll','Recruiting']},
+      {label:'知識層',items:['ChromaDB Vectors','Sentence Transformers','RAG Pipeline','Doc Retrieval']},
+      {label:'基礎設施',items:['FastMCP (28 tools)','PostgreSQL','Redis Cache','BambooHR MCP','Prometheus','Grafana']}
+    ],
+    bullets:[
+      '將 8 智能體企業 HR 平台部署至 <strong>GCP Cloud Run</strong> 生產環境，配備 <strong>1,909 個自動化測試</strong>（Pytest + Playwright E2E）、Docker 容器化，以及透過 Prometheus 和 Grafana 實現即時監控。',
+      '架構了 <strong>LangGraph 多智能體編排系統</strong>，具備條件路由、共享狀態和容錯工作流程，涵蓋政策問答、請假管理、合規審計（<strong>GDPR/CCPA/HIPAA</strong>）和人力分析。',
+      '透過 FastMCP 實現了 <strong>Model Context Protocol (MCP) 伺服器</strong>，提供 28 個工具、8 個資源和 5 個提示，支援標準化 LLM 與工具整合，並配備 BambooHR 連接器以獲取即時 HRIS 數據。',
+      '構建了<strong>混合 RAG 管道</strong>，結合 ChromaDB 向量儲存和 Sentence Transformers 嵌入，在 101 個 Python 模組中實現上下文感知的政策文件檢索。',
+      '設計了端到端的 <strong>CI/CD 管道</strong>，包含自動化 linting、類型檢查和多階段 Docker 構建，確保持續部署的生產穩定性。'
+    ]
+  },
+  'golden-fork':{title:'金叉餐廳',role:'全端 AI 開發者',status:'已部署',
+    desc:'AI 驅動的餐廳平台，搭載 RAG 推薦引擎，使用 OpenAI 嵌入和 Pinecone 向量搜索。具備 Stripe 結帳、WebSocket 即時廚房顯示和管理員分析儀表板。',
+    showcase:[
+      {label:'產品展示',url:'https://aidenmak.vercel.app/showcase/golden-fork.html#value'}
+    ],
+    stats:[{v:'RAG',l:'管道'},{v:'<1s',l:'檢索速度'},{v:'RT',l:'即時通訊'},{v:'$',l:'Stripe 支付'}],
+    overview:{t:'智能餐廳探索',d:'Golden Fork 結合了 RAG 驅動的推薦引擎和完整的電商訂單管道。OpenAI 嵌入驅動語義菜單搜索，透過 Pinecone 向量儲存提供飲食偏好感知的推薦，檢索延遲低於一秒。平台包含 Stripe webhook 驅動的結帳、WebSocket 即時廚房顯示和銷售速率指標的管理員分析儀表板。'},
+    arch:[
+      {label:'前端',items:['Next.js App','TypeScript','Tailwind CSS','Real-Time UI']},
+      {label:'AI 層',items:['OpenAI Embeddings','Pinecone Vectors','RAG Pipeline','Semantic Search']},
+      {label:'訂單管道',items:['Stripe Webhooks','WebSocket Kitchen Display','Order Tracking']},
+      {label:'數據分析',items:['PostgreSQL','Manager Dashboard','Sales Velocity','Menu Engineering']}
+    ],
+    bullets:[
+      '開發了 <strong>RAG 驅動的推薦引擎</strong>，使用 OpenAI 嵌入和 Pinecone 向量搜索，提供飲食偏好感知的菜單推薦，<strong>檢索延遲低於一秒</strong>。',
+      '構建了端到端訂單管道，配備 <strong>Stripe webhook 驅動的結帳</strong>和 <strong>WebSocket 即時廚房顯示</strong>，支援多個並發會話的即時訂單追蹤。',
+      '創建了<strong>管理員分析儀表板</strong>，提供銷售速率指標和菜單工程洞察；完整平台已部署至 Render，使用 PostgreSQL 持久化。',
+      '入選 <strong>Redefine Event</strong> 展示——向業界專業人士演示 AI 驅動的餐廳技術。'
+    ]
+  },
+  'decision-ease':{title:'Decision Ease',role:'創辦人 / 開發者',status:'開發中',
+    desc:'AI 驅動的生產力平台，將令人困擾的待辦事項清單轉化為可執行的微步驟。具備基於能量水平的智能優先順序、同情的指導和隱私優先架構。目前處於早期訪問狀態，有候選列表。',
+    stats:[{v:'AI',l:'驅動'},{v:'8+',l:'候選列表'},{v:'4.8',l:'平均評分'},{v:'隱私',l:'優先'}],
+    overview:{t:'停止無限滾動。開始行動。',d:'DecisionEase 是一個 AI 隊友，將令人困擾的項目分解成根據您能量水平量身定制的小型、可執行的微步驟。它結合了智能優先順序與同情的指導——沒有羞愧，沒有內疚，只有溫和的推動以重新上軌道。採用隱私優先架構構建，您的數據保留在您手中。'},
+    arch:[
+      {label:'前端',items:['Next.js Landing','Waitlist System','Feedback Forms','Live Stats']},
+      {label:'AI 引擎',items:['Smart Prioritization','Energy-Level Adaptation','Micro-Step Decomposition','Compassionate Coach']},
+      {label:'後端',items:['API Routes','PostgreSQL','User Analytics','PIPEDA Compliant']},
+      {label:'基礎設施',items:['Vercel Edge','SSL/TLS','Encrypted Storage','Privacy-First']}
+    ],
+    bullets:[
+      '設計並推出了<strong>完整登陸頁面</strong>，包含候選列表註冊、反饋收集和實時統計儀表板。',
+      '架構了 <strong>AI 驅動的微步驟分解系統</strong>，根據用戶能量水平將令人困擾的項目分解為可執行的任務。',
+      '採用 <strong>PIPEDA 合規的隱私優先架構</strong>構建，具備加密存儲和明確的同意流程。',
+      '目前處於<strong>早期訪問</strong>狀態，候選列表不斷增長——透過用戶反饋循環驗證產品市場適應性。'
+    ]
+  },
+  'upstander':{title:'Upstander 教育平台',role:'AI 開發者 · CMHR 合作',status:'已完成',
+    desc:'曼尼托巴大學與加拿大人權博物館的合作項目。AI 驅動的教育平台，使用 Gemini Flash 2.0 搭配自適應提示和 NLP 驅動的內容個性化，涵蓋 6 個互動學習模組。',
+    stats:[{v:'6',l:'學習模組'},{v:'CMHR',l:'博物館合作'},{v:'AI',l:'Gemini Flash 2.0'},{v:'NLP',l:'個性化'}],
+    overview:{t:'透過 AI 推動人權教育',d:'此平台與加拿大人權博物館合作開發，透過曼尼托巴大學進行。Upstander 引導使用者經歷三個轉變階段：認識社會不公、發現個人優勢，以及運用這些優勢創造有意義的改變。AI 聊天機器人使用自適應提示——指令根據使用者選擇和對話階段動態調整，配合 NLP 驅動的內容個性化。'},
+    arch:[
+      {label:'介面',items:['Streamlit UI','6 Learning Modules','Interactive Exercises','Self-Assessment']},
+      {label:'AI 引擎',items:['Gemini Flash 2.0','Adaptive Prompting','NLP Processing','Response Analysis']},
+      {label:'個性化',items:['User Profiling','Strength Assessment','Content Recommendations','Community Stories']},
+      {label:'後端',items:['Python / Flask','Pandas Processing','Session Management','CMHR Content API']}
+    ],
+    bullets:[
+      '與<strong>加拿大人權博物館</strong>合作，透過曼尼托巴大學構建 LLM 驅動的教育平台，使用 <strong>Gemini Flash 2.0</strong>，配備自適應提示和 NLP 驅動的內容個性化，涵蓋 <strong>6 個互動學習模組</strong>。',
+      '設計了<strong>對話式 AI 系統</strong>，引導使用者認識社會不公、發現個人優勢，並運用這些優勢創造有意義的改變。',
+      '構建了<strong>自我評估工具</strong>和個性化引擎，根據使用者個人檔案和識別的優勢自訂內容推薦。',
+      '平台以 <strong>98.3% Python</strong> 開發，使用 Streamlit 前端、Pandas 數據處理和社群故事分享功能。'
+    ]
+  },
+  'hr-edu-agent':{title:'HR 教育智能體',role:'獨立項目',status:'已完成',
+    desc:'自發啟動的 LangGraph 多智能體工作流程，協調 5 個專業工具進行法律文件分析，在 25+ 人權文件中執行條件路由。',
+    stats:[{v:'5',l:'專業工具'},{v:'25+',l:'法律文件'},{v:'LG',l:'LangGraph'},{v:'↻',l:'已編排'}],
+    overview:{t:'自主工作流程編排',d:'此為獨立項目，展示與 CMHR 合作無關的多智能體架構。五個專業工具負責文件檢索、法律解讀、合規檢查、政策摘要和培訓建議——全部透過 LangGraph 狀態機與條件路由進行編排，處理複雜的多步驟法律分析工作流程。'},
+    arch:[
+      {label:'查詢介面',items:['Natural Language Input','Structured Response','Citation Engine']},
+      {label:'LangGraph 編排',items:['State Machine','Conditional Router','Tool Selector','Memory']},
+      {label:'專業工具',items:['Doc Retriever','Legal Interpreter','Compliance Checker','Summarizer','Recommender']},
+      {label:'知識庫',items:['25+ HR Legal Docs','Employment Law','Policy Frameworks','Compliance Reqs']}
+    ],
+    bullets:[
+      '獨立設計了 <strong>LangGraph 多智能體工作流程</strong>，協調 5 個專業工具進行法律文件分析，在 25+ 人權文件中執行<strong>條件路由</strong>。',
+      '構建了<strong>狀態機編排系統</strong>，具備工具選擇、記憶持久化和帶來源引用的結構化輸出。',
+      '展示了獨立於大學合作的<strong>多智能體架構能力</strong>——獨立代碼庫、獨立設計、自主啟動。'
+    ]
+  },
+  'hr-edu-rag':{title:'HR 教育 RAG',role:'獨立項目',status:'已完成',
+    desc:'獨立 RAG 管道，使用 ChromaDB 實現 97% API 速度提升（6.8s → 0.2s）。處理 112 個文件區塊，涵蓋 9 個主題類別，提供來源引用和 0.013s 檢索速度。',
+    stats:[{v:'97%',l:'速度提升'},{v:'112',l:'文件區塊'},{v:'0.2s',l:'回應時間'},{v:'9',l:'主題類別'}],
+    overview:{t:'優化檢索管道',d:'獨立開發的 RAG 管道，讓國際人權法透過對話式 AI 變得易於理解。112 個文件區塊涵蓋 9 個主題類別（從基本權利到兒童權利和言論自由），使用 sentence-transformers/all-MiniLM-L6-v2 嵌入並儲存於 ChromaDB。優化的分塊和快取策略將回應時間降低 97%——從 6.8s 到 0.2s，原始檢索僅需 0.013s。'},
+    arch:[
+      {label:'前端',items:['JavaScript UI','9 Topic Categories','Source Citations','Relevance Scores']},
+      {label:'API',items:['Flask REST','CORS Support','Response Cache']},
+      {label:'RAG 管道',items:['Query Embedding','ChromaDB Retrieval','Re-Ranking','Context Assembly']},
+      {label:'知識庫',items:['112 Chunks','all-MiniLM-L6-v2','UDHR','CRC','CEDAW','25+ Docs']}
+    ],
+    bullets:[
+      '透過工程化獨立 RAG 管道，使用 ChromaDB 處理 <strong>112 個文件區塊</strong>，通過嵌入優化和快取實現 <strong>97% API 回應速度提升</strong>（6.8s 到 0.2s）。',
+      '每個回應都包含<strong>原始文件引用</strong>和相關性評分，涵蓋 <strong>9 個主題類別</strong>，從基本權利到專門領域。',
+      '原始檢索速度 <strong>0.013 秒</strong>，優化率 98%——主要瓶頸為 Gemini API 延遲（3–7s）。',
+      '知識庫涵蓋 <strong>25+ 權威文件</strong>，包括 UDHR、兒童權利公約和 CEDAW。',
+      '以 <strong>60.1% Python、21.7% JavaScript、14.5% CSS</strong> 構建——Flask 後端配合響應式前端。'
+    ]
+  },
+  '311-analysis':{title:'311 服務分析',role:'數據科學家',status:'已完成',
+    desc:'對溫尼伯 160 萬+ 市政 311 服務請求（2008-2024）進行數據驅動分析，使用 FP-Growth 挖掘、STL 分解和異常檢測，揭示運營模式並改善城市服務。',
+    stats:[{v:'1.6M+',l:'服務請求'},{v:'16yr',l:'數據跨度'},{v:'39-43%',l:'異常率'},{v:'FP',l:'Growth 挖掘'}],
+    overview:{t:'市政智能分析',d:'分析溫尼伯 2008-2024 年的 311 服務請求數據，識別重複問題、季節性需求週期和服務瓶頸。使用 FP-Growth 演算法發現共現請求模式，STL 分解分離趨勢/季節/殘差信號，中位數絕對偏差異常檢測標記異常長的案件處理時間——實現更智能的資源分配和預防性維護。'},
+    arch:[
+      {label:'數據源',items:['1.6M+ Service Requests','2008–2024','Multiple Departments']},
+      {label:'分析管道',items:['FP-Growth Mining','STL Decomposition','MAD Anomaly Detection']},
+      {label:'洞察',items:['Hotspot Mapping','Seasonal Patterns','Co-occurrence Rules','Bottleneck ID']},
+      {label:'輸出',items:['Executive Report','Heatmaps','Visualizations','Recommendations']}
+    ],
+    bullets:[
+      '<strong>水務和廢棄物部門</strong>在全市處理超過 160 萬個請求——是最大的服務類別。',
+      '識別了<strong>熱點區域</strong>：Mynarski、Daniel McIntyre、Point Douglas 和 William Whyte。',
+      '環境/基礎設施服務呈現 <strong>39-43% 異常率</strong>，表明案件解決存在系統性延遲。',
+      'FP-Growth 挖掘揭示了<strong>共現請求模式</strong>，建議捆綁相關服務可降低運營成本。',
+      'STL 分解可實現<strong>預測性人員部署</strong>，將季節性需求從長期趨勢中分離。'
+    ]
+  },
+  'teachreach':{title:'TeachReach 教學平台',role:'軟體開發者',status:'已完成',
+    desc:'Android 家教平台，連接大專院校學生與合格導師。具備配對、排程、應用內訊息、支付和評價系統——使用 Java 和三層測試架構構建。',
+    stats:[{v:'100%',l:'Java'},{v:'3',l:'測試層級'},{v:'Android',l:'平台'},{v:'Full',l:'CRUD 應用'}],
+    overview:{t:'學生-導師市場',d:'功能完整的 Android 應用程式，透過連接學生與合格導師來解決大專教育挑戰。平台處理完整的家教生命週期——發現、預約、課程管理、付款處理和評價。遵循軟體工程最佳實踐，包含三層測試（單元、整合、驗收）。'},
+    arch:[
+      {label:'展示層',items:['Android Activities','XML Layouts','Material Design']},
+      {label:'業務邏輯',items:['Matching Engine','Scheduling','Payment Processing','Messaging']},
+      {label:'數據層',items:['SQLite Database','User Profiles','Session Records','Reviews']},
+      {label:'測試',items:['Unit (JUnit)','Integration','Acceptance (Espresso)']}
+    ],
+    bullets:[
+      '構建了<strong>學生-導師配對系統</strong>，提供詳細個人檔案、科目篩選和時間安排。',
+      '實現了<strong>預約排程</strong>、課程管理、付款處理和應用內即時訊息。',
+      '建立了<strong>三層測試架構</strong>：單元測試（AllUnitTests）、整合測試（AllIntegrationTests）和 UI 驗收測試（AllAcceptanceTest）。',
+      '遵循<strong>軟體工程最佳實踐</strong>，包含架構文件、程式碼風格指南和貢獻工作流程。'
+    ]
+  },
+  'portfolio':{title:'個人作品集',role:'設計師 & 開發者',status:'上線中',
+    desc:'手工打造的單檔 HTML 作品集，具備自訂游標、矩陣雨背景、程序化音頻 BGM、雙語 i18n（EN/中）、CSS 轉場動畫和互動式項目展示——全部約 1,300 行純 HTML/CSS/JS，零依賴。',
+    stats:[{v:'1.3K',l:'程式碼行數'},{v:'0',l:'依賴項'},{v:'9',l:'項目數'},{v:'2',l:'語言'}],
+    overview:{t:'作品集即是作品',d:'這不是模板——而是一個零依賴的單檔互動體驗。自訂游標配合每個項目的獨立色彩主題、矩陣雨 Canvas 背景、Web Audio API 程序化合成器 BGM 和音效、逐字元英雄文字動畫、CSS 擦除頁面轉場、雙語支援（English / 中文）含完整項目翻譯、IntersectionObserver 滾動觸發動畫、以及聯絡區塊——全部從零開始構建，不用 React，不用框架，不用 npm。'},
+    arch:[
+      {label:'展示層',items:['自訂游標系統','CSS 擦除轉場','矩陣 Canvas 雨','滾動觸發動畫']},
+      {label:'音頻引擎',items:['Web Audio API','程序化 BGM 合成','音效產生器','靜音切換']},
+      {label:'i18n 系統',items:['EN/中 切換','data-i18n 屬性','P_ZH 翻譯對象','pL() 輔助函數']},
+      {label:'資料層',items:['9 個項目對象','動態渲染','獨立色彩主題','數據 & 架構']}
+    ],
+    bullets:[
+      '打造了<strong>零依賴單檔</strong>作品集（約 1,300 行），具備自訂游標、矩陣雨和程序化音頻——不用 React，不用 npm，不需構建步驟。',
+      '構建了完整的<strong>雙語 i18n 系統</strong>（English/中文），使用 data-i18n 屬性、平行 P_ZH 翻譯對象和即時語言切換。',
+      '使用 Web Audio API 創建了<strong>程序化 BGM 合成器</strong>，配備振盪器、LFO 調變和動態靜音控制——無需音頻檔案。',
+      '實現了<strong>互動式項目展示</strong>，具備獨立色彩主題、CSS 轉場、架構圖和終端模擬器顯示。',
+      '透過 <strong>AI 輔助 Vibe Coding</strong>（Claude Cowork）設計——通過對話式開發迭代設計、功能和翻譯。'
+    ]
+  }
+};
+
+let currentLang='en';
+// Helper: get project data in current language
+function pL(id){
+  const p=P[id];
+  if(currentLang!=='zh'||!P_ZH[id])return p;
+  const z=P_ZH[id];
+  return{...p,...z,stats:z.stats||p.stats,overview:z.overview||p.overview,bullets:z.bullets||p.bullets,arch:z.arch||p.arch,term:p.term,tags:p.tags,tech:p.tech};
+}
+
+const keys=Object.keys(P);
+let current=null;
+
+// ═══ RENDER WORKS LIST ═══
+const wl=document.getElementById('worksList');
+const projectColors=['#00ffcc','#ffaa00','#ff6b35','#7b61ff','#00ccff','#ff3366','#66ff66','#ff66cc','#00ffcc'];
+function renderWorksList(){
+  wl.innerHTML='';
+  keys.forEach((k,i)=>{
+    const p=pL(k);const styles=['','font-style:italic','','font-style:italic','','font-style:italic','','font-style:italic',''];
+    const fills=[true,false,true,false,true,false,true,false,true];
+    const el=document.createElement('div');
+    el.className='work-item reveal vis';
+    el.setAttribute('data-project',k);
+    const titleColor=projectColors[i%projectColors.length];
+    el.innerHTML=`
+      <span class="work-number">${p.idx}</span>
+      <div class="work-title-wrap">
+        <span class="work-title" style="color:${titleColor};${styles[i]}">${p.title}</span>
+        <span class="work-role">${p.role}</span>
+      </div>
+      <div class="work-tags">${p.tags.map(t=>`<span class="work-tag">${t}</span>`).join('')}</div>
+      <span class="work-year">${p.year.split('–')[0].split(' ').pop()}</span>
+      <span class="work-arrow">→</span>`;
+    el.addEventListener('click',()=>openProject(k));
+    wl.appendChild(el);
+  });
+  // Re-bind hover preview
+  document.querySelectorAll('.work-item').forEach(item=>{
+    item.addEventListener('mouseenter',()=>{const k=item.dataset.project;pl.textContent=pL(k)?.status||'VIEW';wp.classList.add('visible')});
+    item.addEventListener('mouseleave',()=>{wp.classList.remove('visible')});
+  });
+}
+renderWorksList();
+
+// ═══ CUSTOM CURSOR ═══
+const dot=document.getElementById('cursorDot'),ring=document.getElementById('cursorRing'),clbl=document.getElementById('cursorLabel');
+let mx=0,my=0,dx=0,dy=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px';
+  const wp=document.getElementById('workPreview');if(wp.classList.contains('visible')){wp.style.left=mx+'px';wp.style.top=(my-20)+'px'}});
+function animCursor(){dx+=(mx-dx)*.12;dy+=(my-dy)*.12;ring.style.left=dx+'px';ring.style.top=dy+'px';clbl.style.left=mx+'px';clbl.style.top=my+'px';requestAnimationFrame(animCursor)}
+animCursor();
+
+const clickables='a,button,.work-item,.sci-btn,.btn-primary,.btn-ghost,.nav-cta,.skill-pill,.tech-tag,.arch-box,.pn-item,.nav-logo,.acc-item,.intro-hl';
+const accentColors=['#00ffcc','#ff3366','#7b61ff','#ffaa00'];
+document.addEventListener('mouseover',e=>{const t=e.target.closest(clickables);if(t){dot.classList.add('hovering');ring.classList.add('hovering');SFX.hover();
+  // Multi-color cursor based on context
+  const wi=t.closest('.work-item');
+  if(wi){const idx=Array.from(wi.parentNode.children).indexOf(wi);const c=accentColors[idx%4];
+    dot.style.background=c;ring.style.borderColor=c;clbl.style.background=c}
+  const sg=t.closest('.skill-group');
+  if(sg){const idx=Array.from(sg.parentNode.children).indexOf(sg);const cMap=[0,1,2,3,1,2];const c=accentColors[cMap[idx]||0];
+    dot.style.background=c;ring.style.borderColor=c}
+  // Show label for specific items
+  const label=wi?'View':t.closest('.sci-btn-fill')?'Open':t.closest('.sci-btn-outline')?'Code':t.closest('.sci-btn-doc')?'Docs':t.closest('.acc-item')?'Detail':null;
+  if(label){clbl.textContent=label;clbl.classList.add('visible')}
+}});
+document.addEventListener('mouseout',e=>{const t=e.target.closest(clickables);if(t){dot.classList.remove('hovering');ring.classList.remove('hovering');clbl.classList.remove('visible');
+  dot.style.background='';ring.style.borderColor='';clbl.style.background=''}});
+document.addEventListener('mousedown',()=>{ring.classList.add('clicking');SFX.click()});
+document.addEventListener('mouseup',()=>ring.classList.remove('clicking'));
+
+// Auto-start BGM on first interaction
+let bgmStarted=false;
+function initBGM(){if(!bgmStarted){SFX.startBGM();bgmStarted=true}}
+document.addEventListener('click',initBGM,{once:true});
+document.addEventListener('keydown',initBGM,{once:true});
+document.addEventListener('scroll',initBGM,{once:true});
+document.addEventListener('touchstart',initBGM,{once:true});
+
+// ═══ HOVER PREVIEW ═══
+const wp=document.getElementById('workPreview'),pl=document.getElementById('previewLabel');
+// (hover events bound inside renderWorksList)
+
+// ═══ SCROLL PROGRESS ═══
+const sp=document.getElementById('scrollProgress');
+window.addEventListener('scroll',()=>{if(!current){const h=document.documentElement;sp.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100+'%'}});
+
+// ═══ NAV SCROLL ═══
+window.addEventListener('scroll',()=>{if(!current){document.getElementById('mainNav').classList.toggle('scrolled',window.scrollY>60)}});
+
+// ═══ SCROLL REVEALS ═══
+const obs=new IntersectionObserver(entries=>{entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('vis'),i*60)}})},{threshold:.08});
+document.querySelectorAll('.reveal,.reveal-left').forEach(el=>obs.observe(el));
+
+// ═══ HERO CHAR ANIMATION ═══
+document.querySelectorAll('.hero-title span').forEach(line=>{
+  const txt=line.textContent;line.innerHTML='';
+  [...txt].forEach((ch,i)=>{
+    const s=document.createElement('span');s.className='char';s.textContent=ch===''?' ':ch;
+    if(ch===' ')s.style.width='.3em';
+    s.style.animationDelay=(0.3+i*0.04)+'s';line.appendChild(s);
+  });
+});
+
+// ═══ WIPE TRANSITION ═══
+function wipeIn(text,cb){
+  const w=document.getElementById('wipe'),wt=document.getElementById('wipeText');
+  wt.textContent=text;SFX.wipe();
+  w.className='wipe enter';
+  setTimeout(()=>wt.classList.add('visible'),250);
+  setTimeout(()=>{cb();wt.classList.remove('visible');w.className='wipe exit';setTimeout(()=>w.className='wipe',600)},700);
+}
+
+// ═══ OPEN PROJECT ═══
+function openProject(id){
+  const p=pL(id);if(!p)return;
+  wipeIn(currentLang==='zh'?`載入中 ${p.title}`:`LOADING ${p.title.toUpperCase()}`,()=>{
+    current=id;
+    document.getElementById('mainPage').classList.add('hidden');
+    renderProject(id);
+    document.getElementById('projectPage').classList.add('visible');
+    document.getElementById('navLinks').style.display='none';
+    document.getElementById('navBack').classList.add('visible');
+    document.getElementById('mainNav').classList.add('scrolled');
+    sp.style.width='0%';window.scrollTo(0,0);startMatrix();
+  });
+}
+
+function goHome(){
+  wipeIn(currentLang==='zh'?'返回首頁':'RETURNING TO INDEX',()=>{
+    document.getElementById('projectPage').classList.remove('visible');
+    document.getElementById('mainPage').classList.remove('hidden');
+    document.getElementById('navLinks').style.display='flex';
+    document.getElementById('navBack').classList.remove('visible');
+    document.getElementById('mainNav').classList.remove('scrolled');
+    window.scrollTo(0,0);current=null;if(matInt)clearInterval(matInt);
+  });
+}
+
+// ═══ MATRIX ═══
+let matInt;
+function startMatrix(){
+  const c=document.getElementById('matrixCanvas');if(!c)return;
+  const x=c.getContext('2d');
+  c.width=innerWidth;c.height=innerHeight;
+  const sz=15,cols=Math.floor(c.width/sz);
+  const drops=new Array(cols).fill(0).map(()=>Math.random()*-50|0);
+  const speeds=new Array(cols).fill(0).map(()=>0.3+Math.random()*0.9);
+  const bright=new Array(cols).fill(0);/* flare timer per column */
+  /* each column gets its own random base brightness (0.15 – 0.75) */
+  const baseA=new Array(cols).fill(0).map(()=>0.15+Math.random()*0.6);
+  /* slowly drift each column's brightness over time */
+  const drift=new Array(cols).fill(0).map(()=>(Math.random()-0.5)*0.004);
+  const chars='アイウエオカキクケコサシスセソタチツテト0123456789ABCDEF<>{}[]=/';
+  function draw(){
+    x.fillStyle='rgba(12,12,24,.06)';x.fillRect(0,0,c.width,c.height);
+    x.font=sz+'px JetBrains Mono,monospace';
+    for(let i=0;i<cols;i++){
+      /* drift base brightness so columns shift over time */
+      baseA[i]+=drift[i];
+      if(baseA[i]>0.8||baseA[i]<0.12){drift[i]*=-1;baseA[i]=Math.max(0.12,Math.min(0.8,baseA[i]));}
+      /* randomly ignite a column with bright flare */
+      if(bright[i]>0){bright[i]--;}
+      else if(Math.random()<0.003){bright[i]=8+Math.random()*18|0;}
+      const isBright=bright[i]>0;
+      const ch=chars[Math.random()*chars.length|0];
+      const py=drops[i]*sz;
+      if(isBright){
+        x.shadowColor='#00ffcc';x.shadowBlur=20;
+        x.fillStyle='#ffffff';
+        x.fillText(ch,i*sz,py);
+        x.shadowBlur=10;x.fillStyle='rgba(0,255,204,.9)';
+        x.fillText(chars[Math.random()*chars.length|0],i*sz,(drops[i]-1)*sz);
+        x.fillStyle='rgba(0,255,204,.5)';
+        x.fillText(chars[Math.random()*chars.length|0],i*sz,(drops[i]-2)*sz);
+        x.shadowBlur=0;x.shadowColor='transparent';
+      }else{
+        /* per-column random brightness — some dim, some bright */
+        const a=baseA[i];
+        if(a>0.55){x.shadowColor='rgba(0,255,204,.15)';x.shadowBlur=4;}
+        x.fillStyle='rgba(0,255,204,'+a.toFixed(2)+')';
+        x.fillText(ch,i*sz,py);
+        if(a>0.55){x.shadowBlur=0;x.shadowColor='transparent';}
+      }
+      drops[i]+=speeds[i];
+      if(py>c.height&&Math.random()>0.975){
+        drops[i]=Math.random()*-20|0;
+        speeds[i]=0.3+Math.random()*0.9;
+        /* reshuffle brightness on reset so columns keep changing */
+        baseA[i]=0.15+Math.random()*0.6;
+        drift[i]=(Math.random()-0.5)*0.004;
+      }
+    }
+  }
+  if(matInt)clearInterval(matInt);matInt=setInterval(draw,45);
+  window.addEventListener('resize',()=>{c.width=innerWidth;c.height=innerHeight},{passive:true});
+}
+startMatrix();
+
+// ═══ RENDER PROJECT ═══
+function renderProject(id){
+  const p=pL(id),idx=keys.indexOf(id);
+  const prevId=idx>0?keys[idx-1]:keys[keys.length-1];
+  const nextId=idx<keys.length-1?keys[idx+1]:keys[0];
+  const prev=pL(prevId),next=pL(nextId);
+
+  document.getElementById('projectContent').innerHTML=`
+    <section class="project-hero">
+      <div class="project-breadcrumb">${currentLang==='zh'?'作品':'Works'} <span class="bc-accent">/ ${p.title}</span></div>
+      <div class="project-meta">
+        <span class="meta-chip status">${p.status}</span>
+        <span class="meta-chip date">${p.year}</span>
+        <span class="meta-chip role">${p.role}</span>
+      </div>
+      <h1 class="project-title"><span class="glitch" data-text="${p.title}">${p.title}</span></h1>
+      <p class="project-desc">${p.desc}</p>
+      ${id==='portfolio'?`<div style="display:flex;align-items:center;gap:2.5rem;margin:2.5rem 0;padding:2rem 2.5rem;border:1px solid rgba(0,255,204,.1);border-radius:16px;background:linear-gradient(135deg,rgba(0,255,204,.02),rgba(123,97,255,.02));backdrop-filter:blur(12px)">
+        <img src="1769900684236.jpeg" alt="Aiden Mak" style="width:140px;height:140px;object-fit:cover;border-radius:50%;border:3px solid rgba(0,255,204,.2);box-shadow:0 0 30px rgba(0,255,204,.08);flex-shrink:0" onerror="this.style.display=\'none\'">
+        <div style="flex:1;min-width:0">
+          <div style="font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:.3rem">Chin Wei (Aiden) Mak</div>
+          <div style="font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem">AI &amp; Full-Stack Engineer · Toronto</div>
+          <div style="font-size:.88rem;line-height:1.7;color:var(--text-dim)">${currentLang==='zh'?'設計及開發此作品集 — 包含自定義光標、矩陣雨動畫、雙語國際化、CSS 頁面轉場和互動專案展示，全部以純 HTML/CSS/JS 實現，零外部依賴。':'Designed &amp; built this portfolio — featuring custom cursor, matrix rain, bilingual i18n, CSS wipe transitions, and interactive project showcase. Pure HTML/CSS/JS, zero dependencies.'}</div>
+        </div>
+      </div>`:''}
+      <div class="project-links">
+        ${p.live?`<a href="${p.live}" target="_blank" class="sci-btn sci-btn-fill">Live Demo →</a>`:''}
+        ${p.git?`<a href="${p.git}" target="_blank" class="sci-btn sci-btn-outline">Source Code</a>`:''}
+        ${p.docs?`<a href="${p.docs}" target="_blank" class="sci-btn sci-btn-doc">Documentation</a>`:''}
+      </div>
+      ${(p.showcase&&p.showcase.length)?`<div class="project-links" style="margin-top:.8rem;gap:.6rem;flex-wrap:wrap">
+        ${p.showcase.map(s=>`<a href="${s.url}" target="_blank" class="sci-btn sci-btn-showcase" style="background:linear-gradient(135deg,rgba(123,97,255,.12),rgba(0,255,204,.08));border:1px solid rgba(123,97,255,.3);color:var(--accent3);font-size:.72rem;padding:.5rem 1.2rem;letter-spacing:.06em;transition:all .3s var(--ease)" onmouseenter="this.style.background='linear-gradient(135deg,rgba(123,97,255,.25),rgba(0,255,204,.15))';this.style.borderColor='rgba(123,97,255,.5)'" onmouseleave="this.style.background='linear-gradient(135deg,rgba(123,97,255,.12),rgba(0,255,204,.08))';this.style.borderColor='rgba(123,97,255,.3)'">${s.label} ↗</a>`).join('')}
+      </div>`:''}
+    </section>
+
+    <div class="stats-strip">
+      ${p.stats.map(s=>`<div class="stat"><div class="stat-val">${s.v}</div><div class="stat-lbl">${s.l}</div></div>`).join('')}
+    </div>
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.overview']||'Overview'}</span><div class="ln"></div></div>
+      <div class="overview-grid">
+        <div><h3>${p.overview.t}</h3><p>${p.overview.d}</p></div>
+        <div class="arch" id="archDiagram">
+          ${p.arch.map((layer,li)=>`
+            <div class="arch-layer" data-layer="${li}">
+              <div class="arch-layer-label">${layer.label}</div>
+              <div class="arch-boxes">${layer.items.map(item=>`<div class="arch-box" onmouseenter="highlightArch(this)" onmouseleave="unhighlightArch(this)">${item}</div>`).join('')}</div>
+            </div>
+            ${li<p.arch.length-1?'<div class="arch-divider">↓</div>':''}
+          `).join('')}
+        </div>
+      </div>
+    </section>
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.features']||'Features'}</span><div class="ln"></div></div>
+      <div class="tech-wrap">${(p.features||[]).map(f=>`<div class="tech-tag" style="flex:1;text-align:center">${f}</div>`).join('')}</div>
+    </section>
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.functions']||'What It Does'}</span><div class="ln"></div></div>
+      <div class="accomplishments">
+        ${(p.functions||[]).map((f,i)=>`<div class="acc-item" style="transition-delay:${i*0.05}s"><div class="acc-icon">✓</div><div class="acc-text">${f}</div></div>`).join('')}
+      </div>
+    </section>
+
+    ${p.vibeCoding?`<section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.vibe']||'Vibe Coding Experience'}</span><div class="ln"></div></div>
+      <div style="padding:2rem;border:1px solid rgba(0,255,204,.12);background:rgba(0,255,204,.02);border-radius:4px">
+        <p style="font-size:0.95rem;line-height:1.85;color:var(--text-dim)">${p.vibeCoding.desc}</p>
+      </div>
+    </section>`:''}
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.tech']||'Tech Stack'} — ${p.tech.length} ${currentLang==='zh'?'項技術':'Technologies'}</span><div class="ln"></div></div>
+      <div class="tech-wrap">${p.tech.map(t=>`<div class="tech-tag">${t}</div>`).join('')}</div>
+    </section>
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.acc']||'Key Accomplishments'}</span><div class="ln"></div></div>
+      <div class="accomplishments">
+        ${p.bullets.map((b,i)=>`<div class="acc-item" style="transition-delay:${i*0.05}s"><div class="acc-icon">▹</div><div class="acc-text">${b}</div></div>`).join('')}
+      </div>
+    </section>
+
+    <section class="p-section">
+      <div class="p-section-head"><span class="lbl">${I18N[currentLang]['proj.term']||'Terminal'}</span><div class="ln"></div></div>
+      <div class="terminal">
+        <div class="terminal-header">
+          <span class="terminal-dot r"></span><span class="terminal-dot y"></span><span class="terminal-dot g"></span>
+          <span class="terminal-path">~/projects/${id}</span>
+        </div>
+        <div class="terminal-body" id="termBody">
+          ${p.term.map(line=>{
+            if(line.startsWith('#'))return`<div class="cmt">${line}</div>`;
+            if(line.startsWith('$'))return`<div><span class="prompt">$ </span>${line.slice(2)}</div>`;
+            if(line.startsWith('>'))return`<div class="out">${line}</div>`;
+            return`<div>${line}</div>`;
+          }).join('')}
+        </div>
+      </div>
+    </section>
+
+    <div class="project-nav-bar">
+      <div class="pn-item" onclick="switchProject('${prevId}')">
+        <div class="pn-label">${I18N[currentLang]['proj.prev']||'← Previous'}</div>
+        <div class="pn-title">${prev.title}</div>
+      </div>
+      <div class="pn-counter">${idx+1} / ${keys.length}</div>
+      <div class="pn-item" onclick="switchProject('${nextId}')" style="text-align:right">
+        <div class="pn-label">${I18N[currentLang]['proj.next']||'Next →'}</div>
+        <div class="pn-title">${next.title}</div>
+      </div>
+    </div>`;
+
+  // Re-observe reveals in project page
+  document.querySelectorAll('#projectContent .reveal,#projectContent .reveal-left').forEach(el=>obs.observe(el));
+}
+
+// ═══ INTERACTIVE ARCH DIAGRAM ═══
+function highlightArch(el){el.classList.add('highlight')}
+function unhighlightArch(el){el.classList.remove('highlight')}
+
+function switchProject(id){
+  wipeIn(currentLang==='zh'?`載入中 ${pL(id).title}`:`LOADING ${pL(id).title.toUpperCase()}`,()=>{current=id;renderProject(id);window.scrollTo(0,0)});
+}
+
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&current)goHome()});
+
+// ═══ SMOOTH SCROLL NAV ═══
+document.querySelectorAll('.nav-links a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const target=document.querySelector(a.getAttribute('href'));
+    if(target)target.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// ═══ LANGUAGE TOGGLE (EN / 繁體中文) ═══
+const I18N={
+  en:{
+    'nav.about':'About','nav.works':'Works','nav.skills':'Skills','nav.contact':'Contact','nav.back':'← Index',
+    'hero.pre':'AI / Full-Stack Engineer',
+    'hero.line2':'Selected Works',
+    'hero.sub':'Toronto, ON — BSc Honours CS, University of Manitoba 2025',
+    'hero.status':' Open to Work — AI Engineer / Full-Stack / QA',
+    'hero.scroll':'Scroll',
+    'intro.label':'// About Me',
+    'intro.heading':'Building<br><span class="outline">Intelligent</span><br>Systems',
+    'intro.text':'I\'m <strong>Chin Wei (Aiden) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.',
+    'intro.stat1':'AI Agents Shipped','intro.stat2':'Automated Tests','intro.stat3':'MCP Tools Built','intro.stat4':'Speed Improvement',
+    'intro.bio1':'With a <strong>BSc Honours in Computer Science</strong> from the University of Manitoba (2025), I bring strong foundations in software engineering alongside hands-on experience building AI systems that solve real problems. My flagship project — an <strong>8-agent HR Intelligence Platform</strong> — demonstrates my ability to architect, test, and deploy complex AI systems at production scale with 1,909 automated tests and CI/CD on GCP Cloud Run.',
+    'intro.bio2':'I\'m trilingual (<strong>Cantonese</strong>, <strong>Mandarin</strong>, <strong>English</strong>) and passionate about building purpose-driven technology. Whether it\'s a museum partnership with the <strong>Canadian Museum for Human Rights</strong>, an independent RAG pipeline, or a full-stack restaurant platform, I bring the same standard of engineering rigor.',
+    'intro.k1':'Location','intro.v1':'Toronto, ON',
+    'intro.k2':'Education','intro.v2':'BSc Honours CS — UManitoba 2025',
+    'intro.k3':'Languages','intro.v3':'Cantonese · Mandarin · English',
+    'intro.k4':'Status','intro.v4':'Open to Work',
+    'intro.cta':'Get In Touch →',
+    'works.label':'Selected Projects','works.count':'<strong>09</strong> Works',
+    'skills.label':'Technical Skills',
+    'skills.g1':'AI / ML','skills.g2':'Programming','skills.g3':'Full-Stack','skills.g4':'Infrastructure','skills.g5':'Practices','skills.g6':'Languages',
+    'footer.copy':'© 2025 Chin Wei (Aiden) Mak',
+    'contact.heading':'Get In Touch','contact.email':'Email','contact.github':'GitHub','contact.linkedin':'LinkedIn','contact.instagram':'Instagram',
+    'proj.overview':'Overview','proj.features':'Features','proj.functions':'What It Does','proj.vibe':'Vibe Coding Experience','proj.tech':'Tech Stack','proj.acc':'Key Accomplishments','proj.term':'Terminal','proj.prev':'← Previous','proj.next':'Next →'
+  },
+  zh:{
+    'nav.about':'關於','nav.works':'作品','nav.skills':'技能','nav.contact':'聯絡','nav.back':'← 返回',
+    'hero.pre':'AI / 全端工程師',
+    'hero.line2':'精選作品',
+    'hero.sub':'多倫多, ON — 電腦科學榮譽學士, 曼尼托巴大學 2025',
+    'hero.status':' 求職中 — AI 工程師 / 全端 / QA',
+    'hero.scroll':'向下滾動',
+    'intro.label':'// 關於我',
+    'intro.heading':'打造<br><span class="outline">智能化</span><br>系統',
+    'intro.text':'我是 <strong>麥展瑋 (Aiden Mak)</strong>，一名駐多倫多的 AI 及全端工程師。專精於構建<strong>生產級多智能體系統</strong>、RAG 管道和 AI 驅動平台——從可擴展的後端架構、向量搜索管道到部署在雲端基礎設施上的自主智能體編排系統。',
+    'intro.stat1':'AI 智能體已交付','intro.stat2':'自動化測試','intro.stat3':'MCP 工具','intro.stat4':'速度提升',
+    'intro.bio1':'我擁有曼尼托巴大學<strong>電腦科學榮譽學士學位</strong>（2025），具備紮實的軟體工程基礎及豐富的 AI 系統實戰經驗。我的旗艦項目——一個<strong>八智能體 HR 智慧平台</strong>——展示了我在生產規模上架構、測試和部署複雜 AI 系統的能力，涵蓋 1,909 個自動化測試和 GCP Cloud Run 上的 CI/CD。',
+    'intro.bio2':'我精通三種語言（<strong>粵語</strong>、<strong>普通話</strong>、<strong>英語</strong>），致力於構建有目標導向的技術。無論是與<strong>加拿大人權博物館</strong>的合作、獨立的 RAG 管道，還是全端餐廳平台，我都秉持同樣嚴謹的工程標準。',
+    'intro.k1':'所在地','intro.v1':'加拿大多倫多',
+    'intro.k2':'學歷','intro.v2':'電腦科學榮譽學士 — 曼尼托巴大學 2025',
+    'intro.k3':'語言','intro.v3':'粵語 · 普通話 · 英語',
+    'intro.k4':'狀態','intro.v4':'求職中',
+    'intro.cta':'聯繫我 →',
+    'works.label':'精選項目','works.count':'<strong>09</strong> 件作品',
+    'skills.label':'技術能力',
+    'skills.g1':'AI / 機器學習','skills.g2':'程式語言','skills.g3':'全端開發','skills.g4':'基礎設施','skills.g5':'開發實踐','skills.g6':'語言能力',
+    'footer.copy':'© 2025 麥展瑋 (Aiden Mak)',
+    'contact.heading':'聯繫方式','contact.email':'電郵','contact.github':'GitHub','contact.linkedin':'LinkedIn','contact.instagram':'Instagram',
+    'proj.overview':'概覽','proj.features':'功能特色','proj.functions':'主要功能','proj.vibe':'Vibe Coding 體驗','proj.tech':'技術棧','proj.acc':'主要成就','proj.term':'終端','proj.prev':'← 上一個','proj.next':'下一個 →'
+  }
+};
+
+function setLang(lang){
+  currentLang=lang;
+  // Update toggle buttons
+  document.querySelectorAll('.lang-btn').forEach(btn=>{
+    btn.classList.toggle('active',btn.textContent.trim()===(lang==='en'?'EN':'中'));
+  });
+  // Swap all data-i18n elements
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key=el.getAttribute('data-i18n');
+    const val=I18N[lang]?.[key];
+    if(val!==undefined){
+      if(el.hasAttribute('data-i18n-html'))el.innerHTML=val;
+      else el.textContent=val;
+    }
+  });
+  // Re-run hero char animation for line2
+  const line2=document.querySelector('.hero-title .line2');
+  if(line2&&!document.getElementById('mainPage').classList.contains('hidden')){
+    const txt=line2.textContent;line2.innerHTML='';
+    [...txt].forEach((ch,i)=>{
+      const s=document.createElement('span');s.className='char';s.textContent=ch===''?' ':ch;
+      if(ch===' ')s.style.width='.3em';
+      s.style.animationDelay=(0.05+i*0.04)+'s';line2.appendChild(s);
+    });
+  }
+  // Re-render works list with translated titles/roles
+  if(!current)renderWorksList();
+  // If on project page, re-render with new lang
+  if(current)renderProject(current);
+}
+</script>
+</body>
 </html>
