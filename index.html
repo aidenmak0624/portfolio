@@ -63,6 +63,8 @@
   .nav-links a{color:var(--text-dim);text-decoration:none;font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;font-weight:500;transition:color .3s;position:relative;cursor:none}
   .nav-links a::after{content:'';position:absolute;bottom:-6px;left:0;width:0;height:1px;background:var(--accent);transition:width .4s var(--ease)}
   .nav-links a:hover{color:var(--text)}.nav-links a:hover::after{width:100%}
+  /* mobile: collapse overflowing section links, keep the language toggle */
+  @media(max-width:768px){.nav-links{gap:1rem}.nav-links li:not(:last-child){display:none}}
   .nav-cta{padding:.55rem 1.4rem;border:1px solid rgba(0,255,204,.25);color:var(--accent);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;font-family:var(--mono);text-decoration:none;transition:all .3s;cursor:none}
   .nav-cta:hover{background:var(--accent);color:var(--bg);border-color:var(--accent)}
   /* Language Toggle */
