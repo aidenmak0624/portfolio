@@ -4,6 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AIDEN MAK — AI / Full-Stack Engineer</title>
+<meta name="description" content="Aiden (Chin Wei) Mak — Applied AI Engineer building multi-agent systems, RAG, and production-grade LLM products.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Aiden (Chin Wei) Mak — Applied AI Engineer">
+<meta property="og:description" content="I build AI agent systems end-to-end — multi-agent orchestration, RAG, and production-grade LLM systems.">
+<meta property="og:url" content="https://aidenmak.vercel.app">
+<meta property="og:image" content="https://aidenmak.vercel.app/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Aiden (Chin Wei) Mak — Applied AI Engineer">
+<meta name="twitter:description" content="Multi-agent systems, RAG, and production-grade LLM products.">
+<meta name="twitter:image" content="https://aidenmak.vercel.app/og-image.png">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
@@ -597,8 +607,9 @@ const SFX=(()=>{
 // ═══ PROJECT DATA ═══
 const P={
   'hr-agent':{idx:'01',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
-    desc:'Enterprise-grade multi-agent AI system orchestrating 8 specialized LangGraph agents for autonomous HR workflows — from policy Q&A to compliance auditing. Shipped to production on GCP Cloud Run with 1,909 automated tests.',
-    live:'https://hr-platform-837558695367.us-central1.run.app/dashboard',git:'https://github.com/aidenmak0624/HR_agent',docs:null,
+    desc:'Production-grade multi-agent AI system orchestrating 8 specialized LangGraph agents for autonomous HR workflows — from policy Q&A to compliance auditing. Shipped to production on GCP Cloud Run with 1,909 automated tests.',
+    live:'https://hr-platform-1054475963653.us-central1.run.app',git:'https://github.com/aidenmak0624/HR_agent',docs:null,
+    demo:'/hr_demo.mp4',
     showcase:[
       {label:'Developer Deep-Dive',url:'https://aidenmak.vercel.app/showcase/hr-agent-developer.html'},
       {label:'Business Case',url:'https://aidenmak.vercel.app/showcase/hr-agent-business.html'},
@@ -617,7 +628,7 @@ const P={
       {label:'Infrastructure',items:['FastMCP (28 tools)','PostgreSQL','Redis Cache','BambooHR MCP','Prometheus','Grafana']}
     ],
     bullets:[
-      'Shipped 8-agent enterprise HR platform to production on <strong>GCP Cloud Run</strong> with <strong>1,909 automated tests</strong> (Pytest + Playwright E2E), Docker containerization, and real-time observability via Prometheus and Grafana.',
+      'Shipped 8-agent HR platform to production on <strong>GCP Cloud Run</strong> with <strong>1,909 automated tests</strong> (Pytest + Playwright E2E), Docker containerization, and real-time observability via Prometheus and Grafana.',
       'Architected <strong>LangGraph multi-agent orchestration</strong> with conditional routing, shared state, and fault-tolerant workflows across policy Q&A, leave management, compliance auditing (<strong>GDPR/CCPA/HIPAA</strong>), and workforce analytics.',
       'Implemented <strong>Model Context Protocol (MCP) server via FastMCP</strong> exposing 28 tools, 8 resources, and 5 prompts, enabling standardized LLM-to-tool integration with BambooHR connector for live HRIS data.',
       'Built <strong>hybrid RAG pipeline</strong> combining ChromaDB vector store with Sentence Transformers embeddings for context-aware policy document retrieval across 101 Python modules.',
@@ -626,11 +637,12 @@ const P={
     features:['8 Specialized AI Agents','Intelligent Request Routing','Real-Time Monitoring','Policy Q&A Engine','Leave Management Workflows','Compliance Auditing','Multi-LLM Support','Rate Limiting & PII Masking'],
     functions:['Answers HR policy questions with citations','Manages leave requests with approval workflows','Handles benefits inquiries and enrollments','Audits compliance across GDPR/CCPA/HIPAA standards','Generates workforce analytics and trends','Automates onboarding tasks','Processes payroll integrations','Routes recruitment candidates'],
     vibeCoding:{desc:'Built with GitHub Copilot and Claude Code — Copilot handled boilerplate, Claude managed complex multi-agent orchestration and test architecture design. Vibe coding accelerated development of 1,909 tests significantly.'},
-    term:['# Project structure','$ tree src/ -L 1','> src/','> agents/       # 8 specialized LangGraph agents','> api/          # REST API routes & middleware','> core/         # RAG pipeline, LLM gateway','> connectors/   # HRIS integrations','> mcp/          # FastMCP server (28 tools)','> services/     # Business logic','','# Deploy','$ docker-compose up -d && gcloud run deploy','> Deployed: hr-platform-837558695367.us-central1.run.app','','# Tests','$ pytest --cov=agents --cov-report=html','> 1,909 passed, 0 failed (coverage: 94%)','> FastMCP: 28 tools ✓ | Resources: 8 ✓ | Prompts: 5 ✓']
+    term:['# Project structure','$ tree src/ -L 1','> src/','> agents/       # 8 specialized LangGraph agents','> api/          # REST API routes & middleware','> core/         # RAG pipeline, LLM gateway','> connectors/   # HRIS integrations','> mcp/          # FastMCP server (28 tools)','> services/     # Business logic','','# Deploy','$ docker-compose up -d && gcloud run deploy','> Deployed: hr-platform-1054475963653.us-central1.run.app','','# Tests','$ pytest --cov=agents --cov-report=html','> 1,909 passed, 0 failed (coverage: 94%)','> FastMCP: 28 tools ✓ | Resources: 8 ✓ | Prompts: 5 ✓']
   },
   'golden-fork':{idx:'02',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
     desc:'AI-powered restaurant platform with RAG-driven recommendation engine using OpenAI embeddings and Pinecone vector search. Featured at Redefine Event. Features Stripe checkout, WebSocket real-time kitchen display, and manager analytics dashboard.',
-    live:'https://golden-fork-9tn2.onrender.com',git:null,docs:null,
+    live:'https://golden-fork-9tn2.onrender.com',git:'https://github.com/aidenmak0624/golden-fork',docs:null,
+    demo:'/goldenfork_demo.mp4',
     showcase:[
       {label:'Product Showcase',url:'https://aidenmak.vercel.app/showcase/golden-fork.html#value'}
     ],
@@ -657,7 +669,8 @@ const P={
   },
   'decision-ease':{idx:'03',title:'Decision Ease',year:'2026',role:'Founder / Developer',status:'IN DEVELOPMENT',
     desc:'AI-powered productivity platform that turns overwhelming to-do lists into actionable micro-steps. Features smart prioritization based on energy levels, compassionate coaching, and privacy-first architecture. Currently in early access with waitlist.',
-    live:'https://decision-ease-landing.vercel.app',git:null,docs:null,
+    live:'https://decision-ease-landing.vercel.app',git:'https://github.com/aidenmak0624/DecisionEase-landing',docs:null,
+    demo:'/decisionease_demo.mp4',
     stats:[{v:'AI',l:'Powered'},{v:'8+',l:'Waitlist'},{v:'4.8',l:'Avg Rating'},{v:'Privacy',l:'First'}],
     tags:['AI','Productivity','SaaS','Landing Page'],
     tech:['Next.js','React','TypeScript','Tailwind CSS','PostgreSQL','Vercel','PIPEDA'],
@@ -1222,6 +1235,10 @@ function renderProject(id){
       </div>
       ${(p.showcase&&p.showcase.length)?`<div class="project-links" style="margin-top:.8rem;gap:.6rem;flex-wrap:wrap">
         ${p.showcase.map(s=>`<a href="${s.url}" target="_blank" class="sci-btn sci-btn-showcase" style="background:linear-gradient(135deg,rgba(123,97,255,.12),rgba(0,255,204,.08));border:1px solid rgba(123,97,255,.3);color:var(--accent3);font-size:.72rem;padding:.5rem 1.2rem;letter-spacing:.06em;transition:all .3s var(--ease)" onmouseenter="this.style.background='linear-gradient(135deg,rgba(123,97,255,.25),rgba(0,255,204,.15))';this.style.borderColor='rgba(123,97,255,.5)'" onmouseleave="this.style.background='linear-gradient(135deg,rgba(123,97,255,.12),rgba(0,255,204,.08))';this.style.borderColor='rgba(123,97,255,.3)'">${s.label} ↗</a>`).join('')}
+      </div>`:''}
+      ${p.demo?`<div style="margin-top:2rem">
+        <video src="${p.demo}" autoplay loop muted playsinline controls preload="metadata" style="width:100%;border-radius:16px;border:1px solid rgba(0,255,204,.15);box-shadow:0 0 40px rgba(0,255,204,.06);display:block"></video>
+        <div style="font-family:var(--mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-top:.6rem;text-align:center">${currentLang==='zh'?'產品演示走查':'Live demo walkthrough'}</div>
       </div>`:''}
     </section>
 
