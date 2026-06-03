@@ -14,6 +14,7 @@
 <meta name="twitter:title" content="Aiden (Chin Wei) Mak — Applied AI Engineer">
 <meta name="twitter:description" content="Multi-agent systems, RAG, and production-grade LLM products.">
 <meta name="twitter:image" content="https://aidenmak.vercel.app/og-image.png">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230c0c18'/><text x='16' y='23' font-family='monospace' font-size='19' font-weight='700' fill='%2300ffcc' text-anchor='middle'>A</text></svg>">
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Outfit:wght@100;200;300;400;500;600;700;800;900&family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
@@ -123,6 +124,15 @@
   .intro-photo{width:180px;min-width:180px;border-radius:12px;overflow:hidden;border:2px solid rgba(0,255,204,.15);background:linear-gradient(135deg,rgba(0,255,204,.03) 0%,rgba(123,97,255,.03) 100%);transition:all .4s var(--ease);box-shadow:0 8px 32px rgba(0,0,0,.3)}
   .intro-photo:hover{border-color:rgba(0,255,204,.35);box-shadow:0 8px 40px rgba(0,255,204,.1)}
   .intro-photo img{width:100%;display:block}
+  /* a11y: visible keyboard focus rings (was missing on dark theme) */
+  a:focus-visible,button:focus-visible,[tabindex]:focus-visible,.contact-card:focus-visible,.btn-primary:focus-visible,.sci-btn:focus-visible,.nav-links a:focus-visible,.lang-btn:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:4px}
+  /* a11y: respect prefers-reduced-motion — disable motion, matrix rain, custom cursor; restore system cursor */
+  @media(prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important;scroll-behavior:auto!important}
+    .cursor,.cursor-dot,.cursor-ring,.cursor-label,#matrixCanvas{display:none!important}
+    *{cursor:auto!important}
+    a,button,[onclick],.contact-card,.btn-primary,.sci-btn,.nav-links a,.lang-btn,.nav-logo,.project-card{cursor:pointer!important}
+  }
   @media(max-width:768px){.intro-hero{flex-direction:column;align-items:center;text-align:center}.intro-photo{width:150px;min-width:150px}}
   .photo-text{font-family:var(--mono);font-size:.7rem;letter-spacing:.15em;text-transform:uppercase;color:var(--text-muted);text-align:center}
   .intro-left h2{font-family:var(--display);font-weight:900;font-size:clamp(2.2rem,4.5vw,3.6rem);text-transform:uppercase;line-height:1.05;margin-bottom:1.5rem;letter-spacing:-.03em;-webkit-text-stroke:1.5px var(--text);color:transparent}
@@ -547,7 +557,7 @@
   </section>
 
   <footer class="main-footer">
-    <span data-i18n="footer.copy">© 2025 Chin Wei (Aiden) Mak</span>
+    <span data-i18n="footer.copy">© 2026 Aiden (Chin Wei) Mak</span>
     <ul class="footer-links">
       <li><a href="https://github.com/aidenmak0624" target="_blank">GitHub</a></li>
       <li><a href="https://linkedin.com/in/mcwaiden" target="_blank">LinkedIn</a></li>
@@ -1353,7 +1363,7 @@ const I18N={
     'works.label':'Selected Projects','works.count':'<strong>09</strong> Works',
     'skills.label':'Technical Skills',
     'skills.g1':'AI / ML','skills.g2':'Programming','skills.g3':'Full-Stack','skills.g4':'Infrastructure','skills.g5':'Practices','skills.g6':'Languages',
-    'footer.copy':'© 2025 Chin Wei (Aiden) Mak',
+    'footer.copy':'© 2026 Aiden (Chin Wei) Mak',
     'contact.heading':'Get In Touch','contact.email':'Email','contact.github':'GitHub','contact.linkedin':'LinkedIn','contact.instagram':'Instagram','contact.sub':'Open to AI / Agent Engineering roles — let’s build something real.','contact.cta':'Email Me →',
     'proj.overview':'Overview','proj.features':'Features','proj.functions':'What It Does','proj.vibe':'Vibe Coding Experience','proj.tech':'Tech Stack','proj.acc':'Key Accomplishments','proj.term':'Terminal','proj.prev':'← Previous','proj.next':'Next →'
   },
@@ -1366,7 +1376,7 @@ const I18N={
     'hero.scroll':'向下滾動',
     'intro.label':'// 關於我',
     'intro.heading':'打造<br><span class="outline">智能化</span><br>系統',
-    'intro.text':'我是 <strong>麥展瑋 (Aiden Mak)</strong>，一名駐多倫多的 AI 及全端工程師。專精於構建<strong>生產級多智能體系統</strong>、RAG 管道和 AI 驅動平台——從可擴展的後端架構、向量搜索管道到部署在雲端基礎設施上的自主智能體編排系統。',
+    'intro.text':'我是 <strong>麥展維 (Aiden Mak)</strong>，一名駐多倫多的 AI 及全端工程師。專精於構建<strong>生產級多智能體系統</strong>、RAG 管道和 AI 驅動平台——從可擴展的後端架構、向量搜索管道到部署在雲端基礎設施上的自主智能體編排系統。',
     'intro.stat1':'AI 智能體已交付','intro.stat2':'自動化測試','intro.stat3':'MCP 工具','intro.stat4':'速度提升',
     'intro.bio1':'我擁有曼尼托巴大學<strong>電腦科學榮譽學士學位</strong>（2025），具備紮實的軟體工程基礎及豐富的 AI 系統實戰經驗。我的旗艦項目——一個<strong>八智能體 HR 智慧平台</strong>——展示了我在生產規模上架構、測試和部署複雜 AI 系統的能力，涵蓋 1,909 個自動化測試和 GCP Cloud Run 上的 CI/CD。',
     'intro.bio2':'我精通三種語言（<strong>粵語</strong>、<strong>普通話</strong>、<strong>英語</strong>），致力於構建有目標導向的技術。無論是與<strong>加拿大人權博物館</strong>的合作、獨立的 RAG 管道，還是全端餐廳平台，我都秉持同樣嚴謹的工程標準。',
@@ -1378,7 +1388,7 @@ const I18N={
     'works.label':'精選項目','works.count':'<strong>09</strong> 件作品',
     'skills.label':'技術能力',
     'skills.g1':'AI / 機器學習','skills.g2':'程式語言','skills.g3':'全端開發','skills.g4':'基礎設施','skills.g5':'開發實踐','skills.g6':'語言能力',
-    'footer.copy':'© 2025 麥展瑋 (Aiden Mak)',
+    'footer.copy':'© 2026 麥展維 (Aiden Mak)',
     'contact.heading':'聯繫方式','contact.email':'電郵','contact.github':'GitHub','contact.linkedin':'LinkedIn','contact.instagram':'Instagram','contact.sub':'歡迎洽談 AI / Agent 工程職位 — 一起做點真實的東西。','contact.cta':'寄信給我 →',
     'proj.overview':'概覽','proj.features':'功能特色','proj.functions':'主要功能','proj.vibe':'Vibe Coding 體驗','proj.tech':'技術棧','proj.acc':'主要成就','proj.term':'終端','proj.prev':'← 上一個','proj.next':'下一個 →'
   }
