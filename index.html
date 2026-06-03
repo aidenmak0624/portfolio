@@ -279,6 +279,8 @@
   .meta-chip.status{border:1px solid var(--accent);color:var(--accent)}
   .meta-chip.date{color:var(--text-muted);opacity:.6}
   .meta-chip.role{color:var(--text-muted);opacity:.6;border-left:1px solid rgba(255,255,255,.1);padding-left:1rem}
+  .meta-chip.domain{color:var(--accent3);border:1px solid rgba(123,97,255,.35);background:rgba(123,97,255,.08);border-radius:4px}
+  .work-domain{display:inline-block;margin-top:.35rem;font-family:var(--mono);font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent3);background:rgba(123,97,255,.08);border:1px solid rgba(123,97,255,.28);padding:.12rem .55rem;border-radius:4px}
   .project-title{font-family:var(--display);font-weight:900;font-size:clamp(3rem,7vw,5.5rem);text-transform:uppercase;line-height:.95;letter-spacing:-.02em;margin-bottom:1.8rem}
   .project-title .glitch{position:relative;display:inline-block}
   .project-title .glitch::before,.project-title .glitch::after{content:attr(data-text);position:absolute;top:0;left:0;width:100%;height:100%;opacity:0}
@@ -622,7 +624,7 @@ const SFX=(()=>{
 
 // ═══ PROJECT DATA ═══
 const P={
-  'hr-agent':{idx:'01',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
+  'hr-agent':{idx:'01',domain:'HR Tech',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
     desc:'Production-grade multi-agent AI system orchestrating 8 specialized LangGraph agents for autonomous HR workflows — from policy Q&A to compliance auditing. Shipped to production on GCP Cloud Run with 1,909 automated tests.',
     live:'https://hr-platform-1054475963653.us-central1.run.app',git:'https://github.com/aidenmak0624/HR_agent',docs:null,
     demo:'/hr_demo.mp4',
@@ -655,7 +657,7 @@ const P={
     vibeCoding:{desc:'Built with GitHub Copilot and Claude Code — Copilot handled boilerplate, Claude managed complex multi-agent orchestration and test architecture design. AI-assisted development accelerated development of 1,909 tests significantly.'},
     term:['# Project structure','$ tree src/ -L 1','> src/','> agents/       # 8 specialized LangGraph agents','> api/          # REST API routes & middleware','> core/         # RAG pipeline, LLM gateway','> connectors/   # HRIS integrations','> mcp/          # FastMCP server (28 tools)','> services/     # Business logic','','# Deploy','$ docker-compose up -d && gcloud run deploy','> Deployed: hr-platform-1054475963653.us-central1.run.app','','# Tests','$ pytest --cov=agents --cov-report=html','> 1,909 passed, 0 failed (coverage: 94%)','> FastMCP: 28 tools ✓ | Resources: 8 ✓ | Prompts: 5 ✓']
   },
-  'golden-fork':{idx:'02',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
+  'golden-fork':{idx:'02',domain:'FoodTech · Commerce',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
     desc:'AI-powered restaurant platform with RAG-driven recommendation engine using OpenAI embeddings and Pinecone vector search. Featured at Redefine Event. Features Stripe checkout, WebSocket real-time kitchen display, and manager analytics dashboard.',
     live:'https://golden-fork-9tn2.onrender.com',git:'https://github.com/aidenmak0624/golden-fork',docs:null,
     demo:'/goldenfork_demo.mp4',
@@ -683,7 +685,7 @@ const P={
     vibeCoding:{desc:'Claude Code handled RAG pipeline design and Pinecone integration, while Copilot assisted with Next.js boilerplate. AI-assisted development streamlined rapid iteration on the recommendation engine.'},
     term:['# RAG Pipeline','$ node embed-restaurants.js --source=postgresql','> Embedded restaurant menus → Pinecone','> Vector dims: 1536 (text-embedding-ada-002)','','# Query example','> "cozy Italian place with gluten-free options"','> Retrieved: 5 matches (similarity > 0.87)','> Response generated in 340ms','','# WebSocket kitchen display','> Active sessions: 12 concurrent orders','> Stripe webhook: payment_intent.succeeded ✓','> Kitchen display: real-time order stream ACTIVE']
   },
-  'decision-ease':{idx:'03',title:'DecisionEase',year:"2026",role:"Founder / AI Engineer",status:"DEPLOYED",
+  'decision-ease':{idx:'03',domain:'Productivity',title:'DecisionEase',year:"2026",role:"Founder / AI Engineer",status:"DEPLOYED",
     desc:"DecisionEase is a deployed personal AI decision-support PWA that carries context across days and runs a full capture -> compress -> review -> decide -> schedule -> reflect loop over five surfaces (Today, Plan, Decide, Reflect, Chat). A 6-agent backend — an Orchestrator dispatching to Coach, Planner, Analyst, Curator, and Companion agents over an A2A protocol — reasons within per-agent token budgets under a hard 5000ms timeout with cached-data fallback, so the product stays responsive even when an agent or model stalls. Memory is a 4-layer architecture: Redis working memory, a Postgres user profile, an episodic event log, and pgvector semantic recall over 1536-dim OpenAI embeddings, which is what lets the assistant remember context between sessions. A uniform MCPTool ABC fronts 7 internal tools plus 3 external integrations (Google Calendar, Notion, YouTube). The system is built test-first with a 1,600+ automated suite under CI gating, and shipped through real production engineering — resolving an OAuth outage, unifying DST-correct scheduling on a single IANA timezone source of truth, and an idempotent migration runner with deploy-time drift checks.",
     live:'https://decisionease.vercel.app',git:'https://github.com/aidenmak0624/DecisionEase-landing',docs:null,
     demo:'/decisionease_demo.mp4',
@@ -698,7 +700,7 @@ const P={
     functions:["Orchestrator agent routes each request to the right specialist within token and time budgets","Coach agent supports reflection and decision framing","Planner agent compresses captures into schedulable next moves","Analyst agent reviews context and surfaces tradeoffs","Curator agent manages knowledge and external content (Notion, YouTube)","Companion agent sustains conversational continuity across sessions","MCPTool ABC exposes a uniform interface over internal tools and external integrations","Idempotent migration runner with deploy-time drift detection guards schema integrity"],
     term:["$ pytest -q","> 1,600+ passed under CI gating","$ curl -s /agents/dispatch  # Orchestrator -> Coach|Planner|Analyst|Curator|Companion","> a2a: token budgets ok | timeout=5000ms | fallback=cached","$ memory.layers","> redis(working) -> pg(profile) -> episodic(log) -> pgvector(1536-dim)","$ mcp.tools.list","> 7 internal + 3 external (Google Calendar, Notion, YouTube)","$ deploy --check-drift","> migrations idempotent | schema drift: none | status: DEPLOYED"]
   },
-  'upstander':{idx:'04',title:'Upstander Program',year:'Sept 2024 – Oct 2025',role:'AI Developer · CMHR Partnership',status:'COMPLETE',
+  'upstander':{idx:'04',domain:'Civic · EdTech',title:'Upstander Program',year:'Sept 2024 – Oct 2025',role:'AI Developer · CMHR Partnership',status:'COMPLETE',
     desc:'University of Manitoba partnership with the Canadian Museum for Human Rights. AI-powered educational platform using Gemini Flash 2.0 with adaptive prompting and NLP-driven content personalization across 6 interactive learning modules.',
     live:null,git:'https://github.com/aidenmak0624/Upstander_Program',docs:null,
     stats:[{v:'6',l:'Learning Modules'},{v:'CMHR',l:'Museum Partner'},{v:'AI',l:'Gemini Flash 2.0'},{v:'NLP',l:'Personalization'}],
@@ -721,7 +723,7 @@ const P={
     functions:['Teaches users to recognize social injustices','Guides discovery of personal strengths','Facilitates action planning for change','Shares real community stories','Assesses individual strengths objectively','Personalizes content to user profile','Tracks learning progress','Provides strength-based recommendations'],
     term:['# Upstander Platform','$ streamlit run app.py --server.port=8501','> Module 1: Recognizing Injustice ... LOADED','> Module 2: Discovering Strengths ... LOADED','> Module 3: Taking Action ... LOADED','> Module 4: Community Stories ... LOADED','> Module 5: Self-Assessment ... LOADED','> Module 6: Action Planning ... LOADED','> Gemini Flash 2.0 API: CONNECTED','> Adaptive Prompting Engine: READY','> NLP Pipeline: INITIALIZED']
   },
-  'hr-edu-agent':{idx:'05',title:'HR Education Agent',year:'2025',role:'Independent Project',status:'COMPLETE',
+  'hr-edu-agent':{idx:'05',domain:'Civic · EdTech',title:'HR Education Agent',year:'2025',role:'Independent Project',status:'COMPLETE',
     desc:'Self-initiated LangGraph multi-agent workflow orchestrating 5 specialized tools for legal document analysis with conditional routing across 25+ human rights documents.',
     live:null,git:null,docs:null,
     stats:[{v:'5',l:'Specialized Tools'},{v:'25+',l:'Legal Documents'},{v:'LG',l:'LangGraph'},{v:'↻',l:'Orchestrated'}],
@@ -743,7 +745,7 @@ const P={
     functions:['Retrieves relevant legal documents by query','Interprets legal text in plain language','Checks compliance with regulations','Generates responses with source citations','Routes queries to right tools','Maintains conversation state','Tracks which tools were invoked','Provides structured legal analysis'],
     term:['# HR Edu Agent','$ python agent.py --mode=interactive','> LangGraph initialized: 5 tools registered','> Legal docs loaded: 25 documents indexed','','> Query: "What are overtime regulations in Ontario?"','> Tool: doc_retriever → 3 relevant sections','> Tool: legal_interpreter → ESA Part VIII analysis','> Tool: compliance_checker → provincial compliance ✓','> Response generated with 4 citations','','> Workflow: retrieval → interpretation → compliance → summary','> State transitions: 7 | Tools invoked: 4']
   },
-  'hr-edu-rag':{idx:'06',title:'HR Education RAG',year:'2025',role:'Independent Project',status:'COMPLETE',
+  'hr-edu-rag':{idx:'06',domain:'Civic · EdTech',title:'HR Education RAG',year:'2025',role:'Independent Project',status:'COMPLETE',
     desc:'Standalone RAG pipeline with ChromaDB achieving 97% API speed improvement (6.8s → 0.2s). Processes 112 document chunks across 9 topic categories with source-backed citations and 0.013s retrieval speed.',
     live:null,git:'https://github.com/aidenmak0624/Human_Right_Edu_RAG',docs:null,
     stats:[{v:'97%',l:'Speed Improvement'},{v:'112',l:'Doc Chunks'},{v:'0.2s',l:'Response Time'},{v:'9',l:'Topic Categories'}],
@@ -767,7 +769,7 @@ const P={
     functions:['Embeds documents using sentence transformers','Stores and retrieves vectors from ChromaDB','Organizes documents in 9 topic categories','Returns citations to original sources','Shows relevance scores for each result','Caches responses for speed','Expands queries for better matches','Attributes content to official documents'],
     term:['# Ingest pipeline','$ python ingest.py --source=hr_docs/','> Chunking: 112 segments across 9 collections','> Embedding: sentence-transformers/all-MiniLM-L6-v2','> ChromaDB: 112 vectors stored (persistent)','','# Performance benchmark','> Before RAG: avg 6.8s per query','> After RAG:  avg 0.2s per query (retrieval: 0.013s)','> Improvement: 97% faster ✓','','# Sample query','> "What rights do children have under international law?"','> Collection: childrens_rights | Chunks: 4 retrieved','> Sources: CRC Art.1-4, UDHR Art.25 (relevance: 0.94)','> Gemini response: 5.15s (API-bound)']
   },
-  '311-analysis':{idx:'07',title:'311 Service Analysis',year:'2024',role:'Data Scientist',status:'COMPLETE',
+  '311-analysis':{idx:'07',domain:'Data · Civic',title:'311 Service Analysis',year:'2024',role:'Data Scientist',status:'COMPLETE',
     desc:'Data-driven analysis of Winnipeg\'s 1.6M+ municipal 311 service requests (2008–2024) using FP-Growth mining, STL decomposition, and anomaly detection to uncover operational patterns and improve city services.',
     live:null,git:'https://github.com/aidenmak0624/311_Service_Request_Analysis',docs:null,
     stats:[{v:'1.6M+',l:'Requests'},{v:'16yr',l:'Data Span'},{v:'39-43%',l:'Anomaly Rates'},{v:'FP',l:'Growth Mining'}],
@@ -791,7 +793,7 @@ const P={
     functions:['Mines frequent patterns in service requests','Separates trends from seasonal signals','Detects anomalously slow case resolutions','Maps hotspot wards with high request volumes','Identifies co-occurring service types','Analyzes seasonal demand patterns','Finds operational bottlenecks','Generates executive summary reports'],
     term:['# Data pipeline','$ python analysis.py --dataset=311_requests.csv','> Records loaded: 1,612,847 (2008-2024)','> Departments: Water & Waste, Public Works, 311...','','# FP-Growth association mining','> Minimum support: 0.05 | Min confidence: 0.6','> Rules discovered: 23 significant patterns','> Top co-occurrence: road repair ↔ pothole (lift: 4.2)','','# Anomaly detection (MAD)','> Environmental services: 43% anomaly rate','> Infrastructure: 39% anomaly rate','> Avg anomalous case duration: 4.7x normal']
   },
-  'teachreach':{idx:'08',title:'TeachReach',year:'2024',role:'Software Developer',status:'COMPLETE',
+  'teachreach':{idx:'08',domain:'EdTech',title:'TeachReach',year:'2024',role:'Software Developer',status:'COMPLETE',
     desc:'Android tutoring platform connecting post-secondary students with qualified tutors. Features matching, scheduling, in-app messaging, payments, and review systems — built with Java and 3-tier testing.',
     live:null,git:'https://github.com/aidenmak0624/TeachReach',docs:'https://teachreachdev.wixsite.com/home',
     stats:[{v:'100%',l:'Java'},{v:'3',l:'Test Tiers'},{v:'Android',l:'Platform'},{v:'Full',l:'CRUD App'}],
@@ -814,7 +816,7 @@ const P={
     functions:['Matches students with qualified tutors','Schedules lessons and manages appointments','Enables direct messaging between users','Processes payments securely','Allows ratings and written reviews','Displays detailed tutor profiles','Filters tutors by subject expertise','Shows tutor availability calendar'],
     term:['# Build and test','$ ./gradlew assembleDebug','> BUILD SUCCESSFUL in 12s','','$ ./gradlew test','> AllUnitTests: 24 passed ✓','> AllIntegrationTests: 18 passed ✓','','$ ./gradlew connectedAndroidTest','> AllAcceptanceTest: 12 passed ✓','> UI flows verified on Android 13 emulator']
   },
-  'portfolio':{idx:'09',title:'Portfolio',year:'2025–Present',role:'Designer & Developer',status:'LIVE',
+  'portfolio':{idx:'09',domain:'Web',title:'Portfolio',year:'2025–Present',role:'Designer & Developer',status:'LIVE',
     desc:'A hand-crafted single-file HTML portfolio featuring custom cursor, matrix rain, procedural audio BGM, bilingual i18n (EN/中), CSS wipe transitions, and an interactive project showcase — all in ~1,300 lines of pure HTML/CSS/JS with zero dependencies.',
     live:null,git:'https://github.com/aidenmak0624/portfolio',docs:null,
     stats:[{v:'1.3K',l:'Lines of Code'},{v:'0',l:'Dependencies'},{v:'9',l:'Projects'},{v:'2',l:'Languages'}],
@@ -1029,6 +1031,7 @@ function renderWorksList(){
       <div class="work-title-wrap">
         <span class="work-title" style="color:${titleColor};${styles[i]}">${p.title}</span>
         <span class="work-role">${p.role}</span>
+        ${p.domain?`<span class="work-domain">${p.domain}</span>`:''}
       </div>
       <div class="work-tags">${p.tags.map(t=>`<span class="work-tag">${t}</span>`).join('')}</div>
       <span class="work-year">${p.year.split('–')[0].split(' ').pop()}</span>
@@ -1211,6 +1214,7 @@ function renderProject(id){
       <div class="project-breadcrumb">${currentLang==='zh'?'作品':'Works'} <span class="bc-accent">/ ${p.title}</span></div>
       <div class="project-meta">
         <span class="meta-chip status">${p.status}</span>
+        ${p.domain?`<span class="meta-chip domain">${p.domain}</span>`:''}
         <span class="meta-chip date">${p.year}</span>
         <span class="meta-chip role">${p.role}</span>
       </div>
