@@ -474,7 +474,7 @@
             <h2 data-i18n="intro.heading" data-i18n-html="1">Building<br><span class="outline">Intelligent</span><br>Systems</h2>
           </div>
         </div>
-        <p class="intro-text" data-i18n="intro.text" data-i18n-html="1">I'm <strong>Chin Wei (Aiden) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.</p>
+        <p class="intro-text" data-i18n="intro.text" data-i18n-html="1">I'm <strong>Aiden (Chin Wei) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.</p>
         <div class="intro-highlights">
           <div class="intro-hl"><div class="hl-val">8</div><div class="hl-lbl" data-i18n="intro.stat1">AI Agents Shipped</div></div>
           <div class="intro-hl"><div class="hl-val">1,909</div><div class="hl-lbl" data-i18n="intro.stat2">Automated Tests</div></div>
@@ -630,7 +630,7 @@ const SFX=(()=>{
 
 // ═══ PROJECT DATA ═══
 const P={
-  'hr-agent':{idx:'01',domain:'HR Tech',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
+  'hr-agent':{idx:'02',domain:'HR Tech',title:'HR Intelligence Platform',year:'Feb 2026 – Present',role:'AI Engineer',status:'DEPLOYED',
     desc:'Production-grade multi-agent AI system orchestrating 8 specialized LangGraph agents for autonomous HR workflows — from policy Q&A to compliance auditing. Shipped to production on GCP Cloud Run with 1,909 automated tests.',
     live:'https://hr-platform-1054475963653.us-central1.run.app',git:'https://github.com/aidenmak0624/HR_agent',docs:null,
     demo:'/hr_demo.mp4',
@@ -663,7 +663,7 @@ const P={
     vibeCoding:{desc:'Built with GitHub Copilot and Claude Code — Copilot handled boilerplate, Claude managed complex multi-agent orchestration and test architecture design. AI-assisted development accelerated development of 1,909 tests significantly.'},
     term:['# Project structure','$ tree src/ -L 1','> src/','> agents/       # 8 specialized LangGraph agents','> api/          # REST API routes & middleware','> core/         # RAG pipeline, LLM gateway','> connectors/   # HRIS integrations','> mcp/          # FastMCP server (28 tools)','> services/     # Business logic','','# Deploy','$ docker-compose up -d && gcloud run deploy','> Deployed: hr-platform-1054475963653.us-central1.run.app','','# Tests','$ pytest --cov=agents --cov-report=html','> 1,909 passed, 0 failed (coverage: 94%)','> FastMCP: 28 tools ✓ | Resources: 8 ✓ | Prompts: 5 ✓']
   },
-  'golden-fork':{idx:'02',domain:'FoodTech · Commerce',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
+  'golden-fork':{idx:'03',domain:'FoodTech · Commerce',title:'The Golden Fork',year:'Jan – Feb 2026',role:'Full-Stack AI Developer',status:'DEPLOYED',
     desc:'AI-powered restaurant platform with RAG-driven recommendation engine using OpenAI embeddings and Pinecone vector search. Featured at Redefine Event. Features Stripe checkout, WebSocket real-time kitchen display, and manager analytics dashboard.',
     live:'https://golden-fork-9tn2.onrender.com',git:'https://github.com/aidenmak0624/golden-fork',docs:null,
     demo:'/goldenfork_demo.mp4',
@@ -691,7 +691,7 @@ const P={
     vibeCoding:{desc:'Claude Code handled RAG pipeline design and Pinecone integration, while Copilot assisted with Next.js boilerplate. AI-assisted development streamlined rapid iteration on the recommendation engine.'},
     term:['# RAG Pipeline','$ node embed-restaurants.js --source=postgresql','> Embedded restaurant menus → Pinecone','> Vector dims: 1536 (text-embedding-ada-002)','','# Query example','> "cozy Italian place with gluten-free options"','> Retrieved: 5 matches (similarity > 0.87)','> Response generated in 340ms','','# WebSocket kitchen display','> Active sessions: 12 concurrent orders','> Stripe webhook: payment_intent.succeeded ✓','> Kitchen display: real-time order stream ACTIVE']
   },
-  'decision-ease':{idx:'03',domain:'Productivity',title:'DecisionEase',year:"2026",role:"Founder / AI Engineer",status:"DEPLOYED",
+  'decision-ease':{idx:'01',domain:'Productivity',title:'DecisionEase',year:"2026",role:"Founder / AI Engineer",status:"DEPLOYED",
     desc:"DecisionEase is a deployed personal AI decision-support PWA that carries context across days and runs a full capture -> compress -> review -> decide -> schedule -> reflect loop over five surfaces (Today, Plan, Decide, Reflect, Chat). A 6-agent backend — an Orchestrator dispatching to Coach, Planner, Analyst, Curator, and Companion agents over an A2A protocol — reasons within per-agent token budgets under a hard 5000ms timeout with cached-data fallback, so the product stays responsive even when an agent or model stalls. Memory is a 4-layer architecture: Redis working memory, a Postgres user profile, an episodic event log, and pgvector semantic recall over 1536-dim OpenAI embeddings, which is what lets the assistant remember context between sessions. A uniform MCPTool ABC fronts 7 internal tools plus 3 external integrations (Google Calendar, Notion, YouTube). The system is built test-first with a 1,600+ automated suite under CI gating, and shipped through real production engineering — resolving an OAuth outage, unifying DST-correct scheduling on a single IANA timezone source of truth, and an idempotent migration runner with deploy-time drift checks.",
     live:'https://decisionease.vercel.app',git:'https://github.com/aidenmak0624/DecisionEase-landing',docs:null,
     demo:'/decisionease_demo.mp4',
@@ -706,7 +706,7 @@ const P={
     functions:["Orchestrator agent routes each request to the right specialist within token and time budgets","Coach agent supports reflection and decision framing","Planner agent compresses captures into schedulable next moves","Analyst agent reviews context and surfaces tradeoffs","Curator agent manages knowledge and external content (Notion, YouTube)","Companion agent sustains conversational continuity across sessions","MCPTool ABC exposes a uniform interface over internal tools and external integrations","Idempotent migration runner with deploy-time drift detection guards schema integrity"],
     term:["$ pytest -q","> 1,600+ passed under CI gating","$ curl -s /agents/dispatch  # Orchestrator -> Coach|Planner|Analyst|Curator|Companion","> a2a: token budgets ok | timeout=5000ms | fallback=cached","$ memory.layers","> redis(working) -> pg(profile) -> episodic(log) -> pgvector(1536-dim)","$ mcp.tools.list","> 7 internal + 3 external (Google Calendar, Notion, YouTube)","$ deploy --check-drift","> migrations idempotent | schema drift: none | status: DEPLOYED"]
   },
-  'upstander':{idx:'04',domain:'Civic · EdTech',title:'Upstander Program',year:'Sept 2024 – Oct 2025',role:'AI Developer · CMHR Partnership',status:'COMPLETE',
+  'upstander':{idx:'05',domain:'Civic · EdTech',title:'Upstander Program',year:'Sept 2024 – Oct 2025',role:'AI Developer · CMHR Partnership',status:'COMPLETE',
     desc:'University of Manitoba partnership with the Canadian Museum for Human Rights. AI-powered educational platform using Gemini Flash 2.0 with adaptive prompting and NLP-driven content personalization across 6 interactive learning modules.',
     live:null,git:'https://github.com/aidenmak0624/Upstander_Program',docs:null,
     stats:[{v:'6',l:'Learning Modules'},{v:'CMHR',l:'Museum Partner'},{v:'AI',l:'Gemini Flash 2.0'},{v:'NLP',l:'Personalization'}],
@@ -729,7 +729,7 @@ const P={
     functions:['Teaches users to recognize social injustices','Guides discovery of personal strengths','Facilitates action planning for change','Shares real community stories','Assesses individual strengths objectively','Personalizes content to user profile','Tracks learning progress','Provides strength-based recommendations'],
     term:['# Upstander Platform','$ streamlit run app.py --server.port=8501','> Module 1: Recognizing Injustice ... LOADED','> Module 2: Discovering Strengths ... LOADED','> Module 3: Taking Action ... LOADED','> Module 4: Community Stories ... LOADED','> Module 5: Self-Assessment ... LOADED','> Module 6: Action Planning ... LOADED','> Gemini Flash 2.0 API: CONNECTED','> Adaptive Prompting Engine: READY','> NLP Pipeline: INITIALIZED']
   },
-  'hr-edu-agent':{idx:'05',domain:'Civic · EdTech',title:'HR Education Agent',year:'2025',role:'Independent Project',status:'COMPLETE',
+  'hr-edu-agent':{idx:'06',domain:'Civic · EdTech',title:'HR Education Agent',year:'2025',role:'Independent Project',status:'COMPLETE',
     desc:'Self-initiated LangGraph multi-agent workflow orchestrating 5 specialized tools for legal document analysis with conditional routing across 25+ human rights documents.',
     live:null,git:null,docs:null,
     stats:[{v:'5',l:'Specialized Tools'},{v:'25+',l:'Legal Documents'},{v:'LG',l:'LangGraph'},{v:'↻',l:'Orchestrated'}],
@@ -751,7 +751,7 @@ const P={
     functions:['Retrieves relevant legal documents by query','Interprets legal text in plain language','Checks compliance with regulations','Generates responses with source citations','Routes queries to right tools','Maintains conversation state','Tracks which tools were invoked','Provides structured legal analysis'],
     term:['# HR Edu Agent','$ python agent.py --mode=interactive','> LangGraph initialized: 5 tools registered','> Legal docs loaded: 25 documents indexed','','> Query: "What are overtime regulations in Ontario?"','> Tool: doc_retriever → 3 relevant sections','> Tool: legal_interpreter → ESA Part VIII analysis','> Tool: compliance_checker → provincial compliance ✓','> Response generated with 4 citations','','> Workflow: retrieval → interpretation → compliance → summary','> State transitions: 7 | Tools invoked: 4']
   },
-  'hr-edu-rag':{idx:'06',domain:'Civic · EdTech',title:'HR Education RAG',year:'2025',role:'Independent Project',status:'COMPLETE',
+  'hr-edu-rag':{idx:'04',domain:'Civic · EdTech',title:'HR Education RAG',year:'2025',role:'Independent Project',status:'COMPLETE',
     desc:'Standalone RAG pipeline with ChromaDB achieving 97% API speed improvement (6.8s → 0.2s). Processes 112 document chunks across 9 topic categories with source-backed citations and 0.013s retrieval speed.',
     live:null,git:'https://github.com/aidenmak0624/Human_Right_Edu_RAG',docs:null,
     stats:[{v:'97%',l:'Speed Improvement'},{v:'112',l:'Doc Chunks'},{v:'0.2s',l:'Response Time'},{v:'9',l:'Topic Categories'}],
@@ -1017,7 +1017,7 @@ function pL(id){
   return{...p,...z,stats:z.stats||p.stats,overview:z.overview||p.overview,bullets:z.bullets||p.bullets,arch:z.arch||p.arch,term:p.term,tags:p.tags,tech:p.tech};
 }
 
-const keys=Object.keys(P);
+const keys=['decision-ease','hr-agent','golden-fork','hr-edu-rag','upstander','hr-edu-agent','311-analysis','teachreach','portfolio'];
 let current=null;
 
 // ═══ RENDER WORKS LIST ═══
@@ -1242,7 +1242,7 @@ function renderProject(id){
       ${id==='portfolio'?`<div style="display:flex;align-items:center;gap:2.5rem;margin:2.5rem 0;padding:2rem 2.5rem;border:1px solid rgba(0,255,204,.1);border-radius:16px;background:linear-gradient(135deg,rgba(0,255,204,.02),rgba(123,97,255,.02));backdrop-filter:blur(12px)">
         <img src="1769900684236.jpeg" alt="Aiden Mak" style="width:140px;height:140px;object-fit:cover;border-radius:50%;border:3px solid rgba(0,255,204,.2);box-shadow:0 0 30px rgba(0,255,204,.08);flex-shrink:0" onerror="this.style.display=\'none\'">
         <div style="flex:1;min-width:0">
-          <div style="font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:.3rem">Chin Wei (Aiden) Mak</div>
+          <div style="font-family:var(--display);font-weight:800;font-size:1.3rem;color:#fff;margin-bottom:.3rem">Aiden (Chin Wei) Mak</div>
           <div style="font-family:var(--mono);font-size:.80rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:.8rem">AI &amp; Full-Stack Engineer · Toronto</div>
           <div style="font-size:.88rem;line-height:1.7;color:var(--text-dim)">${currentLang==='zh'?'設計及開發此作品集 — 包含自定義光標、矩陣雨動畫、雙語國際化、CSS 頁面轉場和互動專案展示，全部以純 HTML/CSS/JS 實現，零外部依賴。':'Designed &amp; built this portfolio — featuring custom cursor, matrix rain, bilingual i18n, CSS wipe transitions, and interactive project showcase. Pure HTML/CSS/JS, zero dependencies.'}</div>
         </div>
@@ -1376,7 +1376,7 @@ const I18N={
     'hero.scroll':'Scroll',
     'intro.label':'// About Me',
     'intro.heading':'Building<br><span class="outline">Intelligent</span><br>Systems',
-    'intro.text':'I\'m <strong>Chin Wei (Aiden) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.',
+    'intro.text':'I\'m <strong>Aiden (Chin Wei) Mak</strong>, an AI and Full-Stack Engineer based in Toronto. I specialize in building <strong>production-grade multi-agent systems</strong>, RAG pipelines, and AI-powered platforms — from scalable backends and vector-search pipelines to autonomous agent orchestration deployed on cloud infrastructure.',
     'intro.stat1':'AI Agents Shipped','intro.stat2':'Automated Tests','intro.stat3':'MCP Tools Built','intro.stat4':'Speed Improvement',
     'intro.bio1':'With a <strong>BSc Honours in Computer Science</strong> from the University of Manitoba (2025), I bring strong foundations in software engineering alongside hands-on experience building AI systems that solve real problems. My flagship project — an <strong>8-agent HR Intelligence Platform</strong> — demonstrates my ability to architect, test, and deploy complex AI systems at production scale with 1,909 automated tests and CI/CD on GCP Cloud Run.',
     'intro.bio2':'I\'m trilingual (<strong>Cantonese</strong>, <strong>Mandarin</strong>, <strong>English</strong>) and passionate about building purpose-driven technology. Whether it\'s a museum partnership with the <strong>Canadian Museum for Human Rights</strong>, an independent RAG pipeline, or a full-stack restaurant platform, I bring the same standard of engineering rigor.',
